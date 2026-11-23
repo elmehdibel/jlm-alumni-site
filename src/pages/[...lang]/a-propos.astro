@@ -2,6 +2,7 @@
 import { u } from '../../lib/url';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
+import CarteReseau from '../../components/CarteReseau.astro';
 import CtaBlock from '../../components/CtaBlock.astro';
 import { chiffres } from '../../data/site';
 import { getLang, langPaths } from '../../i18n';
@@ -33,9 +34,6 @@ const T = {
       ['Transmission', "Les lauréats d'hier forment et accompagnent les leaders de demain."],
       ['Excellence', 'Viser haut, se former sans cesse et donner le meilleur de soi.'],
     ],
-    mapH: ['établissements, tout le Maroc'],
-    mapTxt: 'Casablanca, Rabat, Fès, Marrakech, Agadir, Tanger, Oujda, Laâyoune… JLM est présent dans les grandes écoles et universités de toutes les régions.',
-    mapAlt: 'Liste et carte des écoles et universités partenaires',
   },
   ar: {
     title: 'من نحن', desc: 'تعرّف على JLM Alumni، جمعية خريجي رواد المغرب الشباب: تاريخها ومهمتها وقيمها.',
@@ -61,9 +59,6 @@ const T = {
       ['نقل الخبرة', 'خريجو الأمس يُكوّنون ويواكبون قادة الغد.'],
       ['التميّز', 'الطموح العالي والتكوين المستمر وبذل أفضل ما لدينا.'],
     ],
-    mapH: ['مؤسسة في كل ربوع المغرب'],
-    mapTxt: 'الدار البيضاء، الرباط، فاس، مراكش، أكادير، طنجة، وجدة، العيون… JLM حاضرة في المدارس العليا والجامعات بجميع الجهات.',
-    mapAlt: 'لائحة وخريطة المدارس والجامعات الشريكة',
   },
 }[lang];
 const couleurs = ['green', 'yellow', 'red', 'ink'];
@@ -127,20 +122,14 @@ const couleurs = ['green', 'yellow', 'red', 'ink'];
     </div>
   </div>
 
-  <section>
-    <div class="wrap map reveal">
-      <div>
-        <h2><span class="c-green">{chiffres.ecoles}</span> {T.mapH[0]}</h2>
-        <p>{T.mapTxt}</p>
-      </div>
-      <img src={u("/images/carte-ecoles.jpg")} alt={T.mapAlt} loading="lazy" />
-    </div>
-  </section>
+  <div class="carte-apropos"><CarteReseau lang={lang} /></div>
 
   <CtaBlock lang={lang} />
 </Base>
 
 <style>
+  .carte-apropos { padding-top: 72px; }
+  @media (max-width: 960px) { .carte-apropos { padding-top: 48px; } }
   .story { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .story-card { background: var(--soft); border-radius: var(--radius); padding: 40px; }
   .story-card.dark { background: var(--ink); color: #fff; }
@@ -171,12 +160,9 @@ const couleurs = ['green', 'yellow', 'red', 'ink'];
   .value h3 { font-size: 1.5rem; margin-bottom: .5rem; }
   .value p { color: rgba(255,255,255,.65); }
 
-  .map { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center; }
-  .map p { color: var(--muted); font-size: 1.1rem; margin-top: 1rem; max-width: 44ch; }
-  .map img { border-radius: var(--radius); border: 1px solid var(--line); }
 
   @media (max-width: 960px) {
-    .story, .map { grid-template-columns: 1fr; }
+    .story { grid-template-columns: 1fr; }
     .indh { grid-template-columns: 1fr; padding: 32px 24px; gap: 24px; }
     .indh img { max-width: 200px; }
     .path, .values { grid-template-columns: 1fr 1fr; }
