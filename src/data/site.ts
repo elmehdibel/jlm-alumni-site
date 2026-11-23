@@ -155,19 +155,20 @@ export const galerie = [
   u("/images/competition-scene.jpg"),
 ];
 
-export const partenaires: { nom: L; logo: string; type: string }[] = [
-  { nom: { fr: "INDH", ar: "المبادرة الوطنية للتنمية البشرية" }, logo: u("/images/partenaires/indh.png"), type: "institution" },
-  { nom: { fr: "Entraide Nationale", ar: "التعاون الوطني" }, logo: u("/images/partenaires/entraide-nationale.png"), type: "institution" },
-  { nom: { fr: "ANAPEC", ar: "أنابيك" }, logo: u("/images/partenaires/anapec.jpg"), type: "institution" },
-  { nom: { fr: "Dar Al Moukawil", ar: "دار المقاول" }, logo: u("/images/partenaires/dar-al-moukawil.jpg"), type: "institution" },
-  { nom: { fr: "Stellantis", ar: "Stellantis" }, logo: u("/images/partenaires/stellantis.png"), type: "entreprise" },
-  { nom: { fr: "ManpowerGroup", ar: "ManpowerGroup" }, logo: u("/images/partenaires/manpowergroup.png"), type: "entreprise" },
-  { nom: { fr: "LabelVie", ar: "LabelVie" }, logo: u("/images/partenaires/labelvie.png"), type: "entreprise" },
-  { nom: { fr: "Artus Maroc", ar: "Artus Maroc" }, logo: u("/images/partenaires/artus-maroc.png"), type: "entreprise" },
-  { nom: { fr: "Heliolys", ar: "Heliolys" }, logo: u("/images/partenaires/heliolys.png"), type: "entreprise" },
-  { nom: { fr: "IMVL", ar: "IMVL" }, logo: u("/images/partenaires/imvl.png"), type: "entreprise" },
-  { nom: { fr: "Soudal", ar: "Soudal" }, logo: u("/images/partenaires/soudal.png"), type: "entreprise" },
-  { nom: { fr: "Mikafric", ar: "Mikafric" }, logo: u("/images/partenaires/mikafric.jpg"), type: "entreprise" },
+// ratio = largeur / hauteur du logo (marges rognées), sert à harmoniser leur taille visuelle dans le bandeau.
+export const partenaires: { nom: L; logo: string; type: string; ratio: number }[] = [
+  { nom: { fr: "INDH", ar: "المبادرة الوطنية للتنمية البشرية" }, logo: u("/images/partenaires/indh.png"), type: "institution", ratio: 3.35 },
+  { nom: { fr: "Entraide Nationale", ar: "التعاون الوطني" }, logo: u("/images/partenaires/entraide-nationale.png"), type: "institution", ratio: 1.11 },
+  { nom: { fr: "ANAPEC", ar: "أنابيك" }, logo: u("/images/partenaires/anapec.png"), type: "institution", ratio: 1.0 },
+  { nom: { fr: "Dar Al Moukawil", ar: "دار المقاول" }, logo: u("/images/partenaires/dar-al-moukawil.png"), type: "institution", ratio: 1.0 },
+  { nom: { fr: "Stellantis", ar: "Stellantis" }, logo: u("/images/partenaires/stellantis.png"), type: "entreprise", ratio: 3.9 },
+  { nom: { fr: "ManpowerGroup", ar: "ManpowerGroup" }, logo: u("/images/partenaires/manpowergroup.png"), type: "entreprise", ratio: 1.77 },
+  { nom: { fr: "LabelVie", ar: "LabelVie" }, logo: u("/images/partenaires/labelvie.png"), type: "entreprise", ratio: 2.7 },
+  { nom: { fr: "Artus Maroc", ar: "Artus Maroc" }, logo: u("/images/partenaires/artus-maroc.png"), type: "entreprise", ratio: 2.32 },
+  { nom: { fr: "Heliolys", ar: "Heliolys" }, logo: u("/images/partenaires/heliolys.png"), type: "entreprise", ratio: 3.3 },
+  { nom: { fr: "IMVL", ar: "IMVL" }, logo: u("/images/partenaires/imvl.png"), type: "entreprise", ratio: 1.13 },
+  { nom: { fr: "Soudal", ar: "Soudal" }, logo: u("/images/partenaires/soudal.png"), type: "entreprise", ratio: 2.62 },
+  { nom: { fr: "Mikafric", ar: "Mikafric" }, logo: u("/images/partenaires/mikafric.png"), type: "entreprise", ratio: 2.82 },
 ];
 
 // Équipes JLM actives, par ville (liste à jour fournie par le bureau, novembre 2026).

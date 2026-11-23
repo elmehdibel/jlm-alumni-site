@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import { partenaires, contact, chiffres } from '../../data/site';
 import { getLang, langPaths, tr } from '../../i18n';
+import { tailleLogo } from '../../lib/logo';
 
 export const getStaticPaths = langPaths;
 const lang = getLang(Astro.params.lang);
@@ -46,11 +47,11 @@ const mail = `mailto:${contact.email}?subject=${encodeURIComponent('Partenariat 
     <div class="wrap">
       <h2 class="sub">{T.inst}</h2>
       <div class="logos">
-        {institutions.map((p) => <div class="logo reveal"><img src={p.logo} alt={tr(p.nom, lang)} loading="lazy" /><span>{tr(p.nom, lang)}</span></div>)}
+        {institutions.map((p) => <div class="logo reveal"><span class="cadre" style={tailleLogo(p.ratio, 7000, 84, 170)}><img src={p.logo} alt={tr(p.nom, lang)} loading="lazy" /></span><span>{tr(p.nom, lang)}</span></div>)}
       </div>
       <h2 class="sub">{T.ent}</h2>
       <div class="logos">
-        {entreprises.map((p) => <div class="logo reveal"><img src={p.logo} alt={tr(p.nom, lang)} loading="lazy" /><span>{tr(p.nom, lang)}</span></div>)}
+        {entreprises.map((p) => <div class="logo reveal"><span class="cadre" style={tailleLogo(p.ratio, 7000, 84, 170)}><img src={p.logo} alt={tr(p.nom, lang)} loading="lazy" /></span><span>{tr(p.nom, lang)}</span></div>)}
       </div>
     </div>
   </section>
@@ -78,11 +79,12 @@ const mail = `mailto:${contact.email}?subject=${encodeURIComponent('Partenariat 
 <style>
   .sub { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 48px 0 20px; }
   .sub:first-child { margin-top: 0; }
-  .logos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  .logo { border: 1px solid var(--line); border-radius: 24px; aspect-ratio: 4 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; transition: .25s; min-width: 0; }
+  .logos { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 12px; }
+  .logo { border: 1px solid var(--line); border-radius: 24px; min-height: 190px; display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center; gap: 14px; padding: 24px; transition: .25s; min-width: 0; }
   .logo:hover { border-color: var(--ink); transform: translateY(-4px); }
-  .logo img { max-height: 90px; max-width: 80%; object-fit: contain; mix-blend-mode: multiply; }
-  .logo span { font-size: .85rem; color: var(--muted); font-weight: 500; text-align: center; }
+  .cadre { display: block; width: min(var(--w), 100%); aspect-ratio: var(--r); flex: none; }
+  .cadre img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .logo > span:last-child { font-size: .85rem; color: var(--muted); font-weight: 500; text-align: center; }
 
   .why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .why div { background: var(--ink-2); border-radius: 24px; padding: 32px; }
