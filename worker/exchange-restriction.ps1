@@ -48,10 +48,10 @@ if ($regle) {
 # 3. Vérification
 Write-Host ""
 $t = Test-ApplicationAccessPolicy -Identity $Boite -AppId $AppId
-Write-Host "$Boite → $($t.AccessCheckResult)  (attendu : Granted)" -ForegroundColor $(if ($t.AccessCheckResult -eq 'Granted') { 'Green' } else { 'Red' })
+Write-Host "$Boite → $($t.AccessCheckResult)  (attendu : Granted / Accordé)" -ForegroundColor $(if ($t.AccessCheckResult -in 'Granted','Accordé') { 'Green' } else { 'Red' })
 try {
   $t2 = Test-ApplicationAccessPolicy -Identity $Admin -AppId $AppId
-  Write-Host "$Admin → $($t2.AccessCheckResult)  (attendu : Denied)" -ForegroundColor $(if ($t2.AccessCheckResult -eq 'Denied') { 'Green' } else { 'Yellow' })
+  Write-Host "$Admin → $($t2.AccessCheckResult)  (attendu : Denied / Refusé)" -ForegroundColor $(if ($t2.AccessCheckResult -in 'Denied','Refusé') { 'Green' } else { 'Yellow' })
 } catch {
   Write-Host "($Admin n'a pas de boîte aux lettres : test « Denied » ignoré.)"
 }
