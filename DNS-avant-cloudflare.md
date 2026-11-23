@@ -24,3 +24,10 @@ et pour revenir en arrière si besoin (remettre ns1.dns-parking.com / ns2.dns-pa
 
 Remarque : aucun enregistrement DKIM Microsoft 365 (selector1/selector2._domainkey) n'existe : la signature DKIM
 du domaine n'est pas activée côté Microsoft 365 (amélioration possible de la délivrabilité, plus tard).
+
+## Après la bascule (23/11/2026)
+
+DNS gérés par Cloudflare (mallory.ns.cloudflare.com / mcgrory.ns.cloudflare.com, réglés dans hPanel ; le domaine
+reste enregistré chez Hostinger). Les enregistrements « oui » ci-dessus ont été repris à l'identique ;
+les restes Hostinger supprimés. Site (A ×4 et www) en **Proxied** (nuage orange) ; MX, TXT et autodiscover en
+**DNS only**. SSL/TLS : mode Full, Always Use HTTPS activé ; certificat émis par Cloudflare.
