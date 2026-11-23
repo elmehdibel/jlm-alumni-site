@@ -1,4 +1,5 @@
 ---
+import { u } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBlock from '../components/CtaBlock.astro';
@@ -43,7 +44,7 @@ const valeurs = [
 
   <section class="indh-sec">
     <div class="wrap"><div class="indh reveal">
-      <img src="/images/partenaires/indh.png" alt="Initiative Nationale pour le Développement Humain" loading="lazy" />
+      <img src={u("/images/partenaires/indh.png")} alt="Initiative Nationale pour le Développement Humain" loading="lazy" />
       <div>
         <span class="pill"><span class="dot"></span>Partenariat institutionnel</span>
         <h2>Aux côtés de l'INDH</h2>
@@ -88,7 +89,7 @@ const valeurs = [
         <h2><span class="c-green">{chiffres.ecoles}</span> établissements, tout le Maroc</h2>
         <p>Casablanca, Rabat, Fès, Marrakech, Agadir, Tanger, Oujda, Laâyoune… JLM est présent dans les grandes écoles et universités de toutes les régions.</p>
       </div>
-      <img src="/images/carte-ecoles.jpg" alt="Liste et carte des écoles et universités partenaires" loading="lazy" />
+      <img src={u("/images/carte-ecoles.jpg")} alt="Liste et carte des écoles et universités partenaires" loading="lazy" />
     </div>
   </section>
 

@@ -1,3 +1,5 @@
+import { u } from '../lib/url';
+
 // Contenu central du site JLM Alumni.
 // Modifier ici les textes, chiffres, partenaires et coordonnées : toutes les pages s'en servent.
 
@@ -27,10 +29,10 @@ export const chiffres = {
 };
 
 export const navigation = [
-  { label: "À propos", href: "/a-propos" },
-  { label: "Programmes", href: "/programmes" },
-  { label: "Événements", href: "/evenements" },
-  { label: "Partenaires", href: "/partenaires" },
+  { label: "À propos", href: u("/a-propos") },
+  { label: "Programmes", href: u("/programmes") },
+  { label: "Événements", href: u("/evenements") },
+  { label: "Partenaires", href: u("/partenaires") },
 ];
 
 export const programmes = [
@@ -39,7 +41,7 @@ export const programmes = [
     nom: "Academy",
     titre: "JLM Academy",
     couleur: "green",
-    image: "/images/prog-academy.jpg",
+    image: u("/images/prog-academy.jpg"),
     resume: "Gestion de projets, soft skills et préparation aux compétitions.",
     description:
       "JLM Academy forme les étudiants porteurs de projets aux compétences clés de l'entrepreneur social : de l'idée au pitch, en passant par la gestion d'équipe et la recherche de partenaires.",
@@ -50,7 +52,7 @@ export const programmes = [
     nom: "Orientation",
     titre: "JLM Orientation",
     couleur: "yellow",
-    image: "/images/prog-orientation.jpg",
+    image: u("/images/prog-orientation.jpg"),
     resume: "Ateliers, sessions d'orientation et rencontres avec des professionnels.",
     description:
       "JLM Orientation accompagne les jeunes dans leurs choix d'études et de carrière, avec des sessions collectives, des ateliers pratiques et des échanges directs avec des professionnels.",
@@ -61,7 +63,7 @@ export const programmes = [
     nom: "Santé",
     titre: "JLM Santé",
     couleur: "red",
-    image: "/images/prog-sante.jpg",
+    image: u("/images/prog-sante.jpg"),
     resume: "Caravanes médicales gratuites, secourisme et sensibilisation.",
     description:
       "Créé en 2018, JLM Santé mobilise lauréats et professionnels de santé au service des populations : caravanes médicales gratuites, formations aux premiers secours et campagnes de sensibilisation.",
@@ -74,48 +76,48 @@ export const saison = [
     nom: "Kick-off",
     quand: "Rentrée",
     couleur: "green",
-    image: "/images/kickoff.jpg",
+    image: u("/images/kickoff.jpg"),
     texte: "L'ouverture officielle de la saison et le lancement des équipes dans les écoles et universités.",
   },
   {
     nom: "Bootcamps régionaux",
     quand: "Toute l'année",
     couleur: "yellow",
-    image: "/images/bootcamp.jpg",
+    image: u("/images/bootcamp.jpg"),
     texte: "Des sessions intensives dans toutes les régions du Royaume pour faire grandir les projets.",
   },
   {
     nom: "Compétition nationale",
     quand: "Fin d'année",
     couleur: "red",
-    image: "/images/competition-salle.jpg",
+    image: u("/images/competition-salle.jpg"),
     texte: "La grande finale : +130 projets, +1 200 participants, 3 000 visiteurs et un jury réunissant gouvernement, entreprises et médias.",
   },
 ];
 
 export const galerie = [
-  "/images/competition-foule.jpg",
-  "/images/remise-prix.jpg",
-  "/images/groupe-scene.jpg",
-  "/images/trophee.jpg",
-  "/images/celebration.jpg",
-  "/images/grand-groupe.jpg",
-  "/images/groupe-blanc-1.jpg",
-  "/images/soiree.jpg",
-  "/images/competition-scene.jpg",
+  u("/images/competition-foule.jpg"),
+  u("/images/remise-prix.jpg"),
+  u("/images/groupe-scene.jpg"),
+  u("/images/trophee.jpg"),
+  u("/images/celebration.jpg"),
+  u("/images/grand-groupe.jpg"),
+  u("/images/groupe-blanc-1.jpg"),
+  u("/images/soiree.jpg"),
+  u("/images/competition-scene.jpg"),
 ];
 
 export const partenaires = [
-  { nom: "INDH", logo: "/images/partenaires/indh.png", type: "institution" },
-  { nom: "Entraide Nationale", logo: "/images/partenaires/entraide-nationale.png", type: "institution" },
-  { nom: "ANAPEC", logo: "/images/partenaires/anapec.jpg", type: "institution" },
-  { nom: "Dar Al Moukawil", logo: "/images/partenaires/dar-al-moukawil.jpg", type: "institution" },
-  { nom: "Stellantis", logo: "/images/partenaires/stellantis.png", type: "entreprise" },
-  { nom: "ManpowerGroup", logo: "/images/partenaires/manpowergroup.png", type: "entreprise" },
-  { nom: "LabelVie", logo: "/images/partenaires/labelvie.png", type: "entreprise" },
-  { nom: "Artus Maroc", logo: "/images/partenaires/artus-maroc.png", type: "entreprise" },
-  { nom: "Heliolys", logo: "/images/partenaires/heliolys.png", type: "entreprise" },
-  { nom: "IMVL", logo: "/images/partenaires/imvl.png", type: "entreprise" },
-  { nom: "Soudal", logo: "/images/partenaires/soudal.png", type: "entreprise" },
-  { nom: "Mikafric", logo: "/images/partenaires/mikafric.jpg", type: "entreprise" },
+  { nom: "INDH", logo: u("/images/partenaires/indh.png"), type: "institution" },
+  { nom: "Entraide Nationale", logo: u("/images/partenaires/entraide-nationale.png"), type: "institution" },
+  { nom: "ANAPEC", logo: u("/images/partenaires/anapec.jpg"), type: "institution" },
+  { nom: "Dar Al Moukawil", logo: u("/images/partenaires/dar-al-moukawil.jpg"), type: "institution" },
+  { nom: "Stellantis", logo: u("/images/partenaires/stellantis.png"), type: "entreprise" },
+  { nom: "ManpowerGroup", logo: u("/images/partenaires/manpowergroup.png"), type: "entreprise" },
+  { nom: "LabelVie", logo: u("/images/partenaires/labelvie.png"), type: "entreprise" },
+  { nom: "Artus Maroc", logo: u("/images/partenaires/artus-maroc.png"), type: "entreprise" },
+  { nom: "Heliolys", logo: u("/images/partenaires/heliolys.png"), type: "entreprise" },
+  { nom: "IMVL", logo: u("/images/partenaires/imvl.png"), type: "entreprise" },
+  { nom: "Soudal", logo: u("/images/partenaires/soudal.png"), type: "entreprise" },
+  { nom: "Mikafric", logo: u("/images/partenaires/mikafric.jpg"), type: "entreprise" },
 ];

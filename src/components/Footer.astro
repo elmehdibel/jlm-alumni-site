@@ -1,4 +1,5 @@
 ---
+import { u } from '../lib/url';
 import { contact, navigation } from '../data/site';
 const annee = new Date().getFullYear();
 ---
@@ -6,14 +7,14 @@ const annee = new Date().getFullYear();
   <div class="wrap">
     <div class="foot">
       <div class="f-brand">
-        <img src="/logos/jlm-alumni-blanc.png" alt="JLM Alumni" width="1117" height="507" loading="lazy" />
+        <img src={u("/logos/jlm-alumni-blanc.png")} alt="JLM Alumni" width="1117" height="507" loading="lazy" />
         <p>Association des lauréats Jeunes Leaders Marocains. All we do is for our nation.</p>
       </div>
       <div>
         <h4>Association</h4>
         <ul>
           {navigation.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-          <li><a href="/contact">Contact</a></li>
+          <li><a href={u("/contact")}>Contact</a></li>
         </ul>
       </div>
       <div>

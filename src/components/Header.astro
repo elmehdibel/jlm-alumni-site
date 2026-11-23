@@ -1,18 +1,19 @@
 ---
+import { u } from '../lib/url';
 import { navigation } from '../data/site';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 <header class="site-header">
   <div class="wrap nav">
-    <a href="/" class="brand" aria-label="JLM Alumni, accueil">
-      <img src="/logos/jlm-alumni-couleur.png" alt="JLM Alumni" width="1117" height="507" />
+    <a href={u("/")} class="brand" aria-label="JLM Alumni, accueil">
+      <img src={u("/logos/jlm-alumni-couleur.png")} alt="JLM Alumni" width="1117" height="507" />
     </a>
     <nav class="links" aria-label="Navigation principale">
       {navigation.map((l) => (
         <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
       ))}
     </nav>
-    <a href="/contact" class="btn btn-dark cta-desk">Contact</a>
+    <a href={u("/contact")} class="btn btn-dark cta-desk">Contact</a>
     <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span>
     </button>
@@ -20,9 +21,9 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 </header>
 <div class="mobile-menu" id="mobile-menu" hidden>
   <nav class="wrap" aria-label="Menu mobile">
-    <a href="/">Accueil</a>
+    <a href={u("/")}>Accueil</a>
     {navigation.map((l) => <a href={l.href}>{l.label}</a>)}
-    <a href="/contact">Contact</a>
+    <a href={u("/contact")}>Contact</a>
     <div class="mm-bar"><i class="bg-green"></i><i class="bg-yellow"></i><i class="bg-red"></i></div>
   </nav>
 </div>

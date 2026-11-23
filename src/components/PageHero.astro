@@ -1,4 +1,5 @@
 ---
+import { u } from '../lib/url';
 interface Props { badge: string; titre: string; accent?: string; intro: string; image?: string; couleur?: 'green' | 'yellow' | 'red'; }
 const { badge, titre, accent, intro, image, couleur = 'green' } = Astro.props;
 ---
@@ -9,7 +10,7 @@ const { badge, titre, accent, intro, image, couleur = 'green' } = Astro.props;
       <h1>{titre} {accent && <span class={`c-${couleur}`}>{accent}</span>}</h1>
       <p>{intro}</p>
     </div>
-    {image && <img src={image} alt="" class={`ph-img ring-${couleur}`} />}
+    {image && <img src={u(image)} alt="" class={`ph-img ring-${couleur}`} />}
   </div>
 </section>
 

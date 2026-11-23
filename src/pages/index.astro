@@ -1,4 +1,5 @@
 ---
+import { u } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import PartnersMarquee from '../components/PartnersMarquee.astro';
 import CtaBlock from '../components/CtaBlock.astro';
@@ -13,15 +14,15 @@ const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
       <h1><span class="c-green">Jeunes.</span><br /><span class="c-yellow">Leaders.</span><br /><span class="c-red">Marocains.</span></h1>
       <p>Le réseau des lauréats JLM. On forme, on oriente et on agit sur le terrain pour que chaque jeune puisse entreprendre pour le Maroc.</p>
       <div class="ctas">
-        <a href="/programmes" class="btn btn-dark">Nos programmes →</a>
-        <a href="/partenaires#devenir-partenaire" class="btn btn-line">Devenir partenaire</a>
+        <a href={u("/programmes")} class="btn btn-dark">Nos programmes →</a>
+        <a href={u("/partenaires#devenir-partenaire")} class="btn btn-line">Devenir partenaire</a>
       </div>
     </div>
     <div class="bento">
-      <img class="b1" src="/images/groupe-scene.jpg" alt="Lauréates JLM sur scène lors d'une remise de prix" />
-      <img src="/images/trophee.jpg" alt="Équipe JLM recevant un trophée" />
-      <img src="/images/celebration.jpg" alt="Célébration lors de la compétition nationale" />
-      <img class="b4" src="/images/competition-foule.jpg" alt="Foule d'étudiants à la compétition nationale JLM" />
+      <img class="b1" src={u("/images/groupe-scene.jpg")} alt="Lauréates JLM sur scène lors d'une remise de prix" />
+      <img src={u("/images/trophee.jpg")} alt="Équipe JLM recevant un trophée" />
+      <img src={u("/images/celebration.jpg")} alt="Célébration lors de la compétition nationale" />
+      <img class="b4" src={u("/images/competition-foule.jpg")} alt="Foule d'étudiants à la compétition nationale JLM" />
       <div class="sticker"><div><b>{ans} ans</b>d'impact</div></div>
     </div>
   </div>
@@ -35,7 +36,7 @@ const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
         <div>
           <h3>All we do is for our nation.</h3>
           <p>Une initiative 100 % marocaine, à but non lucratif, partenaire de l'INDH pour l'inclusion économique des jeunes.</p>
-          <a href="/a-propos" class="more">Découvrir l'association →</a>
+          <a href={u("/a-propos")} class="more">Découvrir l'association →</a>
         </div>
       </div>
       <div class="tile bg-green reveal"><span>Étudiants formés</span><b>{chiffres.etudiants}</b></div>
@@ -50,7 +51,7 @@ const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
       <div class="sec-head"><h2>Nos programmes</h2><p>Trois façons concrètes de faire grandir la jeunesse marocaine, portées par nos lauréats bénévoles.</p></div>
       <div class="progs">
         {programmes.map((p, i) => (
-          <a class="prog reveal" href={`/programmes#${p.id}`}>
+          <a class="prog reveal" href={u(`/programmes#${p.id}`)}>
             <img src={p.image} alt="" loading="lazy" />
             <span class="num" style={`background:var(--${p.couleur});color:${txt[p.couleur as keyof typeof txt]}`}>0{i + 1}</span>
             <div><h3>{p.nom}</h3><p>{p.resume}</p></div>
@@ -65,7 +66,7 @@ const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
       <div class="sec-head"><h2>La saison JLM</h2><p>De la rentrée à la finale, trois rendez-vous qui rassemblent des milliers d'étudiants.</p></div>
       <div class="ev">
         {saison.map((s) => (
-          <a class="ev-card reveal" href="/evenements">
+          <a class="ev-card reveal" href={u("/evenements")}>
             <img src={s.image} alt="" loading="lazy" />
             <div>
               <span class="when" style={`background:var(--${s.couleur});color:${txt[s.couleur as keyof typeof txt]}`}>{s.quand}</span>
@@ -84,9 +85,9 @@ const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
         <span class="pill"><span class="dot" style="background:var(--red)"></span>Un réseau national</span>
         <h2><span class="c-green">{chiffres.ecoles}</span> écoles et universités partenaires</h2>
         <p>De Tanger à Laâyoune, JLM est présent dans les grandes écoles et universités publiques et privées du Royaume.</p>
-        <a href="/a-propos" class="btn btn-dark">En savoir plus →</a>
+        <a href={u("/a-propos")} class="btn btn-dark">En savoir plus →</a>
       </div>
-      <img src="/images/carte-ecoles.jpg" alt="Carte des écoles et universités partenaires de JLM au Maroc" loading="lazy" />
+      <img src={u("/images/carte-ecoles.jpg")} alt="Carte des écoles et universités partenaires de JLM au Maroc" loading="lazy" />
     </div>
   </section>
 
