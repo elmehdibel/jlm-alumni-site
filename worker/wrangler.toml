@@ -8,8 +8,8 @@ RECIPIENT = "contact@jlmalumni.com"
 ALLOWED_ORIGINS = "https://jlmalumni.com,https://www.jlmalumni.com,http://jlmalumni.com,http://www.jlmalumni.com,http://localhost:4321"
 DRY_RUN = "0"
 # Tableaux SharePoint : identifiant du site (worker/sharepoint-site.txt) et des listes (réponse de POST /admin/setup)
-SP_SITE_ID = ""
-SP_LISTES = ""
+SP_SITE_ID = "jlmalumnima.sharepoint.com,fa217327-7c52-4602-8c75-f4002df3fb81,db48eafa-0bff-43a7-b398-c26c0483409c"
+SP_LISTES = '{"teamleader":"b108f45c-a55a-44ba-a117-9e2a9413e244","dsff":"f11a344c-6713-4ac8-8f59-7f983eece016","dsu":"b20a496c-fa1a-45ec-896f-55bf5b885457","alumni":"27cfcdab-6d36-4b29-a451-38366e5e39d4"}'
 
 [observability]
 enabled = true
