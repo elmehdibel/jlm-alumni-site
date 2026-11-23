@@ -89,6 +89,15 @@ puis publier. Pour revenir à Formspree à tout moment : remettre `service.url` 
 
 ---
 
+### En cas de souci
+
+- Lancer `npx wrangler tail` puis refaire un envoi : le journal affiche le code d'erreur.
+- `AADSTS7000215` → le secret client enregistré est l'**ID secret** au lieu de la **Valeur** : créer un nouveau secret (A.4) et refaire `wrangler secret put CLIENT_SECRET`.
+- `AADSTS900023` → `TENANT_ID` incorrect (doit être l'ID de l'annuaire, au format `xxxxxxxx-xxxx-…`).
+- `Turnstile refusé` → refaire `wrangler secret put TURNSTILE_SECRET` avec la Secret Key du widget.
+- Sujet « [à vérifier] » : l'anti-spam est passé mais le champ piège a été rempli (souvent le remplissage automatique du navigateur).
+- La case anti-spam échoue dans le navigateur intégré des outils d'automatisation : tester dans un navigateur normal. Le code Cloudflare s'affiche sous la case.
+
 ### Détails techniques
 
 - Code : `worker/src/index.ts` · réglages : `worker/wrangler.toml` (expéditeur, destinataire, sites autorisés).
