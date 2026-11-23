@@ -190,7 +190,7 @@ export const reseau: { ville: L; lat: number; lon: number; ecoles: string[] }[] 
 // Service d'envoi maison (dossier /worker) : quand `actif` est vrai, les formulaires passent par lui
 // (envoi depuis contact@ via Microsoft 365, CV en pièce jointe, anti-spam Turnstile) au lieu de Formspree.
 export const service = {
-  actif: false, // false = Formspree partout (sauf la page de test cachée /test-envoi)
+  actif: true, // false = retour à Formspree (sans CV) en cas de souci avec le service
   url: "https://jlm-formulaires.elmehdi-bellimam-40d.workers.dev",
   turnstile: "0x4AAAAAAGO0tTSMkDLEVHfY", // clé publique (site key) du widget Cloudflare Turnstile
 };
