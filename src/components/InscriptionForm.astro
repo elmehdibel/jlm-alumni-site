@@ -3,7 +3,7 @@ import { contact, reseau } from '../data/site';
 import { type Lang, tr } from '../i18n';
 
 interface Props {
-  programme: 'dsff' | 'dsu';
+  programme: 'dsff' | 'dsu' | 'alumni';
   endpoint: string; // identifiant Formspree, vide = formulaire pas encore activé
   titre: string;
   sujet: string; // reste en français pour la boîte mail
@@ -29,11 +29,21 @@ const t = {
   autre: { fr: 'Autre équipe', ar: 'فريق آخر' },
   raison: { fr: "Raison de l'inscription", ar: 'سبب التسجيل' },
   raisonEx: { fr: "Pourquoi veux-tu rejoindre ce programme ? Qu'en attends-tu ?", ar: 'لماذا تريد الانضمام إلى هذا البرنامج؟ وماذا تنتظر منه؟' },
+  // Variante « lauréats JLM » (référents / accompagnateurs)
+  ville: { fr: 'Ville', ar: 'المدينة' },
+  equipes: { fr: 'Ancienne(s) équipe(s) JLM', ar: 'فريق (أو فرق) JLM السابقة' },
+  equipesEx: { fr: 'Ex. : ENCG Settat (2019), EMSI Rabat (2020)', ar: 'مثال: ENCG Settat (2019)، EMSI Rabat (2020)' },
+  poste: { fr: "Poste au sein de l'équipe", ar: 'منصبك داخل الفريق' },
+  posteEx: { fr: 'Ex. : Team Leader, Vice Team Leader, membre…', ar: 'مثال: قائد فريق، نائب قائد فريق، عضو…' },
+  motivation: { fr: 'Motivation', ar: 'دوافعك' },
+  motivationEx: { fr: "Pourquoi veux-tu t'engager comme référent puis accompagnateur ?", ar: 'لماذا تريد الالتزام كمرجع ثم كمواكب؟' },
+  envoyerCandidature: { fr: 'Envoyer ma candidature →', ar: 'إرسال الترشيح ←' },
+  okCandidature: { fr: 'Candidature envoyée !', ar: 'تم إرسال ترشيحك!' },
   envoyer: { fr: 'Envoyer mon inscription →', ar: 'إرسال طلب التسجيل ←' },
   note: { fr: 'Tes informations sont utilisées uniquement pour traiter ton inscription.', ar: 'تُستعمل معلوماتك فقط لمعالجة طلب تسجيلك.' },
   okTitre: { fr: 'Inscription envoyée !', ar: 'تم إرسال طلبك!' },
   okTexte: { fr: "Merci ! L'équipe JLM Alumni revient vers toi très vite par email ou par téléphone.", ar: 'شكرًا لك! سيتواصل معك فريق JLM Alumni قريبًا عبر البريد الإلكتروني أو الهاتف.' },
-  errChamps: { fr: 'Merci de compléter tous les champs (raison : 20 caractères minimum).', ar: 'المرجو ملء جميع الخانات (سبب التسجيل: 20 حرفًا على الأقل).' },
+  errChamps: { fr: 'Merci de compléter tous les champs (texte libre : 20 caractères minimum).', ar: 'المرجو ملء جميع الخانات (النص الحر: 20 حرفًا على الأقل).' },
   errBientot: { fr: `Les inscriptions ouvrent très bientôt. En attendant, écris-nous à ${contact.email}.`, ar: `يفتح التسجيل قريبًا جدًا. في انتظار ذلك، راسلنا على ${contact.email}.` },
   errEnvoi: { fr: `L'envoi n'a pas fonctionné. Réessaie dans un instant ou écris-nous à ${contact.email}.`, ar: `تعذّر الإرسال. أعد المحاولة بعد لحظة أو راسلنا على ${contact.email}.` },
   envoi: { fr: 'Envoi en cours…', ar: 'جارٍ الإرسال…' },
@@ -59,7 +69,15 @@ const t = {
       <label>{tr(t.email, lang)}<input name="email" type="email" required autocomplete="email" dir="ltr" /></label>
       <label>{tr(t.tel, lang)}<input name="telephone" type="tel" required autocomplete="tel" placeholder="06 00 00 00 00" pattern="[+0-9 ().\-]{8,20}" dir="ltr" /></label>
     </div>
-    <label>{tr(t.adresse, lang)}<input name="adresse" required autocomplete="street-address" placeholder={tr(t.adresseEx, lang)} /></label>
+    {programme === 'alumni' ? (
+      <>
+        <label>{tr(t.ville, lang)}<input name="ville" required autocomplete="address-level2" /></label>
+        <label>{tr(t.equipes, lang)}<input name="anciennes_equipes" required placeholder={tr(t.equipesEx, lang)} /></label>
+        <label>{tr(t.poste, lang)}<input name="poste" required placeholder={tr(t.posteEx, lang)} /></label>
+      </>
+    ) : (
+      <label>{tr(t.adresse, lang)}<input name="adresse" required autocomplete="street-address" placeholder={tr(t.adresseEx, lang)} /></label>
+    )}
 
     {programme === 'dsu' && (
       <>
@@ -80,17 +98,23 @@ const t = {
       </>
     )}
 
-    <label>{tr(t.raison, lang)}
-      <textarea name="raison" rows="5" required minlength="20" placeholder={tr(t.raisonEx, lang)}></textarea>
-    </label>
+    {programme === 'alumni' ? (
+      <label>{tr(t.motivation, lang)}
+        <textarea name="motivation" rows="5" required minlength="20" placeholder={tr(t.motivationEx, lang)}></textarea>
+      </label>
+    ) : (
+      <label>{tr(t.raison, lang)}
+        <textarea name="raison" rows="5" required minlength="20" placeholder={tr(t.raisonEx, lang)}></textarea>
+      </label>
+    )}
 
     <p class="err" role="alert" hidden></p>
-    <button type="submit" class="btn submit">{tr(t.envoyer, lang)}</button>
+    <button type="submit" class="btn submit">{tr(programme === 'alumni' ? t.envoyerCandidature : t.envoyer, lang)}</button>
     <p class="note">{tr(t.note, lang)}</p>
   </form>
   <div class="ok" hidden>
     <span class="tick">✓</span>
-    <h3>{tr(t.okTitre, lang)}</h3>
+    <h3>{tr(programme === 'alumni' ? t.okCandidature : t.okTitre, lang)}</h3>
     <p>{tr(t.okTexte, lang)}</p>
   </div>
 </div>

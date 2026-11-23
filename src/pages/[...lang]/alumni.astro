@@ -1,0 +1,137 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import InscriptionForm from '../../components/InscriptionForm.astro';
+import { formulaires } from '../../data/site';
+import { getLang, langPaths } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = getLang(Astro.params.lang);
+const f = lang === 'ar' ? '←' : '→';
+const T = {
+  fr: {
+    title: 'Rejoindre JLM Alumni',
+    desc: "Lauréats JLM : devenez référent d'une équipe puis accompagnateur, et transmettez l'aventure JLM à la nouvelle génération.",
+    badge: 'Lauréats JLM', titre: "Tu as vécu l'aventure JLM ?", accent: 'Transmets-la.',
+    intro: 'Rejoins JLM Alumni comme référent puis accompagnateur, et aide la nouvelle génération de Jeunes Leaders Marocains à réussir.',
+    procH: 'Comment devenir Alumni',
+    procP: "Un parcours progressif pour s'engager auprès des équipes JLM, du premier suivi d'équipe jusqu'à l'accompagnement des porteurs de projets.",
+    etapes: [
+      { t: 'Je postule', d: 'Tu remplis le formulaire ci-dessous : ton parcours JLM, ton poste dans ton ancienne équipe et tes motivations.', tag: 'Candidature' },
+      { t: "Je deviens référent d'une équipe", d: "Tu es affecté·e comme référent d'une équipe JLM : tu la suis tout au long de la saison et tu fais le lien avec l'association.", tag: 'Référent' },
+      { t: 'Entretien de validation', d: "Après cette première expérience, un entretien avec l'équipe JLM Alumni permet de valider ton parcours.", tag: 'Validation' },
+      { t: 'Je deviens accompagnateur', d: "Une fois validé·e, tu deviens accompagnateur : tu coaches les porteurs de projets et tu rejoins pleinement le réseau JLM Alumni.", tag: 'Accompagnateur' },
+    ],
+    roles: [
+      { t: 'Référent', d: "Le premier engagement : suivre une équipe étudiante, la motiver, l'orienter et faire remonter ses besoins à l'association." },
+      { t: 'Accompagnateur', d: 'Le rôle confirmé après entretien : coacher les porteurs de projets, des bootcamps régionaux jusqu\'à la Compétition nationale.' },
+    ],
+    formPill: 'Candidature', formH: 'Candidate pour devenir référent',
+    formP: 'Réservé aux lauréats et anciens membres des équipes JLM. On te recontacte pour la suite du parcours.',
+    formTitre: 'Candidature lauréat JLM', postuler: 'Je postule',
+  },
+  ar: {
+    title: 'انضم إلى JLM Alumni',
+    desc: 'خريجو JLM: كن مرجعًا لفريق ثم مواكبًا، وانقل تجربة JLM إلى الجيل الجديد.',
+    badge: 'خريجو JLM', titre: 'عشت تجربة JLM؟', accent: 'انقلها إلى غيرك.',
+    intro: 'انضم إلى JLM Alumni كمرجع ثم كمواكب، وساعد الجيل الجديد من رواد المغرب الشباب على النجاح.',
+    procH: 'كيف تصبح عضوًا في JLM Alumni',
+    procP: 'مسار تدريجي للالتزام إلى جانب فرق JLM، من تتبع فريق أول مرة إلى مواكبة حاملي المشاريع.',
+    etapes: [
+      { t: 'أترشّح', d: 'تملأ الاستمارة أسفله: مسارك في JLM، ومنصبك في فريقك السابق، ودوافعك.', tag: 'الترشيح' },
+      { t: 'أصبح مرجعًا لفريق', d: 'تُكلَّف بمهمة مرجع لفريق JLM: تتابعه طوال الموسم وتكون صلة الوصل بينه وبين الجمعية.', tag: 'مرجع' },
+      { t: 'مقابلة المصادقة', d: 'بعد هذه التجربة الأولى، تُجرى مقابلة مع فريق JLM Alumni للمصادقة على مسارك.', tag: 'المصادقة' },
+      { t: 'أصبح مواكبًا', d: 'بعد المصادقة، تصبح مواكبًا: تؤطّر حاملي المشاريع وتنضم بشكل كامل إلى شبكة JLM Alumni.', tag: 'مواكب' },
+    ],
+    roles: [
+      { t: 'المرجع', d: 'الالتزام الأول: تتبع فريق طلابي وتحفيزه وتوجيهه، ونقل احتياجاته إلى الجمعية.' },
+      { t: 'المواكب', d: 'الدور المؤكَّد بعد المقابلة: تأطير حاملي المشاريع، من المعسكرات الجهوية إلى المسابقة الوطنية.' },
+    ],
+    formPill: 'الترشيح', formH: 'ترشّح لتصبح مرجعًا لفريق',
+    formP: 'مخصص لخريجي وقدماء أعضاء فرق JLM. سنتواصل معك لاستكمال المسار.',
+    formTitre: 'ترشيح خريج JLM', postuler: 'أترشّح',
+  },
+}[lang];
+const couleurs = ['ink', 'green', 'yellow', 'red'];
+const txt: Record<string, string> = { green: '#fff', yellow: 'var(--ink)', red: '#fff', ink: '#fff' };
+---
+<Base title={T.title} description={T.desc} lang={lang}>
+  <PageHero badge={T.badge} titre={T.titre} accent={T.accent} intro={T.intro} image="/images/grand-groupe.jpg" couleur="green" />
+
+  <section class="proc">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>{T.procH}</h2>
+        <p>{T.procP}</p>
+      </div>
+      <ol class="etapes">
+        {T.etapes.map((e, i) => (
+          <li class="etape reveal">
+            <div class="top">
+              <span class="num" style={`background:var(--${couleurs[i]});color:${txt[couleurs[i]]}`}>0{i + 1}</span>
+              <span class="tag">{e.tag}</span>
+            </div>
+            <h3>{e.t}</h3>
+            <p>{e.d}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="roles">
+        {T.roles.map((r, i) => (
+          <div class={`role reveal ${i ? 'r2' : 'r1'}`}>
+            <h3>{r.t}</h3>
+            <p>{r.d}</p>
+          </div>
+        ))}
+      </div>
+      <a href="#candidature" class="btn btn-dark go">{T.postuler} {f}</a>
+    </div>
+  </section>
+
+  <section id="candidature" class="cand">
+    <div class="wrap form-zone">
+      <div class="form-side">
+        <span class="pill"><span class="dot"></span>{T.formPill}</span>
+        <h2>{T.formH}</h2>
+        <p>{T.formP}</p>
+      </div>
+      <InscriptionForm programme="alumni" endpoint={formulaires.alumni} titre={T.formTitre} sujet="Candidature Référent JLM Alumni" lang={lang} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .proc { padding-top: 24px; }
+  .etapes { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; }
+  .etape { background: var(--soft); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 10px; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .num { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 1.1rem; flex: none; }
+  .tag { font-size: .78rem; font-weight: 600; border: 1px solid var(--line); background: #fff; padding: .25rem .7rem; border-radius: 999px; }
+  .etape h3 { font-size: 1.45rem; }
+  .etape p { color: var(--muted); }
+
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .role { border-radius: var(--radius); padding: 32px; }
+  .role h3 { font-size: 1.8rem; margin-bottom: .5rem; }
+  .r1 { background: var(--green); color: #fff; }
+  .r2 { background: var(--ink); color: #fff; }
+  .role p { opacity: .85; max-width: 52ch; }
+  .go { margin-top: 32px; }
+
+  .cand { scroll-margin-top: 84px; padding-top: 24px; }
+  .form-zone { display: grid; grid-template-columns: .8fr 1.2fr; gap: 48px; align-items: start; }
+  .form-side { position: sticky; top: 108px; }
+  .form-side h2 { font-size: clamp(2rem, 4vw, 3rem); margin: 1rem 0; }
+  .form-side p { color: var(--muted); font-size: 1.05rem; }
+
+  @media (max-width: 960px) {
+    .etapes { grid-template-columns: 1fr 1fr; }
+    .roles, .form-zone { grid-template-columns: 1fr; }
+    .form-side { position: static; }
+  }
+  @media (max-width: 520px) {
+    .etapes { grid-template-columns: 1fr; }
+    .role { padding: 24px; }
+  }
+</style>

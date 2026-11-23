@@ -192,4 +192,5 @@ export const formulaires = {
   teamLeader: "xdegpaap", // https://formspree.io/f/xdegpaap → contact@jlmalumni.com
   dsff: "xppdoqda", // Inscription Digital Skills For Future
   dsu: "xwlowvov", // Candidature Digital Startup Incubation
+  alumni: "xkjrpozn", // Candidature lauréats JLM (référents / accompagnateurs)
 };

@@ -1,5 +1,4 @@
 ---
-import { contact } from '../data/site';
 import { type Lang, lp, tr } from '../i18n';
 
 interface Props { titre?: string; lang: Lang; }
@@ -9,17 +8,15 @@ const t = {
   laureat: { fr: 'Je suis lauréat JLM', ar: 'أنا من خريجي JLM' },
   partenaire: { fr: 'Je veux devenir partenaire', ar: 'أريد أن أصبح شريكًا' },
   tl: { fr: 'Je postule pour devenir Team Leader', ar: 'أترشح لأصبح قائد فريق' },
-  sujet: { fr: 'Rejoindre le réseau JLM Alumni', ar: 'الانضمام إلى شبكة JLM Alumni' },
 };
 const titre = Astro.props.titre ?? tr(t.titre, lang);
 const fleche = lang === 'ar' ? '←' : '→';
-const m = (sujet: string) => `mailto:${contact.email}?subject=${encodeURIComponent(sujet)}`;
 ---
 <div class="wrap">
   <div class="cta reveal">
     <h2>{titre}</h2>
     <div class="stack">
-      <a href={m(tr(t.sujet, lang))}>{tr(t.laureat, lang)} <span>{fleche}</span></a>
+      <a href={lp('/alumni', lang)}>{tr(t.laureat, lang)} <span>{fleche}</span></a>
       <a href={lp('/partenaires', lang) + '#devenir-partenaire'}>{tr(t.partenaire, lang)} <span>{fleche}</span></a>
       <a href={lp('/team-leader', lang)} class="alt">{tr(t.tl, lang)} <span>{fleche}</span></a>
     </div>
