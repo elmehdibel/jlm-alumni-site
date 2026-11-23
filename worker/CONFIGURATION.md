@@ -36,11 +36,12 @@ Sans cette étape, l'application pourrait envoyer des emails depuis **n'importe 
 Installer PowerShell une fois, puis l'ouvrir — l'invite devient `PS …>` :
 
 ```bash
-brew install --cask powershell
-pwsh
+brew install --cask powershell@preview
+pwsh-preview
 ```
 
-Puis, **dans PowerShell**, coller les commandes une par une (remplacer la valeur de `$AppId` par
+Le plus simple : lancer le script `pwsh-preview ~/Documents/Claude/jlm-alumni-site/worker/exchange-restriction.ps1`
+(il ne recrée rien de ce qui existe et vérifie le résultat). Sinon, **dans PowerShell**, coller les commandes une par une (remplacer la valeur de `$AppId` par
 l'ID d'application (client) de l'étape A) :
 
 ```powershell
