@@ -18,10 +18,19 @@ const t = {
   </label>
 )}
 {serviceActif(forcer) && service.turnstile && (
-  <div class="cf-turnstile" data-sitekey={service.turnstile} data-language={lang} data-theme="light"></div>
+  <div class="cf-turnstile" data-sitekey={service.turnstile} data-language={lang} data-theme="light" data-error-callback="jlmTurnstileErreur"></div>
+  <small class="ts-code" hidden></small>
 )}
 
 <script>
+  // En cas d'échec de la vérification, affiche le code d'erreur Cloudflare sous la case (aide au diagnostic).
+  (window as any).jlmTurnstileErreur = function (this: unknown, code: string) {
+    document.querySelectorAll<HTMLElement>('.ts-code').forEach((el) => {
+      el.textContent = (document.documentElement.lang === 'ar' ? 'رمز الخطأ: ' : 'Code Cloudflare : ') + code;
+      el.hidden = false;
+    });
+    return false; // laisse Turnstile réessayer automatiquement
+  };
   // Charge le script Turnstile une seule fois, seulement s'il y a un widget sur la page.
   if (document.querySelector('.cf-turnstile') && !document.querySelector('script[src*="challenges.cloudflare.com/turnstile"]')) {
     const s = document.createElement('script');
@@ -45,4 +54,5 @@ const t = {
   .cv-field small { font-weight: 400; color: var(--muted); font-size: .8rem; }
   :global(.card.dark) .cv-field input { background: var(--soft); }
   .cf-turnstile { min-height: 65px; }
+  .ts-code { color: var(--muted); font-size: .75rem; margin-top: -8px; }
 </style>
