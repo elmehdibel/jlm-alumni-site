@@ -35,7 +35,9 @@ if ($existe) {
 }
 
 # 2. Règle : l'application ne peut agir que sur les boîtes de ce groupe
-$regle = Get-ApplicationAccessPolicy | Where-Object { $_.AppId -eq $AppId }
+$regle = $null
+# Sans aucune règle existante, Exchange renvoie une erreur « introuvable » au lieu d'une liste vide.
+try { $regle = Get-ApplicationAccessPolicy -ErrorAction Stop | Where-Object { $_.AppId -eq $AppId } } catch { }
 if ($regle) {
   Write-Host "Règle d'accès déjà présente pour cette application."
 } else {
