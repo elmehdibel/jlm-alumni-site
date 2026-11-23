@@ -1,0 +1,161 @@
+---
+import { contact, reseau } from '../data/site';
+
+interface Props {
+  programme: 'dsff' | 'dsu';
+  endpoint: string; // identifiant Formspree, vide = formulaire pas encore activé
+  titre: string;
+  sujet: string;
+  sombre?: boolean;
+}
+const { programme, endpoint, titre, sujet, sombre = false } = Astro.props;
+const url = endpoint ? `https://formspree.io/f/${endpoint}` : '';
+const equipes = reseau.flatMap((v) => v.ecoles).sort((a, b) => a.localeCompare(b, 'fr'));
+const id = `f-${programme}`;
+---
+<div class={`card ${sombre ? 'dark' : ''}`}>
+  <h3 class="f-title">{titre}</h3>
+  <form class="insc-form" id={id} action={url || undefined} data-endpoint={url} data-email={contact.email} method="POST" novalidate>
+    <input type="hidden" name="_subject" value={sujet} />
+    <input type="hidden" name="programme" value={programme.toUpperCase()} />
+    <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <div class="row">
+      <label>Prénom<input name="prenom" required autocomplete="given-name" /></label>
+      <label>Nom<input name="nom" required autocomplete="family-name" /></label>
+    </div>
+    <div class="row">
+      <label>Adresse email<input name="email" type="email" required autocomplete="email" /></label>
+      <label>Téléphone<input name="telephone" type="tel" required autocomplete="tel" placeholder="06 00 00 00 00" pattern="[+0-9 ().\-]{8,20}" /></label>
+    </div>
+    <label>Adresse<input name="adresse" required autocomplete="street-address" placeholder="Quartier, ville" /></label>
+
+    {programme === 'dsu' && (
+      <>
+        <fieldset>
+          <legend>Membre JLM ?</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="membre_jlm" value="Oui" required /><span>Oui</span></label>
+            <label class="choice"><input type="radio" name="membre_jlm" value="Non" /><span>Non</span></label>
+          </div>
+        </fieldset>
+        <label class="equipe" hidden>Quelle équipe ?
+          <select name="equipe">
+            <option value="" selected disabled>Choisis ton équipe</option>
+            {equipes.map((e) => <option value={e}>{e}</option>)}
+            <option value="Autre">Autre équipe</option>
+          </select>
+        </label>
+      </>
+    )}
+
+    <label>Raison de l'inscription
+      <textarea name="raison" rows="5" required minlength="20" placeholder="Pourquoi veux-tu rejoindre ce programme ? Qu'en attends-tu ?"></textarea>
+    </label>
+
+    <p class="err" role="alert" hidden></p>
+    <button type="submit" class="btn submit">Envoyer mon inscription →</button>
+    <p class="note">Tes informations sont utilisées uniquement pour traiter ton inscription.</p>
+  </form>
+  <div class="ok" hidden>
+    <span class="tick">✓</span>
+    <h3>Inscription envoyée !</h3>
+    <p>Merci ! L'équipe JLM Alumni revient vers toi très vite par email ou par téléphone.</p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.insc-form').forEach((form) => {
+    const err = form.querySelector<HTMLElement>('.err')!;
+    const btn = form.querySelector<HTMLButtonElement>('.submit')!;
+    const label = btn.textContent;
+    const showErr = (msg: string) => { err.textContent = msg; err.hidden = false; };
+
+    // DSU : l'équipe n'est demandée qu'aux membres JLM
+    const equipeWrap = form.querySelector<HTMLElement>('.equipe');
+    const equipe = equipeWrap?.querySelector('select');
+    form.querySelectorAll<HTMLInputElement>('input[name="membre_jlm"]').forEach((r) =>
+      r.addEventListener('change', () => {
+        const oui = r.checked && r.value === 'Oui';
+        if (!equipeWrap || !equipe) return;
+        equipeWrap.hidden = !oui;
+        equipe.required = oui;
+        if (!oui) equipe.selectedIndex = 0;
+      }),
+    );
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.hidden = true;
+      form.classList.add('tried');
+      if (!form.checkValidity()) {
+        form.querySelector<HTMLElement>(':invalid')?.focus();
+        showErr('Merci de compléter tous les champs (raison : 20 caractères minimum).');
+        return;
+      }
+      const endpoint = form.dataset.endpoint;
+      if (!endpoint) {
+        showErr(`Les inscriptions ouvrent très bientôt. En attendant, écris-nous à ${form.dataset.email}.`);
+        return;
+      }
+      btn.disabled = true; btn.textContent = 'Envoi en cours…';
+      try {
+        const res = await fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.hidden = true;
+        const ok = form.parentElement!.querySelector<HTMLElement>('.ok')!;
+        ok.hidden = false;
+        ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch {
+        showErr(`L'envoi n'a pas fonctionné. Réessaie dans un instant ou écris-nous à ${form.dataset.email}.`);
+        btn.disabled = false; btn.textContent = label;
+      }
+    });
+  });
+</script>
+
+<style>
+  .card { background: var(--soft); border-radius: var(--radius); padding: 40px; color: var(--ink); }
+  .card.dark { background: #fff; }
+  .f-title { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 24px; }
+  form { display: grid; gap: 18px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  label, legend { display: grid; gap: 6px; font-weight: 600; font-size: .9rem; }
+  select {
+    appearance: none; -webkit-appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230c0d0c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem !important;
+  }
+  input:not([type='radio']), textarea, select {
+    font: inherit; font-weight: 400; font-size: 1rem; color: var(--ink);
+    background-color: #fff; border: 2px solid transparent; border-radius: 14px; padding: .85rem 1rem; width: 100%;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .card.dark input:not([type='radio']), .card.dark textarea, .card.dark select { background-color: var(--soft); }
+  textarea { resize: vertical; min-height: 120px; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 4px rgba(34,164,71,.18); }
+  form.tried input:invalid, form.tried textarea:invalid, form.tried select:invalid { border-color: var(--red); }
+  fieldset { border: 0; display: grid; gap: 8px; }
+  .choices { display: flex; gap: 10px; }
+  .choice { display: block; cursor: pointer; }
+  .choice input { position: absolute; opacity: 0; pointer-events: none; }
+  .choice span { display: inline-block; padding: .7rem 1.6rem; border-radius: 999px; background: #fff; border: 2px solid transparent; font-weight: 600; transition: .2s; }
+  .card.dark .choice span { background: var(--soft); }
+  .choice input:checked + span { background: var(--ink); color: #fff; }
+  .choice input:focus-visible + span { border-color: var(--green); }
+  form.tried .choices:has(input:invalid) span { border-color: var(--red); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; }
+  .submit { justify-content: center; font-size: 1.05rem; padding: 1.1rem; background: var(--ink); color: #fff; }
+  .submit:hover { background: #262826; }
+  .submit:disabled { opacity: .6; cursor: wait; }
+  .err { background: #fdecea; color: #a3261c; border-radius: 12px; padding: .8rem 1rem; font-weight: 500; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--muted); text-align: center; }
+  .ok { text-align: center; padding: 32px 12px; }
+  .tick { width: 72px; height: 72px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 2rem; margin-bottom: 1.25rem; background: var(--green); color: #fff; }
+  .ok h3 { font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin-bottom: .75rem; }
+  .ok p { color: var(--muted); max-width: 40ch; margin: 0 auto; }
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; }
+    .card { padding: 24px 18px; }
+  }
+</style>

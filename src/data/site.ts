@@ -31,6 +31,7 @@ export const chiffres = {
 export const navigation = [
   { label: "À propos", href: u("/a-propos") },
   { label: "Programmes", href: u("/programmes") },
+  { label: "Avec Stellantis", href: u("/stellantis") },
   { label: "Événements", href: u("/evenements") },
   { label: "Partenaires", href: u("/partenaires") },
 ];
@@ -141,4 +142,6 @@ export const reseau = [
 // Formulaires : identifiants Formspree (https://formspree.io), à renseigner après création du formulaire.
 export const formulaires = {
   teamLeader: "xdegpaap", // https://formspree.io/f/xdegpaap → contact@jlmalumni.com
+  dsff: "xppdoqda", // Inscription Digital Skills For Future
+  dsu: "xwlowvov", // Candidature Digital Startup Incubation
 };
