@@ -1,23 +1,23 @@
 ---
 // Champ CV (facultatif) et anti-spam Cloudflare Turnstile, actifs seulement avec le service d'envoi maison.
-import { service, cvActif } from '../data/site';
+import { service, cvActif, serviceActif } from '../data/site';
 import { type Lang, tr } from '../i18n';
 
-interface Props { lang: Lang; cv?: boolean; }
-const { lang, cv = false } = Astro.props;
+interface Props { lang: Lang; cv?: boolean; forcer?: boolean; }
+const { lang, cv = false, forcer = false } = Astro.props;
 const t = {
   cv: { fr: 'CV (facultatif)', ar: 'السيرة الذاتية (اختياري)' },
   aide: { fr: 'PDF ou Word, 3 Mo maximum', ar: 'ملف PDF أو Word، بحد أقصى 3 ميغابايت' },
 };
 ---
-{cv && cvActif() && (
+{cv && cvActif(forcer) && (
   <label class="cv-field">
     <span>{tr(t.cv, lang)}</span>
     <input type="file" name="cv" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
     <small>{tr(t.aide, lang)}</small>
   </label>
 )}
-{service.url && service.turnstile && (
+{serviceActif(forcer) && service.turnstile && (
   <div class="cf-turnstile" data-sitekey={service.turnstile} data-language={lang} data-theme="light"></div>
 )}
 

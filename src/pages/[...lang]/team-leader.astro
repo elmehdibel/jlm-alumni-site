@@ -97,7 +97,7 @@ const couleurs = ['green', 'yellow', 'red'];
           </div>
           <div class="row">
             <label>{T.email}<input name="email" type="email" required autocomplete="email" dir="ltr" /></label>
-            <label>{T.tel}<input name="telephone" type="tel" required autocomplete="tel" placeholder="06 00 00 00 00" pattern="[+0-9 ().\-]{8,20}" dir="ltr" /></label>
+            <label>{T.tel}<input name="telephone" type="tel" required autocomplete="tel" placeholder="06 00 00 00 00" pattern={"[+0-9 \\(\\)\\.\\-]{8,20}"} dir="ltr" /></label>
           </div>
           <div class="row">
             <label>{T.region}

@@ -1,0 +1,25 @@
+---
+// Page de test cachée (non liée, non indexée) : essaie le service d'envoi maison sur le vrai domaine
+// avant de l'activer pour tous les formulaires (service.actif dans src/data/site.ts).
+import Base from '../layouts/Base.astro';
+import InscriptionForm from '../components/InscriptionForm.astro';
+---
+<Base title="Test d'envoi" lang="fr" noindex>
+  <section>
+    <div class="wrap zone">
+      <div>
+        <h1>Test du service d'envoi</h1>
+        <p>Page interne, non référencée. Ce formulaire passe par le nouveau service (Microsoft 365) et arrive sur contact@jlmalumni.com.</p>
+      </div>
+      <InscriptionForm programme="dsff" titre="Test d'envoi" sujet="TEST service d'envoi — à ignorer" lang="fr" forcer />
+    </div>
+  </section>
+</Base>
+
+<style>
+  section { padding-top: 120px; }
+  .zone { display: grid; grid-template-columns: .8fr 1.2fr; gap: 48px; align-items: start; }
+  h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+  p { color: var(--muted); }
+  @media (max-width: 960px) { .zone { grid-template-columns: 1fr; } }
+</style>

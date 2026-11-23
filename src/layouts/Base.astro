@@ -5,12 +5,12 @@ import Footer from '../components/Footer.astro';
 import { type Lang, autreLangue } from '../i18n';
 import '../styles/global.css';
 
-interface Props { title?: string; description?: string; lang?: Lang; }
+interface Props { title?: string; description?: string; lang?: Lang; noindex?: boolean; }
 const defaut = {
   fr: "JLM Alumni, l'association des lauréats Jeunes Leaders Marocains : formation, orientation, santé et engagement citoyen au service de la jeunesse marocaine.",
   ar: "جمعية خريجي رواد المغرب الشباب: التكوين والتوجيه والصحة والالتزام المواطن في خدمة الشباب المغربي.",
 };
-const { title, lang = 'fr', description = defaut[lang] } = Astro.props;
+const { title, lang = 'fr', description = defaut[lang], noindex = false } = Astro.props;
 const site = lang === 'ar' ? 'JLM Alumni · رواد المغرب الشباب' : 'JLM Alumni · Jeunes Leaders Marocains';
 const fullTitle = title ? `${title} · JLM Alumni` : site;
 const alt = autreLangue(Astro.url.pathname, lang);
@@ -23,6 +23,7 @@ const altLang = lang === 'fr' ? 'ar' : 'fr';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={u("/images/alumni-groupe.jpg")} />

@@ -10,9 +10,10 @@ interface Props {
   sujet: string; // reste en français pour la boîte mail
   sombre?: boolean;
   lang: Lang;
+  forcer?: boolean; // utilise le service maison même s'il n'est pas encore activé (page de test)
 }
-const { programme, titre, sujet, sombre = false, lang } = Astro.props;
-const url = adresseEnvoi(programme);
+const { programme, titre, sujet, sombre = false, lang, forcer = false } = Astro.props;
+const url = adresseEnvoi(programme, forcer);
 const equipes = reseau.flatMap((v) => v.ecoles).sort((a, b) => a.localeCompare(b, 'fr'));
 const id = `f-${programme}`;
 const t = {
@@ -71,7 +72,7 @@ const t = {
     </div>
     <div class="row">
       <label>{tr(t.email, lang)}<input name="email" type="email" required autocomplete="email" dir="ltr" /></label>
-      <label>{tr(t.tel, lang)}<input name="telephone" type="tel" required autocomplete="tel" placeholder="06 00 00 00 00" pattern="[+0-9 ().\-]{8,20}" dir="ltr" /></label>
+      <label>{tr(t.tel, lang)}<input name="telephone" type="tel" required autocomplete="tel" placeholder="06 00 00 00 00" pattern={"[+0-9 \\(\\)\\.\\-]{8,20}"} dir="ltr" /></label>
     </div>
     {programme === 'alumni' ? (
       <>
@@ -112,7 +113,7 @@ const t = {
       </label>
     )}
 
-    <ChampsEnvoi lang={lang} cv={programme !== 'dsff'} />
+    <ChampsEnvoi lang={lang} cv={programme !== 'dsff'} forcer={forcer} />
 
     <p class="err" role="alert" hidden></p>
     <button type="submit" class="btn submit">{tr(programme === 'alumni' ? t.envoyerCandidature : t.envoyer, lang)}</button>

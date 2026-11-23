@@ -114,7 +114,8 @@ async function verifierTurnstile(token: string, ip: string | null, env: Env) {
   corps.append('response', token);
   if (ip) corps.append('remoteip', ip);
   const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: corps });
-  const d = (await r.json()) as { success: boolean };
+  const d = (await r.json()) as { success: boolean; 'error-codes'?: string[]; hostname?: string };
+  if (!d.success) console.warn('Turnstile refusé', JSON.stringify({ codes: d['error-codes'], hostname: d.hostname }));
   return d.success === true;
 }
 
@@ -163,6 +164,7 @@ export default {
     const essai = env.DRY_RUN === '1';
     if (!essai) {
       const token = String(donnees.get('cf-turnstile-response') ?? '');
+      if (!token) console.warn('Turnstile : jeton absent');
       if (!token || !(await verifierTurnstile(token, req.headers.get('CF-Connecting-IP'), env)))
         return json({ ok: false, erreur: 'anti-spam' }, 403, cors);
     }
@@ -221,6 +223,7 @@ ${valeurs.map(([l, v]) => `<tr><td style="background:#f4f4f1;font-weight:bold;ve
         }),
       });
       if (r.status !== 202) throw new Error(`Envoi refusé (${r.status}) : ${await r.text()}`);
+      console.log(`Envoyé : formulaire ${m![1]}`);
       return json({ ok: true }, 200, cors);
     } catch (e) {
       console.error(e);
