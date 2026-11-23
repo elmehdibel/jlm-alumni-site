@@ -132,7 +132,11 @@ async function jetonGraph(env: Env) {
       grant_type: 'client_credentials',
     }),
   });
-  if (!r.ok) throw new Error(`Jeton Microsoft refusé (${r.status}) : ${await r.text()}`);
+  if (!r.ok) {
+    // On ne journalise que les codes d'erreur : la réponse complète peut recopier les identifiants envoyés.
+    const e = (await r.json().catch(() => ({}))) as { error?: string; error_codes?: number[] };
+    throw new Error(`Jeton Microsoft refusé (${r.status}) : ${e.error ?? '?'} ${JSON.stringify(e.error_codes ?? [])}`);
+  }
   const d = (await r.json()) as { access_token: string; expires_in: number };
   jeton = { valeur: d.access_token, expire: Date.now() + d.expires_in * 1000 };
   return jeton.valeur;
