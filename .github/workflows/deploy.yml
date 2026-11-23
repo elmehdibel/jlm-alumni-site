@@ -14,12 +14,7 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
-env:
-  # Adresse provisoire : https://elmehdibel.github.io/jlm-alumni-site
-  # Le jour où jlmalumni.com pointe vers GitHub Pages : vider BASE_PATH, mettre SITE_URL à https://jlmalumni.com
-  # et ajouter le fichier public/CNAME contenant « jlmalumni.com ».
-  BASE_PATH: /jlm-alumni-site
-  SITE_URL: https://elmehdibel.github.io
+# Le site est servi sur https://jlmalumni.com (fichier public/CNAME).
 
 jobs:
   build:
