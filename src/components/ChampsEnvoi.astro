@@ -1,0 +1,48 @@
+---
+// Champ CV (facultatif) et anti-spam Cloudflare Turnstile, actifs seulement avec le service d'envoi maison.
+import { service, cvActif } from '../data/site';
+import { type Lang, tr } from '../i18n';
+
+interface Props { lang: Lang; cv?: boolean; }
+const { lang, cv = false } = Astro.props;
+const t = {
+  cv: { fr: 'CV (facultatif)', ar: 'السيرة الذاتية (اختياري)' },
+  aide: { fr: 'PDF ou Word, 3 Mo maximum', ar: 'ملف PDF أو Word، بحد أقصى 3 ميغابايت' },
+};
+---
+{cv && cvActif() && (
+  <label class="cv-field">
+    <span>{tr(t.cv, lang)}</span>
+    <input type="file" name="cv" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+    <small>{tr(t.aide, lang)}</small>
+  </label>
+)}
+{service.url && service.turnstile && (
+  <div class="cf-turnstile" data-sitekey={service.turnstile} data-language={lang} data-theme="light"></div>
+)}
+
+<script>
+  // Charge le script Turnstile une seule fois, seulement s'il y a un widget sur la page.
+  if (document.querySelector('.cf-turnstile') && !document.querySelector('script[src*="challenges.cloudflare.com/turnstile"]')) {
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+</script>
+
+<style>
+  .cv-field { display: grid; gap: 6px; font-weight: 600; font-size: .9rem; }
+  .cv-field input {
+    font: inherit; font-size: .95rem; font-weight: 400; background: #fff; border: 2px dashed var(--line);
+    border-radius: 14px; padding: .8rem 1rem; width: 100%; cursor: pointer; color: var(--muted);
+  }
+  .cv-field input:hover { border-color: var(--ink); }
+  .cv-field input::file-selector-button {
+    font: inherit; font-weight: 600; border: 0; border-radius: 999px; padding: .45rem 1rem;
+    background: var(--ink); color: #fff; margin-inline-end: 12px; cursor: pointer;
+  }
+  .cv-field small { font-weight: 400; color: var(--muted); font-size: .8rem; }
+  :global(.card.dark) .cv-field input { background: var(--soft); }
+  .cf-turnstile { min-height: 65px; }
+</style>

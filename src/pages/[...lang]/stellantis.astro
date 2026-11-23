@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import InscriptionForm from '../../components/InscriptionForm.astro';
 import { u } from '../../lib/url';
-import { formulaires } from '../../data/site';
 import { getLang, langPaths } from '../../i18n';
 
 export const getStaticPaths = langPaths;
@@ -188,7 +187,7 @@ const T = {
           <h3>{T.dsff.formH}</h3>
           <p>{T.dsff.formP}</p>
         </div>
-        <InscriptionForm programme="dsff" endpoint={formulaires.dsff} titre={T.dsff.formTitre} sujet="Inscription Digital Skills For Future" lang={lang} />
+        <InscriptionForm programme="dsff" titre={T.dsff.formTitre} sujet="Inscription Digital Skills For Future" lang={lang} />
       </div>
     </div>
   </section>
@@ -237,7 +236,7 @@ const T = {
             <h3>{T.dsu.formH}</h3>
             <p>{T.dsu.formP}</p>
           </div>
-          <InscriptionForm programme="dsu" endpoint={formulaires.dsu} titre={T.dsu.formTitre} sujet="Candidature Digital Startup Incubation" sombre lang={lang} />
+          <InscriptionForm programme="dsu" titre={T.dsu.formTitre} sujet="Candidature Digital Startup Incubation" sombre lang={lang} />
         </div>
       </div>
     </div>

@@ -1,12 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { contact, formulaires } from '../../data/site';
+import { contact, adresseEnvoi } from '../../data/site';
+import ChampsEnvoi from '../../components/ChampsEnvoi.astro';
 import { regions } from '../../data/regions';
 import { getLang, langPaths, tr } from '../../i18n';
 
 export const getStaticPaths = langPaths;
 const lang = getLang(Astro.params.lang);
-const action = formulaires.teamLeader ? `https://formspree.io/f/${formulaires.teamLeader}` : '';
+const action = adresseEnvoi('teamLeader');
 // Valeur envoyée = nom français ; texte affiché = langue de la page.
 const villesParRegion = Object.fromEntries(
   regions.map((r) => [
@@ -37,6 +38,8 @@ const T = {
     errOff: `Le formulaire n'est pas encore activé. En attendant, écris-nous à ${contact.email}.`,
     errEnvoi: `L'envoi n'a pas fonctionné. Réessaie dans un instant ou écris-nous à ${contact.email}.`,
     envoi: 'Envoi en cours…',
+    errCv: 'Le CV doit être un fichier PDF ou Word de 3 Mo maximum.',
+    errRobot: "Merci de valider la vérification anti-spam avant d'envoyer.",
   },
   ar: {
     title: 'كن قائد فريق', desc: 'ترشّح لتصبح قائد فريق JLM وتؤطّر فريق مدرستك أو جامعتك.',
@@ -58,9 +61,11 @@ const T = {
     errOff: `الاستمارة غير مفعّلة بعد. في انتظار ذلك، راسلنا على ${contact.email}.`,
     errEnvoi: `تعذّر الإرسال. أعد المحاولة بعد لحظة أو راسلنا على ${contact.email}.`,
     envoi: 'جارٍ الإرسال…',
+    errCv: 'يجب أن تكون السيرة الذاتية ملف PDF أو Word لا يتجاوز 3 ميغابايت.',
+    errRobot: 'المرجو إتمام التحقق من أنك لست روبوتًا قبل الإرسال.',
   },
 }[lang];
-const M = { choisirVille: T.choisirVille, autreVille: T.autreVille, errChamps: T.errChamps, errOff: T.errOff, errEnvoi: T.errEnvoi, envoi: T.envoi, envoyer: T.envoyer };
+const M = { choisirVille: T.choisirVille, autreVille: T.autreVille, errChamps: T.errChamps, errOff: T.errOff, errEnvoi: T.errEnvoi, envoi: T.envoi, envoyer: T.envoyer, errCv: T.errCv, errRobot: T.errRobot };
 const couleurs = ['green', 'yellow', 'red'];
 ---
 <Base title={T.title} description={T.desc} lang={lang}>
@@ -122,6 +127,8 @@ const couleurs = ['green', 'yellow', 'red'];
             <textarea name="motivations" rows="6" required minlength="30" placeholder={T.motivEx}></textarea>
           </label>
 
+          <ChampsEnvoi lang={lang} cv />
+
           <p class="err" role="alert" hidden></p>
           <button type="submit" class="btn btn-dark submit">{T.envoyer}</button>
           <p class="note">{T.note}</p>
@@ -177,6 +184,10 @@ const couleurs = ['green', 'yellow', 'red'];
     }
     const endpoint = form.dataset.endpoint;
     if (!endpoint) { showErr(M.errOff); return; }
+    const cv = form.querySelector('input[name="cv"]')?.files?.[0];
+    if (cv && (cv.size > 3 * 1024 * 1024 || !/\.(pdf|docx?)$/i.test(cv.name))) { showErr(M.errCv); return; }
+    const ts = form.querySelector('.cf-turnstile');
+    if (ts && !form.querySelector('[name="cf-turnstile-response"]')?.value) { showErr(M.errRobot); return; }
     btn.disabled = true; btn.textContent = M.envoi;
     try {
       const res = await fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
@@ -188,6 +199,8 @@ const couleurs = ['green', 'yellow', 'red'];
     } catch {
       showErr(M.errEnvoi);
       btn.disabled = false; btn.textContent = M.envoyer;
+      const ts = form.querySelector('.cf-turnstile');
+      if (ts) window.turnstile?.reset(ts);
     }
   });
 </script>

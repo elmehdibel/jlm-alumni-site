@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import InscriptionForm from '../../components/InscriptionForm.astro';
-import { formulaires } from '../../data/site';
 import { getLang, langPaths } from '../../i18n';
 
 export const getStaticPaths = langPaths;
@@ -96,7 +95,7 @@ const txt: Record<string, string> = { green: '#fff', yellow: 'var(--ink)', red: 
         <h2>{T.formH}</h2>
         <p>{T.formP}</p>
       </div>
-      <InscriptionForm programme="alumni" endpoint={formulaires.alumni} titre={T.formTitre} sujet="Candidature Référent JLM Alumni" lang={lang} />
+      <InscriptionForm programme="alumni" titre={T.formTitre} sujet="Candidature Référent JLM Alumni" lang={lang} />
     </div>
   </section>
 </Base>

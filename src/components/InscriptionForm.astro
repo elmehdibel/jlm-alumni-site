@@ -1,17 +1,18 @@
 ---
-import { contact, reseau } from '../data/site';
+import { contact, reseau, adresseEnvoi } from '../data/site';
+import ChampsEnvoi from './ChampsEnvoi.astro';
 import { type Lang, tr } from '../i18n';
 
 interface Props {
   programme: 'dsff' | 'dsu' | 'alumni';
-  endpoint: string; // identifiant Formspree, vide = formulaire pas encore activé
+  endpoint?: string; // obsolète : l'adresse d'envoi est calculée par adresseEnvoi()
   titre: string;
   sujet: string; // reste en français pour la boîte mail
   sombre?: boolean;
   lang: Lang;
 }
-const { programme, endpoint, titre, sujet, sombre = false, lang } = Astro.props;
-const url = endpoint ? `https://formspree.io/f/${endpoint}` : '';
+const { programme, titre, sujet, sombre = false, lang } = Astro.props;
+const url = adresseEnvoi(programme);
 const equipes = reseau.flatMap((v) => v.ecoles).sort((a, b) => a.localeCompare(b, 'fr'));
 const id = `f-${programme}`;
 const t = {
@@ -47,6 +48,8 @@ const t = {
   errBientot: { fr: `Les inscriptions ouvrent très bientôt. En attendant, écris-nous à ${contact.email}.`, ar: `يفتح التسجيل قريبًا جدًا. في انتظار ذلك، راسلنا على ${contact.email}.` },
   errEnvoi: { fr: `L'envoi n'a pas fonctionné. Réessaie dans un instant ou écris-nous à ${contact.email}.`, ar: `تعذّر الإرسال. أعد المحاولة بعد لحظة أو راسلنا على ${contact.email}.` },
   envoi: { fr: 'Envoi en cours…', ar: 'جارٍ الإرسال…' },
+  errCv: { fr: 'Le CV doit être un fichier PDF ou Word de 3 Mo maximum.', ar: 'يجب أن تكون السيرة الذاتية ملف PDF أو Word لا يتجاوز 3 ميغابايت.' },
+  errRobot: { fr: "Merci de valider la vérification anti-spam avant d'envoyer.", ar: 'المرجو إتمام التحقق من أنك لست روبوتًا قبل الإرسال.' },
 };
 ---
 <div class={`card ${sombre ? 'dark' : ''}`}>
@@ -55,6 +58,7 @@ const t = {
     class="insc-form" id={id} action={url || undefined} data-endpoint={url} method="POST" novalidate
     data-err-champs={tr(t.errChamps, lang)} data-err-bientot={tr(t.errBientot, lang)}
     data-err-envoi={tr(t.errEnvoi, lang)} data-envoi={tr(t.envoi, lang)}
+    data-err-cv={tr(t.errCv, lang)} data-err-robot={tr(t.errRobot, lang)}
   >
     <input type="hidden" name="_subject" value={sujet} />
     <input type="hidden" name="programme" value={programme.toUpperCase()} />
@@ -108,6 +112,8 @@ const t = {
       </label>
     )}
 
+    <ChampsEnvoi lang={lang} cv={programme !== 'dsff'} />
+
     <p class="err" role="alert" hidden></p>
     <button type="submit" class="btn submit">{tr(programme === 'alumni' ? t.envoyerCandidature : t.envoyer, lang)}</button>
     <p class="note">{tr(t.note, lang)}</p>
@@ -151,6 +157,12 @@ const t = {
       }
       const endpoint = form.dataset.endpoint;
       if (!endpoint) { showErr(msg.errBientot); return; }
+      // CV : PDF ou Word, 3 Mo maximum
+      const cv = form.querySelector<HTMLInputElement>('input[name="cv"]')?.files?.[0];
+      if (cv && (cv.size > 3 * 1024 * 1024 || !/\.(pdf|docx?)$/i.test(cv.name))) { showErr(msg.errCv); return; }
+      // Anti-spam Turnstile (si présent)
+      const ts = form.querySelector<HTMLElement>('.cf-turnstile');
+      if (ts && !(form.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement | null)?.value) { showErr(msg.errRobot); return; }
       btn.disabled = true; btn.textContent = msg.envoi ?? '…';
       try {
         const res = await fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
@@ -162,6 +174,8 @@ const t = {
       } catch {
         showErr(msg.errEnvoi);
         btn.disabled = false; btn.textContent = label;
+        const ts = form.querySelector<HTMLElement>('.cf-turnstile');
+        if (ts) (window as any).turnstile?.reset(ts);
       }
     });
   });

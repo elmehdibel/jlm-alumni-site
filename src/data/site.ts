@@ -187,7 +187,23 @@ export const reseau: { ville: L; lat: number; lon: number; ecoles: string[] }[] 
   { ville: { fr: "Dakhla", ar: "الداخلة" }, lat: 23.6848, lon: -15.958, ecoles: ["ENCG Dakhla"] },
 ];
 
-// Formulaires : identifiants Formspree (https://formspree.io).
+// Service d'envoi maison (dossier /worker) : quand `url` est renseignée, les formulaires passent par lui
+// (envoi depuis contact@ via Microsoft 365, CV en pièce jointe, anti-spam Turnstile) au lieu de Formspree.
+export const service = {
+  url: "", // ex. "https://jlm-formulaires.xxxx.workers.dev"
+  turnstile: "", // clé publique (site key) du widget Cloudflare Turnstile
+};
+
+export type CleFormulaire = 'teamLeader' | 'dsff' | 'dsu' | 'alumni';
+/** Adresse d'envoi d'un formulaire : service maison si configuré, sinon Formspree. */
+export const adresseEnvoi = (cle: CleFormulaire) =>
+  service.url
+    ? `${service.url.replace(/\/$/, '')}/submit/${cle === 'teamLeader' ? 'teamleader' : cle}`
+    : formulaires[cle] ? `https://formspree.io/f/${formulaires[cle]}` : '';
+/** Le champ CV n'existe qu'avec le service maison (Formspree gratuit ne prend pas les fichiers). */
+export const cvActif = () => !!service.url;
+
+// Formulaires : identifiants Formspree (https://formspree.io), utilisés tant que le service maison n'est pas en place.
 export const formulaires = {
   teamLeader: "xdegpaap", // https://formspree.io/f/xdegpaap → contact@jlmalumni.com
   dsff: "xppdoqda", // Inscription Digital Skills For Future

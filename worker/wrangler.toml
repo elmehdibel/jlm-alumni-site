@@ -1,0 +1,9 @@
+name = "jlm-formulaires"
+main = "src/index.ts"
+compatibility_date = "2025-06-01"
+
+[vars]
+SENDER = "contact@jlmalumni.com"
+RECIPIENT = "contact@jlmalumni.com"
+ALLOWED_ORIGINS = "https://jlmalumni.com,https://www.jlmalumni.com,http://jlmalumni.com,http://www.jlmalumni.com,http://localhost:4321"
+DRY_RUN = "0"
