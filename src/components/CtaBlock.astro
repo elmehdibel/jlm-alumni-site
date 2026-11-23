@@ -1,0 +1,26 @@
+---
+import { contact } from '../data/site';
+interface Props { titre?: string; }
+const { titre = 'Prêt·e à faire bouger la jeunesse marocaine ?' } = Astro.props;
+const m = (sujet: string) => `mailto:${contact.email}?subject=${encodeURIComponent(sujet)}`;
+---
+<div class="wrap">
+  <div class="cta reveal">
+    <h2>{titre}</h2>
+    <div class="stack">
+      <a href={m('Rejoindre le réseau JLM Alumni')}>Je suis lauréat JLM <span>→</span></a>
+      <a href="/partenaires#devenir-partenaire">Je veux devenir partenaire <span>→</span></a>
+      <a href={m('Devenir bénévole JLM Alumni')} class="alt">Je veux être bénévole <span>→</span></a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cta { background: var(--yellow); border-radius: 40px; padding: 80px 56px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; }
+  .cta h2 { font-size: clamp(2.4rem, 5.5vw, 4.6rem); }
+  .stack { display: grid; gap: 12px; }
+  .stack a { background: var(--ink); color: #fff; border-radius: 20px; padding: 22px 24px; display: flex; justify-content: space-between; font-weight: 600; font-size: 1.1rem; transition: .2s; }
+  .stack a:hover { transform: translateX(6px); }
+  .stack a.alt { background: #fff; color: var(--ink); }
+  @media (max-width: 960px) { .cta { grid-template-columns: 1fr; padding: 56px 24px; border-radius: 28px; } }
+</style>

@@ -1,0 +1,19 @@
+---
+import { partenaires } from '../data/site';
+const liste = [...partenaires, ...partenaires];
+---
+<div class="marquee" aria-label="Nos partenaires">
+  <div class="track">
+    {liste.map((p, i) => <img src={p.logo} alt={i < partenaires.length ? p.nom : ''} loading="lazy" />)}
+  </div>
+</div>
+
+<style>
+  .marquee { border-block: 1px solid var(--line); padding: 22px 0; overflow: hidden; }
+  .track { display: flex; gap: 64px; width: max-content; animation: scroll 45s linear infinite; align-items: center; }
+  .marquee:hover .track { animation-play-state: paused; }
+  img { height: 52px; width: auto; max-width: 150px; object-fit: contain; filter: grayscale(1); opacity: .7; transition: .3s; mix-blend-mode: multiply; }
+  img:hover { filter: none; opacity: 1; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; } }
+</style>

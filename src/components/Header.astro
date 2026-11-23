@@ -1,0 +1,70 @@
+---
+import { navigation } from '../data/site';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header class="site-header">
+  <div class="wrap nav">
+    <a href="/" class="brand" aria-label="JLM Alumni, accueil">
+      <img src="/logos/jlm-alumni-couleur.png" alt="JLM Alumni" width="1117" height="507" />
+    </a>
+    <nav class="links" aria-label="Navigation principale">
+      {navigation.map((l) => (
+        <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
+      ))}
+    </nav>
+    <a href="/contact" class="btn btn-dark cta-desk">Contact</a>
+    <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+<div class="mobile-menu" id="mobile-menu" hidden>
+  <nav class="wrap" aria-label="Menu mobile">
+    <a href="/">Accueil</a>
+    {navigation.map((l) => <a href={l.href}>{l.label}</a>)}
+    <a href="/contact">Contact</a>
+    <div class="mm-bar"><i class="bg-green"></i><i class="bg-yellow"></i><i class="bg-red"></i></div>
+  </nav>
+</div>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.burger');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    btn.setAttribute('aria-label', open ? 'Ouvrir le menu' : 'Fermer le menu');
+    if (menu) menu.hidden = open;
+    document.documentElement.style.overflow = open ? '' : 'hidden';
+  });
+  window.matchMedia('(min-width: 961px)').addEventListener('change', (e) => {
+    if (e.matches && btn?.getAttribute('aria-expanded') === 'true') btn.click();
+  });
+</script>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.9); backdrop-filter: blur(10px); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 16px; }
+  .brand img { height: 50px; width: auto; }
+  .links { display: flex; gap: .25rem; background: var(--soft); padding: .35rem; border-radius: 999px; }
+  .links a { padding: .5rem 1rem; border-radius: 999px; font-weight: 500; font-size: .92rem; transition: .2s; }
+  .links a:hover { background: #fff; }
+  .links a.active { background: var(--ink); color: #fff; }
+  .cta-desk { padding: .75rem 1.3rem; }
+  .burger { display: none; width: 48px; height: 48px; border-radius: 50%; background: var(--soft); border: 0; cursor: pointer; position: relative; }
+  .burger span { position: absolute; left: 14px; right: 14px; height: 2px; background: var(--ink); transition: .25s; }
+  .burger span:first-child { top: 19px; }
+  .burger span:last-child { top: 27px; }
+  .burger[aria-expanded='true'] span:first-child { top: 23px; transform: rotate(45deg); }
+  .burger[aria-expanded='true'] span:last-child { top: 23px; transform: rotate(-45deg); }
+  .mobile-menu { position: fixed; inset: 84px 0 0; background: #fff; z-index: 49; padding-top: 24px; overflow-y: auto; }
+  .mobile-menu nav { display: flex; flex-direction: column; }
+  .mobile-menu a { font-family: var(--display); font-weight: 800; font-size: 2.2rem; letter-spacing: -.03em; padding: .5rem 0; border-bottom: 1px solid var(--line); }
+  .mm-bar { display: flex; gap: 8px; margin-top: 32px; }
+  .mm-bar i { height: 8px; flex: 1; border-radius: 4px; }
+  @media (max-width: 960px) {
+    .links, .cta-desk { display: none; }
+    .burger { display: block; }
+    .brand img { height: 44px; }
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { partenaires, contact, chiffres } from '../data/site';
+const institutions = partenaires.filter((p) => p.type === 'institution');
+const entreprises = partenaires.filter((p) => p.type === 'entreprise');
+const raisons = [
+  { t: 'Visibilité', d: `Votre marque auprès de ${chiffres.etudiants} étudiants et de ${chiffres.ecoles} écoles et universités.`, c: 'green' },
+  { t: 'Talents', d: 'Un accès privilégié aux jeunes leaders les plus engagés du pays.', c: 'yellow' },
+  { t: 'Impact', d: 'Une contribution concrète et mesurable à l\'inclusion économique des jeunes.', c: 'red' },
+];
+const mail = `mailto:${contact.email}?subject=${encodeURIComponent('Partenariat JLM Alumni')}`;
+---
+<Base title="Partenaires" description="Institutions et entreprises qui soutiennent JLM Alumni, et comment devenir partenaire.">
+  <PageHero
+    badge="Ils nous font confiance"
+    titre="Ensemble pour"
+    accent="la jeunesse."
+    intro="Institutions publiques et entreprises engagées : nos partenaires rendent possibles nos programmes et nos événements partout au Maroc."
+    image="/images/remise-prix.jpg"
+  />
+
+  <section style="padding-top:24px">
+    <div class="wrap">
+      <h2 class="sub">Partenaires institutionnels</h2>
+      <div class="logos">
+        {institutions.map((p) => <div class="logo reveal"><img src={p.logo} alt={p.nom} loading="lazy" /><span>{p.nom}</span></div>)}
+      </div>
+      <h2 class="sub">Entreprises partenaires</h2>
+      <div class="logos">
+        {entreprises.map((p) => <div class="logo reveal"><img src={p.logo} alt={p.nom} loading="lazy" /><span>{p.nom}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <div class="dark-block" id="devenir-partenaire">
+    <div class="wrap" style="padding:0">
+      <div class="sec-head"><h2>Devenir partenaire</h2><p>Soutenez un programme, un événement ou la saison entière. Nous construisons ensemble un partenariat sur mesure.</p></div>
+      <div class="why">
+        {raisons.map((r) => (
+          <div class="reveal">
+            <i class={`bg-${r.c}`}></i>
+            <h3>{r.t}</h3>
+            <p>{r.d}</p>
+          </div>
+        ))}
+      </div>
+      <div class="contact-row">
+        <a href={mail} class="btn btn-white">Proposer un partenariat →</a>
+        <span>ou appelez-nous au <a href={`tel:${contact.telephoneLien}`}>{contact.telephone}</a></span>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .sub { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 48px 0 20px; }
+  .sub:first-child { margin-top: 0; }
+  .logos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .logo { border: 1px solid var(--line); border-radius: 24px; aspect-ratio: 4 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; transition: .25s; min-width: 0; }
+  .logo:hover { border-color: var(--ink); transform: translateY(-4px); }
+  .logo img { max-height: 90px; max-width: 80%; object-fit: contain; mix-blend-mode: multiply; }
+  .logo span { font-size: .85rem; color: var(--muted); font-weight: 500; text-align: center; }
+
+  .why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .why div { background: var(--ink-2); border-radius: 24px; padding: 32px; }
+  .why i { display: block; width: 40px; height: 8px; border-radius: 4px; margin-bottom: 1.5rem; }
+  .why h3 { font-size: 1.8rem; margin-bottom: .5rem; }
+  .why p { color: rgba(255,255,255,.7); }
+  .contact-row { display: flex; align-items: center; gap: 24px; margin-top: 40px; flex-wrap: wrap; color: rgba(255,255,255,.7); }
+  .contact-row a:not(.btn) { color: var(--yellow); font-weight: 600; }
+
+  @media (max-width: 960px) {
+    .logos { grid-template-columns: repeat(2, 1fr); }
+    .why { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JLM Alumni · Piste A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f2a1f; --green:#1f5a3d; --green-2:#2f7a52; --gold:#e0a526; --red:#c8372d;
+  --cream:#f7f4ec; --paper:#fff; --muted:#5b6b62; --line:#e4e0d4;
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.1;letter-spacing:-.01em}
+h2{font-size:clamp(2rem,4vw,3rem)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.5rem;border-radius:999px;font-weight:600;font-size:.95rem;transition:.2s}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:#f0b838}
+.btn-ghost{border:1px solid rgba(255,255,255,.5);color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-dark{background:var(--ink);color:#fff}
+
+/* Nav */
+header{position:absolute;inset:0 0 auto;z-index:10}
+.nav{display:flex;align-items:center;justify-content:space-between;height:88px}
+.logo{background:#fff;border-radius:12px;padding:6px 10px}
+.logo img{height:44px}
+.links{display:flex;gap:2rem;color:#fff;font-weight:500;font-size:.95rem}
+.links a{opacity:.85}.links a:hover{opacity:1}
+.menu-btn{display:none;color:#fff;background:none;border:1px solid rgba(255,255,255,.5);border-radius:8px;padding:.5rem .8rem;font:inherit}
+
+/* Hero */
+.hero{position:relative;min-height:92vh;display:flex;align-items:flex-end;color:#fff;background:#0f2a1f url('https://jlmalumni.com/wp-content/uploads/2025/09/JLM-286.jpg') center/cover}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,42,31,.95) 0%,rgba(15,42,31,.75) 45%,rgba(15,42,31,.25) 100%),linear-gradient(0deg,rgba(15,42,31,.9),transparent 50%)}
+.hero .wrap{position:relative;padding-bottom:140px;padding-top:140px}
+.hero h1{font-size:clamp(2.4rem,6vw,4.6rem);max-width:15ch;margin:1rem 0 1.25rem}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{max-width:52ch;font-size:1.1rem;opacity:.9}
+.hero .ctas{display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap}
+
+/* Stats */
+.stats{position:relative;z-index:2;margin-top:-70px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-radius:20px;box-shadow:0 20px 50px rgba(15,42,31,.15);overflow:hidden}
+.stat{padding:2rem;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:var(--serif);font-size:clamp(1.8rem,3.2vw,2.6rem);white-space:nowrap;color:var(--green);line-height:1}
+.stat span{color:var(--muted);font-size:.9rem}
+
+section{padding:110px 0}
+/* Mission */
+.mission{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.mission p{color:var(--muted);font-size:1.08rem;margin-bottom:1rem}
+.indh{margin-top:2rem;padding:1.5rem;border-left:4px solid var(--gold);background:var(--cream);border-radius:0 12px 12px 0;display:flex;gap:1rem;align-items:center}
+.indh img{width:84px;flex:none;mix-blend-mode:multiply}
+.indh small{color:var(--muted)}
+
+/* Programmes */
+.bg-cream{background:var(--cream)}
+.head{display:flex;justify-content:space-between;align-items:end;gap:2rem;margin-bottom:3rem;flex-wrap:wrap}
+.head p{max-width:46ch;color:var(--muted)}
+.progs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.prog{background:#fff;border-radius:20px;overflow:hidden;transition:.3s}
+.prog:hover{transform:translateY(-6px);box-shadow:0 24px 40px rgba(15,42,31,.12)}
+.prog img{height:230px;width:100%;object-fit:cover}
+.prog div{padding:1.75rem}
+.prog h3{font-size:1.5rem;margin-bottom:.5rem}
+.prog p{color:var(--muted);font-size:.95rem}
+.prog .tag{display:inline-block;margin-bottom:.75rem;font-size:.75rem;font-weight:600;color:var(--green-2);background:#e7f2ea;padding:.25rem .6rem;border-radius:999px}
+
+/* Saison */
+.season{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+.season-img{border-radius:24px;overflow:hidden;position:relative}
+.season-img img{height:520px;width:100%;object-fit:cover}
+.season-img .badge{position:absolute;left:20px;bottom:20px;background:var(--gold);color:var(--ink);padding:1rem 1.25rem;border-radius:14px;font-weight:600}
+.season-img .badge b{font-family:var(--serif);font-size:1.8rem;display:block;line-height:1}
+.steps{margin-top:2rem;display:grid;gap:0}
+.step{display:grid;grid-template-columns:56px 1fr;gap:1rem;padding:1.4rem 0;border-top:1px solid var(--line)}
+.step i{font-style:normal;font-family:var(--serif);font-size:1.6rem;color:var(--gold)}
+.step h3{font-size:1.25rem;margin-bottom:.25rem}
+.step p{color:var(--muted);font-size:.95rem}
+
+/* Réseau */
+.network{background:var(--ink);color:#fff;border-radius:28px;padding:72px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.network b{font-family:var(--serif);font-size:clamp(4rem,10vw,8rem);color:var(--gold);line-height:.9}
+.network p{opacity:.8;font-size:1.05rem;margin-top:1rem}
+.network img{border-radius:16px}
+
+/* Partenaires */
+.partners{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.partners div{min-width:0;background:#fff;aspect-ratio:3/2;display:grid;place-items:center;padding:1.25rem}
+.partners img{max-height:64px;max-width:100%;object-fit:contain;filter:grayscale(1);opacity:.75;transition:.3s}
+.partners div:hover img{filter:none;opacity:1}
+
+/* CTA */
+.cta{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.cta a{border-radius:24px;padding:48px;min-height:260px;display:flex;flex-direction:column;justify-content:space-between;transition:.3s}
+.cta a:hover{transform:translateY(-4px)}
+.cta .c1{background:var(--green);color:#fff}
+.cta .c2{background:var(--gold);color:var(--ink)}
+.cta h3{font-size:2rem}
+.cta span{font-weight:600}
+
+footer{background:var(--ink);color:rgba(255,255,255,.8);padding:72px 0 32px;margin-top:110px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+.foot h4{color:#fff;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem}
+.foot li{list-style:none;margin-bottom:.5rem;font-size:.95rem}
+.foot .logo{display:inline-block;margin-bottom:1rem}
+.copy{border-top:1px solid rgba(255,255,255,.12);margin-top:48px;padding-top:24px;font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+
+@media (max-width:900px){
+  .links{display:none}.menu-btn{display:block}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .mission,.season,.network,.cta{grid-template-columns:1fr}
+  .progs{grid-template-columns:1fr}
+  .partners{grid-template-columns:repeat(3,1fr)}
+  .foot{grid-template-columns:1fr 1fr}
+  .network{padding:40px 28px}
+  section{padding:72px 0}
+  .season-img img{height:340px}
+}
+@media (max-width:520px){
+  .wrap{padding:0 16px}
+  .stat{padding:1.25rem}.stat b{font-size:2rem}
+  .cta a{padding:32px}
+  .foot{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo"><img src="https://jlmalumni.com/wp-content/uploads/2025/09/cropped-cropped-jlm-alumni.jpg" alt="JLM Alumni"></a>
+    <nav class="links">
+      <a href="#mission">À propos</a><a href="#programmes">Programmes</a><a href="#evenements">Événements</a><a href="#partenaires">Partenaires</a><a href="#contact">Contact</a>
+    </nav>
+    <a href="#rejoindre" class="btn btn-gold" style="padding:.65rem 1.2rem">Nous rejoindre</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Association des lauréats · Jeunes Leaders Marocains</span>
+    <h1>Tout ce que nous faisons, c'est <em>pour notre nation.</em></h1>
+    <p>Depuis 2011, JLM forme et accompagne des milliers d'étudiants marocains à l'entrepreneuriat social et à l'engagement citoyen. JLM Alumni fédère ses lauréats pour prolonger cet impact.</p>
+    <div class="ctas">
+      <a href="#programmes" class="btn btn-gold">Découvrir nos programmes →</a>
+      <a href="#partenaires" class="btn btn-ghost">Devenir partenaire</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap stats">
+  <div class="stats-grid">
+    <div class="stat"><b>2011</b><span>Création de JLM</span></div>
+    <div class="stat"><b>+10 000</b><span>Étudiants formés</span></div>
+    <div class="stat"><b>+50</b><span>Écoles &amp; universités</span></div>
+    <div class="stat"><b>+300 000</b><span>Bénéficiaires</span></div>
+  </div>
+</div>
+
+<section id="mission">
+  <div class="wrap mission">
+    <div>
+      <span class="eyebrow" style="color:var(--green-2)">Qui sommes-nous</span>
+      <h2 style="margin-top:.75rem">Une jeunesse qui entreprend pour le Maroc.</h2>
+    </div>
+    <div>
+      <p>Jeunes Leaders Marocains est une initiative d'entrepreneuriat social et d'engagement citoyen, 100 % marocaine et à but non lucratif, qui encadre les étudiants de l'enseignement supérieur public et privé.</p>
+      <p>Créée en 2018, l'association JLM Alumni rassemble les lauréats du programme pour transmettre, accompagner et agir sur le terrain : formation, orientation, santé et inclusion économique des jeunes.</p>
+      <div class="indh">
+        <img src="https://jlmalumni.com/wp-content/uploads/2026/08/%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%AF%D8%B1%D8%A9-%D8%A7%D9%84%D9%88%D8%B7%D9%86%D9%8A%D8%A9-%D9%84%D9%84%D8%AA%D9%86%D9%85%D9%8A%D8%A9-%D8%A7%D9%84%D8%A8%D8%B4%D8%B1%D9%8A%D8%A9-e1786982709718.png" alt="INDH">
+        <div><b>Partenaire de l'INDH</b><br><small>Axe « Amélioration du revenu et inclusion économique des jeunes »</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="programmes" class="bg-cream">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="eyebrow" style="color:var(--green-2)">Nos programmes</span><h2 style="margin-top:.75rem">Trois leviers d'impact</h2></div>
+      <p>Des formations concrètes, un accompagnement humain et des actions solidaires, portés par des lauréats bénévoles partout au Maroc.</p>
+    </div>
+    <div class="progs">
+      <a class="prog" href="#"><img src="https://jlmalumni.com/wp-content/uploads/2025/09/academy.png" alt=""><div><span class="tag">Formation</span><h3>JLM Academy</h3><p>Gestion de projets, soft skills et préparation aux compétitions pour les porteurs de projets étudiants.</p></div></a>
+      <a class="prog" href="#"><img src="https://jlmalumni.com/wp-content/uploads/2025/09/orien.png" alt=""><div><span class="tag">Orientation</span><h3>JLM Orientation</h3><p>Sessions d'orientation, ateliers soft skills et rencontres avec des professionnels pour les lycéens.</p></div></a>
+      <a class="prog" href="#"><img src="https://jlmalumni.com/wp-content/uploads/2025/09/jlm-doc.png" alt=""><div><span class="tag">Solidarité</span><h3>JLM Santé</h3><p>Caravanes médicales gratuites, formation au secourisme et campagnes de sensibilisation.</p></div></a>
+    </div>
+  </div>
+</section>
+
+<section id="evenements">
+  <div class="wrap season">
+    <div class="season-img">
+      <img src="https://jlmalumni.com/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-17-at-21.30.32.jpeg" alt="Compétition nationale JLM">
+      <div class="badge"><b>+1 200</b>participants à la Compétition nationale</div>
+    </div>
+    <div>
+      <span class="eyebrow" style="color:var(--green-2)">La saison JLM</span>
+      <h2 style="margin-top:.75rem">Une année rythmée par trois temps forts.</h2>
+      <div class="steps">
+        <div class="step"><i>01</i><div><h3>Kick-off</h3><p>L'ouverture officielle de la saison et le lancement des équipes dans les écoles.</p></div></div>
+        <div class="step"><i>02</i><div><h3>Bootcamps régionaux</h3><p>Des sessions intensives dans toutes les régions, tout au long de l'année académique.</p></div></div>
+        <div class="step"><i>03</i><div><h3>Compétition nationale</h3><p>+130 projets, 3 000 visiteurs et un jury réunissant gouvernement, entreprises et médias.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="network">
+    <div>
+      <b>+50</b>
+      <h2 style="font-size:2rem;margin-top:1rem">grandes écoles et universités partenaires</h2>
+      <p>De Tanger à Laâyoune, un réseau national qui fait de JLM l'une des plus grandes communautés étudiantes engagées du Maroc.</p>
+    </div>
+    <img src="https://jlmalumni.com/wp-content/uploads/2025/06/WhatsApp-Image-2025-06-17-at-01.08.15.jpeg" alt="Carte des écoles partenaires">
+  </div>
+</div>
+
+<section id="partenaires">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="eyebrow" style="color:var(--green-2)">Ils nous font confiance</span><h2 style="margin-top:.75rem">Nos partenaires</h2></div>
+      <a href="#" class="btn btn-dark">Devenir partenaire →</a>
+    </div>
+    <div class="partners" id="plist"></div>
+  </div>
+</section>
+
+<div class="wrap cta" id="rejoindre">
+  <a href="#" class="c1"><h3>Vous êtes lauréat JLM ?</h3><span>Rejoindre le réseau Alumni →</span></a>
+  <a href="#" class="c2"><h3>Vous voulez soutenir la jeunesse ?</h3><span>Devenir partenaire →</span></a>
+</div>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#"><img src="https://jlmalumni.com/wp-content/uploads/2025/09/cropped-cropped-jlm-alumni.jpg" alt="JLM Alumni"></a>
+        <p style="max-width:34ch">Association des lauréats Jeunes Leaders Marocains. Tout ce que nous faisons, c'est pour notre nation.</p>
+      </div>
+      <div><h4>Association</h4><ul><li>À propos</li><li>Notre équipe</li><li>Programmes</li><li>Événements</li></ul></div>
+      <div><h4>Contact</h4><ul><li>Complexe Social INDH, Sidi Maarouf, Casablanca</li><li>contact@jlmalumni.com</li><li>+212 6 47 00 80 00</li></ul></div>
+      <div><h4>Suivez-nous</h4><ul><li>LinkedIn</li><li>Instagram</li><li>Facebook</li></ul></div>
+    </div>
+    <div class="copy"><span>© 2026 JLM Alumni. Tous droits réservés.</span><span>Mentions légales · Confidentialité</span></div>
+  </div>
+</footer>
+
+<script>
+const U='https://jlmalumni.com/wp-content/uploads/';
+['2026/08/entraide-national.png','2025/06/WhatsApp-Image-2025-06-17-at-00.25.32.jpeg','2026/08/stellantis.png','2026/08/ManpowerGroup2.webp','2026/08/Labelvie.png','2026/08/ArtusMaroc.png','2026/08/dar-almoqawil2.jpg','2026/08/Heliolys.png','2026/08/IMVL.png','2026/08/Soudale2.jpg','2026/08/Mikafric-e1786982972171.jpg','2026/08/%D8%A7%D9%84%D9%85%D8%A8%D8%A7%D8%AF%D8%B1%D8%A9-%D8%A7%D9%84%D9%88%D8%B7%D9%86%D9%8A%D8%A9-%D9%84%D9%84%D8%AA%D9%86%D9%85%D9%8A%D8%A9-%D8%A7%D9%84%D8%A8%D8%B4%D8%B1%D9%8A%D8%A9-e1786982709718.png']
+.forEach(p=>{document.getElementById('plist').insertAdjacentHTML('beforeend',`<div><img src="${U+p}" alt="" loading="lazy"></div>`)});
+</script>
+<a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99;background:#111;color:#fff;font:600 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.25)">← Toutes les pistes</a>
+</body>
+</html>

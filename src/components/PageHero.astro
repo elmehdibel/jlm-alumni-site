@@ -1,0 +1,30 @@
+---
+interface Props { badge: string; titre: string; accent?: string; intro: string; image?: string; couleur?: 'green' | 'yellow' | 'red'; }
+const { badge, titre, accent, intro, image, couleur = 'green' } = Astro.props;
+---
+<section class="page-hero">
+  <div class="wrap grid">
+    <div>
+      <span class="pill"><span class="dot" style={`background:var(--${couleur})`}></span>{badge}</span>
+      <h1>{titre} {accent && <span class={`c-${couleur}`}>{accent}</span>}</h1>
+      <p>{intro}</p>
+    </div>
+    {image && <img src={image} alt="" class={`ph-img ring-${couleur}`} />}
+  </div>
+</section>
+
+<style>
+  .page-hero { padding: 56px 0 72px; }
+  .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; }
+  h1 { font-size: clamp(2.8rem, 6.4vw, 5.6rem); margin: 1.25rem 0; }
+  p { font-size: 1.15rem; color: var(--muted); max-width: 48ch; }
+  .ph-img { width: 100%; height: 420px; object-fit: cover; border-radius: var(--radius); }
+  .ring-green { box-shadow: 16px 16px 0 var(--green); }
+  .ring-yellow { box-shadow: 16px 16px 0 var(--yellow); }
+  .ring-red { box-shadow: 16px 16px 0 var(--red); }
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: 1fr; }
+    .ph-img { height: 280px; box-shadow: 10px 10px 0 var(--green); width: calc(100% - 10px); }
+    .page-hero { padding: 32px 0 48px; }
+  }
+</style>
