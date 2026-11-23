@@ -162,15 +162,19 @@ export default {
       return json({ ok: false, erreur: 'formulaire illisible' }, 400, cors);
     }
 
-    // Piège à robots : champ invisible rempli → on fait semblant d'accepter.
-    if (String(donnees.get('_gotcha') ?? '').trim()) return json({ ok: true }, 200, cors);
-
     const essai = env.DRY_RUN === '1';
-    if (!essai) {
+    const piege = !!String(donnees.get('_gotcha') ?? '').trim();
+    if (essai) {
+      // Sans anti-spam (mode essai), le piège à robots reste bloquant : on fait semblant d'accepter.
+      if (piege) return json({ ok: true }, 200, cors);
+    } else {
       const token = String(donnees.get('cf-turnstile-response') ?? '');
       if (!token) console.warn('Turnstile : jeton absent');
       if (!token || !(await verifierTurnstile(token, req.headers.get('CF-Connecting-IP'), env)))
         return json({ ok: false, erreur: 'anti-spam' }, 403, cors);
+      // Anti-spam validé mais champ piège rempli (souvent le remplissage automatique du navigateur) :
+      // on envoie quand même, en le signalant dans le sujet.
+      if (piege) console.warn('Champ piège rempli malgré un anti-spam valide');
     }
 
     // Champs
@@ -197,7 +201,7 @@ export default {
     }
 
     const nomComplet = `${donnees.get('prenom')} ${donnees.get('nom')}`.trim();
-    const sujet = `${def.sujet} — ${nomComplet}`;
+    const sujet = `${piege ? '[à vérifier] ' : ''}${def.sujet} — ${nomComplet}`;
     const html = `<div style="font-family:Arial,sans-serif;font-size:14px;color:#0c0d0c">
 <h2 style="margin:0 0 12px">${echapper(def.sujet)}</h2>
 <table cellpadding="8" style="border-collapse:collapse;border:1px solid #e6e6e1">

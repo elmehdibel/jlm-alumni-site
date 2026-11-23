@@ -89,7 +89,7 @@ const couleurs = ['green', 'yellow', 'red'];
         <form id="tl-form" action={action || undefined} data-endpoint={action} method="POST" novalidate>
           <input type="hidden" name="_subject" value="Candidature Team Leader JLM" />
           <input type="hidden" name="langue" value={lang === 'ar' ? 'Arabe' : 'Français'} />
-          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
 
           <div class="row">
             <label>{T.prenom}<input name="prenom" required autocomplete="given-name" /></label>
