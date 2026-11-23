@@ -31,20 +31,29 @@ Sur https://entra.microsoft.com (connecté en administrateur) :
 ## B. Exchange — limiter l'application à la boîte contact@ (≈ 5 min, fortement recommandé)
 
 Sans cette étape, l'application pourrait envoyer des emails depuis **n'importe quelle** boîte de l'association.
-Dans un terminal (sur Mac : `brew install powershell` puis `pwsh`) :
+
+⚠️ Ces commandes sont du **PowerShell** : elles ne marchent pas dans le terminal Mac normal (zsh).
+Installer PowerShell une fois, puis l'ouvrir — l'invite devient `PS …>` :
+
+```bash
+brew install --cask powershell
+pwsh
+```
+
+Puis, **dans PowerShell**, coller les commandes une par une (remplacer la valeur de `$AppId` par
+l'ID d'application (client) de l'étape A) :
 
 ```powershell
-Install-Module ExchangeOnlineManagement -Scope CurrentUser   # une seule fois
-Connect-ExchangeOnline -UserPrincipalName ton-admin@jlmalumni.com
-
+$AppId = "COLLE-ICI-L-ID-D-APPLICATION-CLIENT"
+Install-Module ExchangeOnlineManagement -Scope CurrentUser
+Connect-ExchangeOnline -UserPrincipalName admin@JLMAlumniMA.onmicrosoft.com
 New-DistributionGroup -Name "Site JLM - envoi formulaires" -Alias site-formulaires -Type Security -Members contact@jlmalumni.com
-
-New-ApplicationAccessPolicy -AppId <CLIENT_ID> -PolicyScopeGroupId site-formulaires@jlmalumni.com -AccessRight RestrictAccess -Description "Le site ne peut envoyer que depuis contact@"
-
-# Vérification (peut prendre jusqu'à 1 h pour être effectif) :
-Test-ApplicationAccessPolicy -Identity contact@jlmalumni.com -AppId <CLIENT_ID>   # → Granted
-Test-ApplicationAccessPolicy -Identity ton-admin@jlmalumni.com -AppId <CLIENT_ID>  # → Denied
+New-ApplicationAccessPolicy -AppId $AppId -PolicyScopeGroupId site-formulaires -AccessRight RestrictAccess -Description "Envoi uniquement depuis contact"
+Test-ApplicationAccessPolicy -Identity contact@jlmalumni.com -AppId $AppId
 ```
+
+La dernière commande doit afficher **AccessCheckResult : Granted** (jusqu'à 1 h d'attente possible).
+Pour quitter PowerShell : `exit`.
 
 ## C. Cloudflare — compte et anti-spam (≈ 5 min)
 
