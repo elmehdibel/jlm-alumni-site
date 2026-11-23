@@ -87,6 +87,24 @@ npx wrangler secret put TURNSTILE_SECRET
 Dans `src/data/site.ts`, renseigner `service.url` (adresse du Worker) et `service.turnstile` (Site Key),
 puis publier. Pour revenir à Formspree à tout moment : remettre `service.url` à `""` et publier.
 
+## F. Tableaux SharePoint des candidatures (une liste par formulaire)
+
+Chaque candidature est aussi enregistrée dans une liste SharePoint (Team Leader, DSFF, DSU, Lauréats),
+avec une colonne **Statut** (Nouveau, À vérifier, En cours, Retenu, Non retenu) et le CV rangé dans
+**Documents › CV**. Bouton **Exporter › Exporter vers Excel** dans chaque liste.
+
+1. **Entra** : application *JLM Site Formulaires* → Autorisations de l'API → Ajouter → Microsoft Graph →
+   Autorisations d'application → **Sites.Selected** → Ajouter, puis **Accorder un consentement d'administrateur**.
+2. **SharePoint** : créer un site d'équipe privé *Candidatures JLM* (membres : les personnes qui traitent les candidatures).
+3. **PowerShell** (`pwsh`) : `~/Documents/Claude/jlm-alumni-site/worker/sharepoint-acces.ps1`
+   → demande l'adresse du site et l'ID d'application, donne à l'application l'accès à **ce site uniquement**
+   et écrit son identifiant dans `worker/sharepoint-site.txt`.
+4. Renseigner `SP_SITE_ID` dans `wrangler.toml`, déployer, puis appeler `POST /admin/setup`
+   (en-tête `Authorization: Bearer <SETUP_TOKEN>`) : les listes sont créées et leurs identifiants
+   sont à copier dans `SP_LISTES`, puis redéployer.
+
+Si l'enregistrement SharePoint échoue, l'email part quand même avec un avertissement rouge en bas.
+
 ---
 
 ### En cas de souci
