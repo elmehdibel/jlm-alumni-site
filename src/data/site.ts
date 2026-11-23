@@ -168,7 +168,7 @@ export const partenaires: { nom: L; logo: string; type: string; ratio: number }[
   { nom: { fr: "Artus Maroc", ar: "Artus Maroc" }, logo: u("/images/partenaires/artus-maroc.png"), type: "entreprise", ratio: 2.32 },
   { nom: { fr: "Heliolys", ar: "Heliolys" }, logo: u("/images/partenaires/heliolys.png"), type: "entreprise", ratio: 3.3 },
   { nom: { fr: "IMVL", ar: "IMVL" }, logo: u("/images/partenaires/imvl.png"), type: "entreprise", ratio: 1.13 },
-  { nom: { fr: "Soudal", ar: "Soudal" }, logo: u("/images/partenaires/soudal.png"), type: "entreprise", ratio: 2.62 },
+  { nom: { fr: "Soudal", ar: "Soudal" }, logo: u("/images/partenaires/soudal-hd.png"), type: "entreprise", ratio: 2.64 },
   { nom: { fr: "Mikafric", ar: "Mikafric" }, logo: u("/images/partenaires/mikafric.png"), type: "entreprise", ratio: 2.82 },
 ];
 
