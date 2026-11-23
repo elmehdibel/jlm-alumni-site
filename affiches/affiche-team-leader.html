@@ -9,18 +9,17 @@
   .page { background: var(--soft); color: var(--ink); }
   .top { display: flex; justify-content: space-between; align-items: center; }
   .top img { height: 15mm; }
-  .photo { margin-top: 7mm; height: 74mm; border-radius: 8mm; overflow: hidden; position: relative; }
-  .photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 55%; display: block; }
-  .sticker { position: absolute; right: 6mm; top: 6mm; background: var(--yellow); font-family: var(--display); font-weight: 800; font-size: 5mm; padding: 3mm 5mm; border-radius: 99mm; transform: rotate(6deg); }
-  .pill { background: #fff; border: .3mm solid var(--line); margin-top: 8mm; }
-  h1 { font-size: 21mm; margin-top: 5mm; }
+  .sticker { position: absolute; right: 14mm; top: 37mm; background: var(--yellow); font-family: var(--display); font-weight: 800; font-size: 5mm; padding: 3mm 5mm; border-radius: 99mm; transform: rotate(6deg); }
+  .pill { background: #fff; border: .3mm solid var(--line); margin-top: 12mm; font-size: 4.2mm; }
+  h1 { font-size: 27mm; margin-top: 6mm; line-height: .92; }
+  h1 span { display: block; }
   h1 .g { color: var(--green); }
-  .lead { font-size: 5mm; line-height: 1.4; color: var(--muted); margin-top: 5mm; max-width: 170mm; }
-  .missions { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 7mm; margin-bottom: 7mm; }
-  .missions li { background: #fff; border-radius: 5mm; padding: 4.5mm; display: flex; gap: 3mm; }
+  .lead { font-size: 5mm; line-height: 1.4; color: var(--muted); margin-top: 7mm; max-width: 175mm; font-size: 5.3mm; }
+  .missions { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-top: 8mm; margin-bottom: 8mm; }
+  .missions li { background: #fff; border-radius: 6mm; padding: 6mm 5mm; display: flex; gap: 3mm; }
   .missions .bar { width: 1.6mm; border-radius: 1mm; flex: none; }
-  .missions h3 { font-family: var(--display); font-weight: 800; font-size: 4.6mm; line-height: 1.1; }
-  .missions p { font-size: 3.3mm; line-height: 1.35; color: var(--muted); margin-top: 1.5mm; }
+  .missions h3 { font-family: var(--display); font-weight: 800; font-size: 5.2mm; line-height: 1.1; }
+  .missions p { font-size: 3.7mm; line-height: 1.35; color: var(--muted); margin-top: 1.5mm; }
   .qr-zone { background: var(--ink); color: #fff; margin-top: auto; }
   .qr-txt p { color: rgba(255,255,255,.75); }
   .qr-txt .url { color: var(--yellow); }
@@ -33,13 +32,9 @@
     <div class="stripes" style="width:36mm;border-radius:2mm;overflow:hidden"><span style="background:var(--green)"></span><span style="background:var(--yellow)"></span><span style="background:var(--red)"></span></div>
   </div>
 
-  <div class="photo">
-    <img src="../public/images/kickoff.jpg" alt="Équipes JLM réunies" />
-    <span class="sticker">Saison 2026–2027</span>
-  </div>
-
+  <span class="sticker">Saison 2026–2027</span>
   <span class="pill"><span class="dot" style="background:var(--red)"></span>Candidatures ouvertes</span>
-  <h1>Deviens <span class="g">Team Leader</span> JLM.</h1>
+  <h1><span>Deviens</span><span class="g">Team Leader</span><span>JLM.</span></h1>
   <p class="lead">Tu veux porter l'esprit JLM dans ton école ou ton université ? Envoie ta candidature, l'équipe régionale te recontacte.</p>
 
   <ul class="missions">
