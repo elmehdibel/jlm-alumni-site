@@ -121,3 +121,19 @@ export const partenaires = [
   { nom: "Soudal", logo: u("/images/partenaires/soudal.png"), type: "entreprise" },
   { nom: "Mikafric", logo: u("/images/partenaires/mikafric.jpg"), type: "entreprise" },
 ];
+
+// Équipes JLM actives, par ville (liste à jour fournie par le bureau, novembre 2026).
+export const reseau = [
+  { ville: "Casablanca", lat: 33.5731, lon: -7.5898, ecoles: ["ISCAE", "FSJES Aïn Chock", "EST Casa", "ENSAM Casa", "ESITH", "ESCA"] },
+  { ville: "Rabat", lat: 34.0209, lon: -6.8416, ecoles: ["FMP Rabat", "ESI", "FSR", "EMSI Rabat"] },
+  { ville: "Mohammedia", lat: 33.6866, lon: -7.383, ecoles: ["ENSET Mohammedia"] },
+  { ville: "Kénitra", lat: 34.261, lon: -6.5802, ecoles: ["ENSA Kénitra"] },
+  { ville: "Tanger", lat: 35.7595, lon: -5.834, ecoles: ["EMSI Tanger", "ENCG Tanger"] },
+  { ville: "Fès", lat: 34.0181, lon: -5.0078, ecoles: ["FMP Fès", "Euromed"] },
+  { ville: "Meknès", lat: 33.8935, lon: -5.5473, ecoles: ["EST Meknès", "ENCG Meknès"] },
+  { ville: "Béni Mellal", lat: 32.3373, lon: -6.3498, ecoles: ["ENCG Béni Mellal", "ENSA Béni Mellal"] },
+  { ville: "Khouribga", lat: 32.8811, lon: -6.9063, ecoles: ["FP Khouribga", "ENSA Khouribga"] },
+  { ville: "Marrakech", lat: 31.6295, lon: -7.9811, ecoles: ["ENCG Marrakech", "ENSA Marrakech"] },
+  { ville: "Agadir", lat: 30.4278, lon: -9.5981, ecoles: ["ENCG Agadir", "Universiapolis"] },
+  { ville: "Dakhla", lat: 23.6848, lon: -15.958, ecoles: ["ENCG Dakhla"] },
+];

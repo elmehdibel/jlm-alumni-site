@@ -3,7 +3,9 @@ import { u } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import PartnersMarquee from '../components/PartnersMarquee.astro';
 import CtaBlock from '../components/CtaBlock.astro';
-import { chiffres, programmes, saison } from '../data/site';
+import CarteReseau from '../components/CarteReseau.astro';
+import { chiffres, programmes, saison, reseau } from '../data/site';
+const equipes = reseau.reduce((n, v) => n + v.ecoles.length, 0);
 const ans = new Date().getFullYear() - Number(chiffres.creationJlm);
 const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
 ---
@@ -40,11 +42,13 @@ const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
         </div>
       </div>
       <div class="tile bg-green reveal"><span>Étudiants formés</span><b>{chiffres.etudiants}</b></div>
-      <div class="tile bg-yellow reveal"><span>Écoles &amp; universités</span><b>{chiffres.ecoles}</b></div>
+      <div class="tile bg-yellow reveal"><span>Équipes actives</span><b>{equipes}</b></div>
       <div class="tile t-soft reveal"><span>Lauréats Alumni</span><b>{chiffres.laureats}</b></div>
       <div class="tile bg-red reveal"><span>Bénéficiaires</span><b>{chiffres.beneficiaires}</b></div>
     </div>
   </section>
+
+  <CarteReseau />
 
   <section style="padding-top:0">
     <div class="wrap">
@@ -79,18 +83,7 @@ const txt = { green: '#fff', yellow: 'var(--ink)', red: '#fff' } as const;
     </div>
   </div>
 
-  <section>
-    <div class="wrap network reveal">
-      <div>
-        <span class="pill"><span class="dot" style="background:var(--red)"></span>Un réseau national</span>
-        <h2><span class="c-green">{chiffres.ecoles}</span> écoles et universités partenaires</h2>
-        <p>De Tanger à Laâyoune, JLM est présent dans les grandes écoles et universités publiques et privées du Royaume.</p>
-        <a href={u("/a-propos")} class="btn btn-dark">En savoir plus →</a>
-      </div>
-      <img src={u("/images/carte-ecoles.jpg")} alt="Carte des écoles et universités partenaires de JLM au Maroc" loading="lazy" />
-    </div>
-  </section>
-
+  <div style="height:96px"></div>
   <CtaBlock />
 </Base>
 

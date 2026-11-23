@@ -1,0 +1,203 @@
+---
+import { geoMercator, geoPath } from 'd3-geo';
+import { merge } from 'topojson-client';
+import world from 'world-atlas/countries-50m.json';
+import { reseau } from '../data/site';
+
+// Fond de carte : Maroc (504) et provinces du Sud (732) fusionnés en une seule forme.
+const topo = world as any;
+const geoms = topo.objects.countries.geometries.filter((g: any) => g.id === '504' || g.id === '732');
+const maroc = merge(topo, geoms) as any;
+
+const W = 460;
+const pad = 14;
+const projection = geoMercator().fitWidth(W - pad * 2, maroc);
+const path = geoPath(projection);
+const [[x0, y0], [x1, y1]] = path.bounds(maroc);
+projection.translate([projection.translate()[0] - x0 + pad, projection.translate()[1] - y0 + pad]);
+const H = Math.ceil(y1 - y0 + pad * 2);
+const d = path(maroc);
+
+const villes = [...reseau]
+  .sort((a, b) => b.ecoles.length - a.ecoles.length)
+  .map((v, i) => {
+    const [x, y] = projection([v.lon, v.lat])!;
+    return { ...v, i, x: +x.toFixed(1), y: +y.toFixed(1), r: +(3.2 + Math.sqrt(v.ecoles.length) * 2.6).toFixed(1) };
+  });
+const total = reseau.reduce((n, v) => n + v.ecoles.length, 0);
+const data = JSON.stringify(villes.map(({ ville, ecoles, x, y, r }) => ({ ville, ecoles, x, y, r })));
+const premiere = villes[0];
+---
+<section class="carte-sec">
+  <div class="wrap">
+    <div class="carte reveal" data-villes={data}>
+      <div class="map-wrap">
+        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="carte-titre">
+          <title id="carte-titre">Carte du Maroc des villes où des équipes JLM sont actives</title>
+          <defs>
+            <pattern id="trame" width="7" height="7" patternUnits="userSpaceOnUse">
+              <circle cx="3.5" cy="3.5" r="1.1" fill="rgba(255,255,255,.16)" />
+            </pattern>
+          </defs>
+          <path d={d} class="pays" />
+          <path d={d} fill="url(#trame)" />
+          <g class="points">
+            {villes.map((v) => (
+              <g
+                class={`ville ${v.i === 0 ? 'active' : ''}`}
+                data-i={v.i}
+                style={`--d:${v.i * 45}ms`}
+                tabindex="0"
+                role="button"
+                aria-label={`${v.ville} : ${v.ecoles.length} équipe${v.ecoles.length > 1 ? 's' : ''}`}
+              >
+                <circle class="halo" cx={v.x} cy={v.y} r={v.r + 7} />
+                <circle class="dot" cx={v.x} cy={v.y} r={v.r} />
+                <circle class="hit" cx={v.x} cy={v.y} r={Math.max(v.r, 9)} />
+              </g>
+            ))}
+          </g>
+          <g class="label" aria-hidden="true">
+            <rect rx="8" />
+            <text></text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="panel">
+        <span class="pill dark-pill"><span class="dot" style="background:var(--red)"></span>Un réseau national</span>
+        <h2><span class="c-green">{total}</span> équipes<br />dans {reseau.length} villes</h2>
+        <p class="intro">Survolez ou touchez une ville pour découvrir les équipes JLM actives dans ses écoles et universités.</p>
+
+        <div class="city" aria-live="polite">
+          <div class="city-head">
+            <h3 class="city-name">{premiere.ville}</h3>
+            <span class="city-count">{premiere.ecoles.length} équipe{premiere.ecoles.length > 1 ? 's' : ''}</span>
+          </div>
+          <ul class="city-list">
+            {premiere.ecoles.map((e) => <li>{e}</li>)}
+          </ul>
+        </div>
+
+        <div class="chips" role="list">
+          {villes.map((v) => (
+            <button type="button" class={`chip ${v.i === 0 ? 'active' : ''}`} data-i={v.i} role="listitem">
+              {v.ville} <b>{v.ecoles.length}</b>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.carte').forEach((root) => {
+    const villes: { ville: string; ecoles: string[]; x: number; y: number; r: number }[] = JSON.parse(root.dataset.villes || '[]');
+    const svg = root.querySelector('svg')!;
+    const label = svg.querySelector<SVGGElement>('.label')!;
+    const rect = label.querySelector('rect')!;
+    const text = label.querySelector('text')!;
+    const nom = root.querySelector('.city-name')!;
+    const count = root.querySelector('.city-count')!;
+    const list = root.querySelector('.city-list')!;
+    const W = svg.viewBox.baseVal.width;
+    let current = -1;
+
+    const select = (i: number) => {
+      if (i === current || !villes[i]) return;
+      current = i;
+      const v = villes[i];
+      root.querySelectorAll('[data-i]').forEach((el) => el.classList.toggle('active', Number((el as HTMLElement).dataset.i) === i));
+      nom.textContent = v.ville;
+      count.textContent = `${v.ecoles.length} équipe${v.ecoles.length > 1 ? 's' : ''}`;
+      list.innerHTML = v.ecoles.map((e) => `<li>${e}</li>`).join('');
+      list.classList.remove('pop'); void (list as HTMLElement).offsetWidth; list.classList.add('pop');
+      // étiquette sur la carte
+      text.textContent = v.ville;
+      const tw = text.getComputedTextLength();
+      const bw = tw + 20, bh = 28;
+      let lx = v.x - bw / 2;
+      lx = Math.max(4, Math.min(W - bw - 4, lx));
+      const ly = v.y - v.r - bh - 10;
+      rect.setAttribute('x', String(lx)); rect.setAttribute('y', String(ly));
+      rect.setAttribute('width', String(bw)); rect.setAttribute('height', String(bh));
+      text.setAttribute('x', String(lx + bw / 2)); text.setAttribute('y', String(ly + bh / 2 + 1));
+      label.classList.add('show');
+    };
+
+    root.querySelectorAll<HTMLElement | SVGGElement>('.ville, .chip').forEach((el) => {
+      const i = Number((el as HTMLElement).dataset.i);
+      el.addEventListener('mouseenter', () => select(i));
+      el.addEventListener('focus', () => select(i));
+      el.addEventListener('click', () => select(i));
+      el.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') { e.preventDefault(); select(i); }
+      });
+    });
+
+    if (document.fonts?.ready) document.fonts.ready.then(() => { current = -1; select(0); });
+    else select(0);
+  });
+</script>
+
+<style>
+  .carte-sec { padding: 0 0 96px; }
+  .carte { background: var(--ink); color: #fff; border-radius: 40px; padding: 56px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+  .map-wrap { position: relative; }
+  svg { width: 100%; height: auto; display: block; max-height: 720px; overflow: visible; }
+  .pays { fill: var(--ink-2); stroke: rgba(255,255,255,.22); stroke-width: 1; }
+
+  .ville { cursor: pointer; outline: none; }
+  .ville .dot { fill: var(--green); stroke: var(--ink); stroke-width: 2; transition: fill .25s, transform .25s; transform-box: fill-box; transform-origin: center; }
+  .ville .halo { fill: var(--yellow); opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .ville .hit { fill: transparent; }
+  .ville:hover .dot, .ville:focus-visible .dot { fill: #3ccf66; }
+  .ville.active .dot { fill: var(--yellow); }
+  .ville.active .halo { animation: pulse 1.8s ease-out infinite; }
+  @keyframes pulse { from { opacity: .45; transform: scale(.6); } to { opacity: 0; transform: scale(1.6); } }
+
+  /* apparition des points quand la carte entre à l'écran */
+  .carte .ville .dot { transform: scale(0); }
+  .carte.in .ville .dot { animation: pop .5s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: var(--d); }
+  @keyframes pop { to { transform: scale(1); } }
+
+  .label { opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .label.show { opacity: 1; }
+  .label rect { fill: #fff; }
+  .label text { fill: var(--ink); font: 700 13px var(--sans); text-anchor: middle; dominant-baseline: middle; }
+
+  .dark-pill { background: #222; color: #fff; }
+  .panel h2 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); margin: 1.25rem 0 1rem; }
+  .intro { color: rgba(255,255,255,.65); margin-bottom: 1.75rem; max-width: 46ch; }
+
+  .city { background: var(--ink-2); border-radius: 24px; padding: 24px; min-height: 170px; }
+  .city-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .city-name { font-size: 1.9rem; color: var(--yellow); }
+  .city-count { font-size: .85rem; font-weight: 600; color: rgba(255,255,255,.6); }
+  .city-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .city-list :global(li) { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); padding: .4rem .75rem; border-radius: 999px; font-size: .88rem; font-weight: 500; }
+  .city-list.pop :global(li) { animation: fade .35s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+  .chip { font: 500 .8rem var(--sans); color: rgba(255,255,255,.75); background: transparent; border: 1px solid rgba(255,255,255,.15); border-radius: 999px; padding: .35rem .7rem; cursor: pointer; transition: .2s; }
+  .chip b { color: var(--green); margin-left: 2px; }
+  .chip:hover, .chip:focus-visible { border-color: rgba(255,255,255,.5); color: #fff; outline: none; }
+  .chip.active { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+  .chip.active b { color: var(--ink); }
+
+  @media (max-width: 960px) {
+    .carte-sec { padding: 0 0 64px; }
+    .carte { grid-template-columns: 1fr; padding: 40px 24px; border-radius: 28px; gap: 32px; }
+    .map-wrap { max-width: 360px; margin: 0 auto; width: 100%; }
+  }
+  @media (max-width: 520px) {
+    .carte { padding: 32px 16px; margin: 0 -4px; }
+    .city { padding: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carte .ville .dot { transform: none; animation: none !important; }
+    .ville.active .halo { animation: none; opacity: .3; }
+  }
+</style>
