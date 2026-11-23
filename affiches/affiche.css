@@ -1,0 +1,23 @@
+/* Affiches A4 JLM Alumni — même charte que le site (piste B énergique). */
+@page { size: 210mm 297mm; margin: 0; }
+:root {
+  --ink: #0c0d0c; --green: #22a447; --yellow: #ffc21a; --red: #ee3b2d;
+  --soft: #f4f4f1; --muted: #5f625f; --line: #e6e6e1;
+  --display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --sans: 'Inter', system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 210mm; height: 297mm; }
+body { font-family: var(--sans); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 210mm; height: 297mm; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 14mm; }
+h1, .display { font-family: var(--display); font-weight: 800; letter-spacing: -0.02em; line-height: .95; }
+.pill { display: inline-flex; align-items: center; gap: 2.5mm; font-weight: 600; font-size: 3.6mm; padding: 2mm 4.5mm; border-radius: 99mm; align-self: flex-start; }
+.pill .dot { width: 2.6mm; height: 2.6mm; border-radius: 50%; }
+.qr-zone { display: flex; align-items: center; gap: 8mm; border-radius: 8mm; padding: 7mm; }
+.qr { width: 52mm; height: 52mm; background: #fff; border-radius: 4mm; padding: 4mm; flex: none; }
+.qr svg { width: 100%; height: 100%; display: block; }
+.qr-txt .k { font-family: var(--display); font-weight: 800; font-size: 11mm; line-height: 1; }
+.qr-txt p { font-size: 4.2mm; margin-top: 3mm; line-height: 1.35; }
+.qr-txt .url { font-weight: 600; margin-top: 4mm; font-size: 4.4mm; }
+.stripes { display: flex; height: 3mm; }
+.stripes span { flex: 1; }
