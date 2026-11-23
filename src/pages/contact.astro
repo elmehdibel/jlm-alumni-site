@@ -1,11 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import { contact } from '../data/site';
+import { u } from '../lib/url';
+type Profil = { t: string; d: string; c: string; sujet?: string; lien?: string; cta?: string };
 const m = (sujet: string) => `mailto:${contact.email}?subject=${encodeURIComponent(sujet)}`;
-const profils = [
+const profils: Profil[] = [
   { t: 'Je suis lauréat JLM', d: 'Rejoignez le réseau Alumni et engagez-vous auprès de la nouvelle génération.', sujet: 'Rejoindre le réseau JLM Alumni', c: 'green' },
   { t: 'Je veux devenir partenaire', d: 'Institution ou entreprise : construisons un partenariat sur mesure.', sujet: 'Partenariat JLM Alumni', c: 'yellow' },
-  { t: 'Je postule pour devenir Team Leader', d: 'Encadrez une équipe JLM dans votre école et accompagnez ses porteurs de projets tout au long de la saison.', sujet: 'Candidature Team Leader JLM', c: 'red' },
+  { t: 'Je postule pour devenir Team Leader', d: 'Encadrez une équipe JLM dans votre école et accompagnez ses porteurs de projets tout au long de la saison.', lien: u('/team-leader'), cta: 'Remplir le formulaire →', c: 'red' },
   { t: 'Presse & autres demandes', d: 'Une question, une interview, une idée ? Écrivez-nous.', sujet: 'Demande de contact', c: 'ink' },
 ];
 ---
@@ -21,10 +23,10 @@ const profils = [
   <section style="padding-top:0">
     <div class="wrap profils">
       {profils.map((p) => (
-        <a href={m(p.sujet)} class={`profil p-${p.c} reveal`}>
+        <a href={p.lien ?? m(p.sujet ?? '')} class={`profil p-${p.c} reveal`}>
           <h2>{p.t}</h2>
           <p>{p.d}</p>
-          <span class="go">Écrire un message →</span>
+          <span class="go">{p.cta ?? 'Écrire un message →'}</span>
         </a>
       ))}
     </div>

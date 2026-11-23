@@ -137,3 +137,8 @@ export const reseau = [
   { ville: "Agadir", lat: 30.4278, lon: -9.5981, ecoles: ["ENCG Agadir", "Universiapolis"] },
   { ville: "Dakhla", lat: 23.6848, lon: -15.958, ecoles: ["ENCG Dakhla"] },
 ];
+
+// Formulaires : identifiants Formspree (https://formspree.io), à renseigner après création du formulaire.
+export const formulaires = {
+  teamLeader: "xdegpaap", // https://formspree.io/f/xdegpaap → contact@jlmalumni.com
+};
