@@ -234,7 +234,11 @@ async function enregistrer(
   }
   const r = await graph(env, `/sites/${site}/lists/${listeId}/items`, { method: 'POST', body: JSON.stringify({ fields: champs }) });
   if (!r.ok) throw await erreurGraph('Ajout dans la liste', r);
-  return ((await r.json()) as { webUrl?: string }).webUrl ?? '';
+  // webUrl d'une ligne de liste pointe vers un fichier technique « …/1_.000 » qui se télécharge :
+  // on renvoie plutôt la fiche d'affichage de la ligne (…/Lists/<liste>/DispForm.aspx?ID=<n>).
+  const item = (await r.json()) as { id: string; webUrl?: string };
+  if (!item.webUrl) return '';
+  return item.webUrl.replace(/\/[^/]+$/, `/DispForm.aspx?ID=${encodeURIComponent(item.id)}`);
 }
 
 // ——— traitement ———
