@@ -1,17 +1,27 @@
 ---
-import { u } from '../lib/url';
 import { contact } from '../data/site';
-interface Props { titre?: string; }
-const { titre = 'Prêt·e à faire bouger la jeunesse marocaine ?' } = Astro.props;
+import { type Lang, lp, tr } from '../i18n';
+
+interface Props { titre?: string; lang: Lang; }
+const { lang } = Astro.props;
+const t = {
+  titre: { fr: 'Prêt·e à faire bouger la jeunesse marocaine ?', ar: 'مستعد(ة) لتحريك الشباب المغربي؟' },
+  laureat: { fr: 'Je suis lauréat JLM', ar: 'أنا من خريجي JLM' },
+  partenaire: { fr: 'Je veux devenir partenaire', ar: 'أريد أن أصبح شريكًا' },
+  tl: { fr: 'Je postule pour devenir Team Leader', ar: 'أترشح لأصبح قائد فريق' },
+  sujet: { fr: 'Rejoindre le réseau JLM Alumni', ar: 'الانضمام إلى شبكة JLM Alumni' },
+};
+const titre = Astro.props.titre ?? tr(t.titre, lang);
+const fleche = lang === 'ar' ? '←' : '→';
 const m = (sujet: string) => `mailto:${contact.email}?subject=${encodeURIComponent(sujet)}`;
 ---
 <div class="wrap">
   <div class="cta reveal">
     <h2>{titre}</h2>
     <div class="stack">
-      <a href={m('Rejoindre le réseau JLM Alumni')}>Je suis lauréat JLM <span>→</span></a>
-      <a href={u("/partenaires#devenir-partenaire")}>Je veux devenir partenaire <span>→</span></a>
-      <a href={u('/team-leader')} class="alt">Je postule pour devenir Team Leader <span>→</span></a>
+      <a href={m(tr(t.sujet, lang))}>{tr(t.laureat, lang)} <span>{fleche}</span></a>
+      <a href={lp('/partenaires', lang) + '#devenir-partenaire'}>{tr(t.partenaire, lang)} <span>{fleche}</span></a>
+      <a href={lp('/team-leader', lang)} class="alt">{tr(t.tl, lang)} <span>{fleche}</span></a>
     </div>
   </div>
 </div>
@@ -20,8 +30,9 @@ const m = (sujet: string) => `mailto:${contact.email}?subject=${encodeURICompone
   .cta { background: var(--yellow); border-radius: 40px; padding: 80px 56px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; }
   .cta h2 { font-size: clamp(2.4rem, 5.5vw, 4.6rem); }
   .stack { display: grid; gap: 12px; }
-  .stack a { background: var(--ink); color: #fff; border-radius: 20px; padding: 22px 24px; display: flex; justify-content: space-between; font-weight: 600; font-size: 1.1rem; transition: .2s; }
+  .stack a { background: var(--ink); color: #fff; border-radius: 20px; padding: 22px 24px; display: flex; justify-content: space-between; gap: 12px; font-weight: 600; font-size: 1.1rem; transition: .2s; }
   .stack a:hover { transform: translateX(6px); }
+  :global([dir='rtl']) .stack a:hover { transform: translateX(-6px); }
   .stack a.alt { background: #fff; color: var(--ink); }
   @media (max-width: 960px) { .cta { grid-template-columns: 1fr; padding: 56px 24px; border-radius: 28px; } }
 </style>

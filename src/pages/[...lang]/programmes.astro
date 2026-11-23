@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import { programmes } from '../../data/site';
+import { getLang, langPaths, tr } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = getLang(Astro.params.lang);
+const T = {
+  fr: {
+    title: 'Programmes', desc: 'JLM Academy, JLM Orientation et JLM Santé : les programmes de JLM Alumni au service de la jeunesse marocaine.',
+    badge: 'Nos programmes', titre: 'Former, orienter,', accent: 'soigner.',
+    intro: "Trois programmes portés par des lauréats bénévoles, pour donner à chaque jeune les moyens de réussir et d'agir.",
+    aller: 'Aller au programme', cta: 'Envie de vous impliquer dans un programme ?',
+  },
+  ar: {
+    title: 'برامجنا', desc: 'أكاديمية JLM، توجيه JLM وصحة JLM: برامج JLM Alumni في خدمة الشباب المغربي.',
+    badge: 'برامجنا', titre: 'نُكوّن، نوجّه،', accent: 'ونعالج.',
+    intro: 'ثلاثة برامج يحملها خريجون متطوعون، لمنح كل شاب الوسائل للنجاح والمبادرة.',
+    aller: 'الانتقال إلى البرنامج', cta: 'هل ترغب في المساهمة في أحد برامجنا؟',
+  },
+}[lang];
+---
+<Base title={T.title} description={T.desc} lang={lang}>
+  <PageHero badge={T.badge} titre={T.titre} accent={T.accent} intro={T.intro} image="/images/prog-academy.jpg" couleur="yellow" />
+
+  <nav class="wrap jump" aria-label={T.aller}>
+    {programmes.map((p) => <a href={`#${p.id}`} class={`chip chip-${p.couleur}`}>{tr(p.titre, lang)}</a>)}
+  </nav>
+
+  {programmes.map((p, i) => (
+    <section id={p.id} class="prog-sec">
+      <div class={`wrap prog ${i % 2 ? 'flip' : ''}`}>
+        <div class="media reveal">
+          <img src={p.image} alt={tr(p.titre, lang)} loading="lazy" />
+          <span class={`tag bg-${p.couleur}`}>0{i + 1}</span>
+        </div>
+        <div class="body reveal">
+          <h2>{tr(p.titre, lang)}</h2>
+          <p class="desc">{tr(p.description, lang)}</p>
+          <ul>
+            {p.points.map((pt) => <li><span class={`tick bg-${p.couleur}`}>✓</span>{tr(pt, lang)}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <CtaBlock titre={T.cta} lang={lang} />
+</Base>
+
+<style>
+  .jump { display: flex; gap: 10px; flex-wrap: wrap; margin-top: -24px; }
+  .chip { padding: .6rem 1.1rem; border-radius: 999px; font-weight: 600; border: 2px solid var(--ink); transition: .2s; }
+  .chip:hover { background: var(--ink); color: #fff; }
+  .prog-sec { padding: 72px 0; scroll-margin-top: 84px; }
+  .prog { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .prog.flip .media { order: 2; }
+  .media { position: relative; }
+  .media img { width: 100%; height: 460px; object-fit: cover; border-radius: var(--radius); }
+  .tag { position: absolute; top: 20px; left: 20px; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 1.3rem; }
+  .body h2 { margin-bottom: 1.25rem; }
+  .desc { font-size: 1.15rem; color: var(--muted); margin-bottom: 2rem; }
+  .body li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); font-weight: 500; }
+  .tick { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; flex: none; }
+  @media (max-width: 960px) {
+    .prog { grid-template-columns: 1fr; gap: 32px; }
+    .prog.flip .media { order: 0; }
+    .media img { height: 300px; }
+    .prog-sec { padding: 48px 0; }
+    .jump { margin-top: 0; }
+  }
+</style>

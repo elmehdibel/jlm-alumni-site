@@ -1,0 +1,253 @@
+---
+import Base from '../../layouts/Base.astro';
+import { contact, formulaires } from '../../data/site';
+import { regions } from '../../data/regions';
+import { getLang, langPaths, tr } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = getLang(Astro.params.lang);
+const action = formulaires.teamLeader ? `https://formspree.io/f/${formulaires.teamLeader}` : '';
+// Valeur envoyée = nom français ; texte affiché = langue de la page.
+const villesParRegion = Object.fromEntries(
+  regions.map((r) => [
+    r.nom.fr,
+    r.villes
+      .map(([fr, ar]) => ({ v: fr, l: lang === 'ar' ? ar : fr }))
+      .sort((a, b) => a.l.localeCompare(b.l, lang)),
+  ]),
+);
+const T = {
+  fr: {
+    title: 'Devenir Team Leader', desc: "Postulez pour devenir Team Leader JLM et encadrer l'équipe de votre école ou université.",
+    pill: 'Candidature', h1: ['Deviens', 'Team Leader', 'JLM.'],
+    lead: "Tu veux porter l'esprit JLM dans ton école ou ton université ? Envoie ta candidature, l'équipe régionale te recontacte.",
+    missions: [
+      ['Encadrer une équipe', "Tu animes l'équipe JLM de ton école ou de ton université tout au long de la saison."],
+      ['Accompagner les projets', "Tu aides les étudiants à faire grandir leur projet, des bootcamps jusqu'à la Compétition nationale."],
+      ['Grandir avec le réseau', 'Tu te formes au leadership et rejoins une communauté nationale de jeunes engagés.'],
+    ],
+    prenom: 'Prénom', nom: 'Nom', email: 'Adresse email', tel: 'Téléphone',
+    region: 'Région', choisirRegion: 'Choisis ta région', ville: 'Ville', choisirRegionDabord: "Choisis d'abord la région",
+    choisirVille: 'Choisis ta ville', autreVille: 'Autre ville…', preciser: 'Précise ta ville', ecole: 'École / université',
+    ancien: 'Ancien membre JLM ?', oui: 'Oui', non: 'Non',
+    motiv: 'Motivations', motivEx: "Pourquoi veux-tu devenir Team Leader ? Qu'aimerais-tu apporter à ton équipe ?",
+    envoyer: 'Envoyer ma candidature →', note: 'Tes informations sont utilisées uniquement pour traiter ta candidature.',
+    okH: 'Candidature envoyée !', okP: "Merci pour ton engagement. L'équipe JLM te recontacte très vite par email ou par téléphone.",
+    errChamps: 'Merci de compléter tous les champs (motivations : 30 caractères minimum).',
+    errOff: `Le formulaire n'est pas encore activé. En attendant, écris-nous à ${contact.email}.`,
+    errEnvoi: `L'envoi n'a pas fonctionné. Réessaie dans un instant ou écris-nous à ${contact.email}.`,
+    envoi: 'Envoi en cours…',
+  },
+  ar: {
+    title: 'كن قائد فريق', desc: 'ترشّح لتصبح قائد فريق JLM وتؤطّر فريق مدرستك أو جامعتك.',
+    pill: 'الترشيح', h1: ['كن', 'قائد فريق', 'في JLM.'],
+    lead: 'تريد أن تحمل روح JLM في مدرستك أو جامعتك؟ أرسل ترشيحك، وسيتواصل معك الفريق الجهوي.',
+    missions: [
+      ['تأطير فريق', 'تُنشّط فريق JLM في مدرستك أو جامعتك طوال الموسم.'],
+      ['مواكبة المشاريع', 'تساعد الطلبة على تطوير مشاريعهم، من المعسكرات الجهوية إلى المسابقة الوطنية.'],
+      ['النمو مع الشبكة', 'تتكوّن في القيادة وتنضم إلى مجتمع وطني من الشباب الملتزم.'],
+    ],
+    prenom: 'الاسم الشخصي', nom: 'الاسم العائلي', email: 'البريد الإلكتروني', tel: 'رقم الهاتف',
+    region: 'الجهة', choisirRegion: 'اختر جهتك', ville: 'المدينة', choisirRegionDabord: 'اختر الجهة أولًا',
+    choisirVille: 'اختر مدينتك', autreVille: 'مدينة أخرى…', preciser: 'حدّد مدينتك', ecole: 'المدرسة / الجامعة',
+    ancien: 'هل كنت عضوًا في JLM؟', oui: 'نعم', non: 'لا',
+    motiv: 'دوافع الترشيح', motivEx: 'لماذا تريد أن تصبح قائد فريق؟ وماذا تودّ أن تقدّم لفريقك؟',
+    envoyer: 'إرسال الترشيح ←', note: 'تُستعمل معلوماتك فقط لمعالجة ترشيحك.',
+    okH: 'تم إرسال ترشيحك!', okP: 'شكرًا على التزامك. سيتواصل معك فريق JLM قريبًا عبر البريد الإلكتروني أو الهاتف.',
+    errChamps: 'المرجو ملء جميع الخانات (الدوافع: 30 حرفًا على الأقل).',
+    errOff: `الاستمارة غير مفعّلة بعد. في انتظار ذلك، راسلنا على ${contact.email}.`,
+    errEnvoi: `تعذّر الإرسال. أعد المحاولة بعد لحظة أو راسلنا على ${contact.email}.`,
+    envoi: 'جارٍ الإرسال…',
+  },
+}[lang];
+const M = { choisirVille: T.choisirVille, autreVille: T.autreVille, errChamps: T.errChamps, errOff: T.errOff, errEnvoi: T.errEnvoi, envoi: T.envoi, envoyer: T.envoyer };
+const couleurs = ['green', 'yellow', 'red'];
+---
+<Base title={T.title} description={T.desc} lang={lang}>
+  <section class="tl">
+    <div class="wrap grid">
+      <div class="pitch">
+        <span class="pill"><span class="dot" style="background:var(--red)"></span>{T.pill}</span>
+        <h1>{T.h1[0]} <span class="c-green">{T.h1[1]}</span> {T.h1[2]}</h1>
+        <p class="lead">{T.lead}</p>
+        <ul class="missions">
+          {T.missions.map(([t, d], i) => (
+            <li>
+              <span class={`bar bg-${couleurs[i]}`}></span>
+              <div><h3>{t}</h3><p>{d}</p></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="card">
+        <form id="tl-form" action={action || undefined} data-endpoint={action} method="POST" novalidate>
+          <input type="hidden" name="_subject" value="Candidature Team Leader JLM" />
+          <input type="hidden" name="langue" value={lang === 'ar' ? 'Arabe' : 'Français'} />
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div class="row">
+            <label>{T.prenom}<input name="prenom" required autocomplete="given-name" /></label>
+            <label>{T.nom}<input name="nom" required autocomplete="family-name" /></label>
+          </div>
+          <div class="row">
+            <label>{T.email}<input name="email" type="email" required autocomplete="email" dir="ltr" /></label>
+            <label>{T.tel}<input name="telephone" type="tel" required autocomplete="tel" placeholder="06 00 00 00 00" pattern="[+0-9 ().\-]{8,20}" dir="ltr" /></label>
+          </div>
+          <div class="row">
+            <label>{T.region}
+              <select name="region" id="tl-region" required>
+                <option value="" selected disabled>{T.choisirRegion}</option>
+                {regions.map((r) => <option value={r.nom.fr}>{tr(r.nom, lang)}</option>)}
+              </select>
+            </label>
+            <label>{T.ville}
+              <select name="ville" id="tl-ville" required disabled>
+                <option value="" selected disabled>{T.choisirRegionDabord}</option>
+              </select>
+            </label>
+          </div>
+          <label id="tl-autre-wrap" hidden>{T.preciser}<input name="ville_precision" id="tl-autre" autocomplete="address-level2" /></label>
+          <label>{T.ecole}<input name="ecole" required /></label>
+
+          <fieldset>
+            <legend>{T.ancien}</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="ancien_membre" value="Oui" required /><span>{T.oui}</span></label>
+              <label class="choice"><input type="radio" name="ancien_membre" value="Non" /><span>{T.non}</span></label>
+            </div>
+          </fieldset>
+
+          <label>{T.motiv}
+            <textarea name="motivations" rows="6" required minlength="30" placeholder={T.motivEx}></textarea>
+          </label>
+
+          <p class="err" role="alert" hidden></p>
+          <button type="submit" class="btn btn-dark submit">{T.envoyer}</button>
+          <p class="note">{T.note}</p>
+        </form>
+
+        <div class="ok" hidden>
+          <span class="tick bg-green">✓</span>
+          <h2>{T.okH}</h2>
+          <p>{T.okP}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script define:vars={{ villesParRegion, M }}>
+  const form = document.getElementById('tl-form');
+
+  // Région → Ville (valeur envoyée en français, libellé dans la langue de la page)
+  const region = document.getElementById('tl-region');
+  const ville = document.getElementById('tl-ville');
+  const autreWrap = document.getElementById('tl-autre-wrap');
+  const autre = document.getElementById('tl-autre');
+  const AUTRE = 'Autre ville';
+  const toggleAutre = () => {
+    const on = ville.value === AUTRE;
+    autreWrap.hidden = !on;
+    autre.required = on;
+    if (!on) autre.value = '';
+  };
+  region.addEventListener('change', () => {
+    const liste = villesParRegion[region.value] || [];
+    ville.innerHTML = `<option value="" selected disabled>${M.choisirVille}</option>`
+      + liste.map((x) => `<option value="${x.v}">${x.l}</option>`).join('')
+      + `<option value="${AUTRE}">${M.autreVille}</option>`;
+    ville.disabled = false;
+    toggleAutre();
+  });
+  ville.addEventListener('change', () => { toggleAutre(); if (ville.value === AUTRE) autre.focus(); });
+
+  const err = form.querySelector('.err');
+  const btn = form.querySelector('.submit');
+  const showErr = (msg) => { err.textContent = msg; err.hidden = false; };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.hidden = true;
+    form.classList.add('tried');
+    if (!form.checkValidity()) {
+      form.querySelector(':invalid')?.focus();
+      showErr(M.errChamps);
+      return;
+    }
+    const endpoint = form.dataset.endpoint;
+    if (!endpoint) { showErr(M.errOff); return; }
+    btn.disabled = true; btn.textContent = M.envoi;
+    try {
+      const res = await fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(String(res.status));
+      form.hidden = true;
+      const ok = form.parentElement.querySelector('.ok');
+      ok.hidden = false;
+      ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch {
+      showErr(M.errEnvoi);
+      btn.disabled = false; btn.textContent = M.envoyer;
+    }
+  });
+</script>
+
+<style>
+  .tl { padding: 56px 0 24px; }
+  .grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: start; }
+  .pitch { position: sticky; top: 108px; }
+  h1 { font-size: clamp(2.8rem, 6vw, 5rem); margin: 1.25rem 0; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 44ch; }
+  .missions { margin-top: 2.5rem; display: grid; gap: 22px; }
+  .missions li { display: grid; grid-template-columns: 8px 1fr; gap: 18px; }
+  .bar { border-radius: 4px; }
+  .missions h3 { font-size: 1.35rem; margin-bottom: .3rem; }
+  .missions p { color: var(--muted); }
+
+  .card { background: var(--soft); border-radius: var(--radius); padding: 40px; }
+  form { display: grid; gap: 18px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  label, legend { display: grid; gap: 6px; font-weight: 600; font-size: .9rem; }
+  select {
+    appearance: none; -webkit-appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230c0d0c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem !important;
+  }
+  select:disabled { cursor: not-allowed; color: var(--muted); opacity: .7; }
+  input:not([type='radio']), textarea, select {
+    font: inherit; font-weight: 400; font-size: 1rem; color: var(--ink);
+    background-color: #fff; border: 2px solid transparent; border-radius: 14px; padding: .85rem 1rem; width: 100%;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  textarea { resize: vertical; min-height: 140px; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 4px rgba(34,164,71,.18); }
+  form.tried input:invalid, form.tried textarea:invalid, form.tried select:invalid { border-color: var(--red); }
+  fieldset { border: 0; display: grid; gap: 8px; }
+  .choices { display: flex; gap: 10px; }
+  .choice { display: block; cursor: pointer; }
+  .choice input { position: absolute; opacity: 0; pointer-events: none; }
+  .choice span { display: inline-block; padding: .7rem 1.6rem; border-radius: 999px; background: #fff; border: 2px solid transparent; font-weight: 600; transition: .2s; }
+  .choice input:checked + span { background: var(--ink); color: #fff; }
+  .choice input:focus-visible + span { border-color: var(--green); }
+  form.tried .choices:has(input:invalid) span { border-color: var(--red); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; }
+  .submit { justify-content: center; font-size: 1.05rem; padding: 1.1rem; }
+  .submit:disabled { opacity: .6; cursor: wait; }
+  .err { background: #fdecea; color: #a3261c; border-radius: 12px; padding: .8rem 1rem; font-weight: 500; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--muted); text-align: center; }
+
+  .ok { text-align: center; padding: 40px 12px; }
+  .tick { width: 72px; height: 72px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 2rem; margin-bottom: 1.25rem; }
+  .ok h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: .75rem; }
+  .ok p { color: var(--muted); max-width: 40ch; margin: 0 auto; }
+
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: 1fr; gap: 40px; }
+    .pitch { position: static; }
+    .tl { padding: 32px 0 0; }
+  }
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; }
+    .card { padding: 24px 18px; }
+  }
+</style>

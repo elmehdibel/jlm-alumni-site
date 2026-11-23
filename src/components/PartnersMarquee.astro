@@ -1,10 +1,14 @@
 ---
 import { partenaires } from '../data/site';
+import { type Lang, tr } from '../i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
 const liste = [...partenaires, ...partenaires];
 ---
-<div class="marquee" aria-label="Nos partenaires">
+<div class="marquee" aria-label={lang === 'ar' ? 'شركاؤنا' : 'Nos partenaires'} dir="ltr">
   <div class="track">
-    {liste.map((p, i) => <img src={p.logo} alt={i < partenaires.length ? p.nom : ''} loading="lazy" />)}
+    {liste.map((p, i) => <img src={p.logo} alt={i < partenaires.length ? tr(p.nom, lang) : ''} loading="lazy" />)}
   </div>
 </div>
 

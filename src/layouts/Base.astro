@@ -2,17 +2,22 @@
 import { u } from '../lib/url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { type Lang, autreLangue } from '../i18n';
 import '../styles/global.css';
 
-interface Props { title?: string; description?: string; }
-const {
-  title,
-  description = "JLM Alumni, l'association des lauréats Jeunes Leaders Marocains : formation, orientation, santé et engagement citoyen au service de la jeunesse marocaine.",
-} = Astro.props;
-const fullTitle = title ? `${title} · JLM Alumni` : 'JLM Alumni · Jeunes Leaders Marocains';
+interface Props { title?: string; description?: string; lang?: Lang; }
+const defaut = {
+  fr: "JLM Alumni, l'association des lauréats Jeunes Leaders Marocains : formation, orientation, santé et engagement citoyen au service de la jeunesse marocaine.",
+  ar: "جمعية خريجي رواد المغرب الشباب: التكوين والتوجيه والصحة والالتزام المواطن في خدمة الشباب المغربي.",
+};
+const { title, lang = 'fr', description = defaut[lang] } = Astro.props;
+const site = lang === 'ar' ? 'JLM Alumni · رواد المغرب الشباب' : 'JLM Alumni · Jeunes Leaders Marocains';
+const fullTitle = title ? `${title} · JLM Alumni` : site;
+const alt = autreLangue(Astro.url.pathname, lang);
+const altLang = lang === 'fr' ? 'ar' : 'fr';
 ---
 <!doctype html>
-<html lang="fr">
+<html lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,18 +26,22 @@ const fullTitle = title ? `${title} · JLM Alumni` : 'JLM Alumni · Jeunes Leade
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={u("/images/alumni-groupe.jpg")} />
+    <meta property="og:locale" content={lang === 'ar' ? 'ar_MA' : 'fr_MA'} />
+    <link rel="alternate" hreflang={altLang} href={alt} />
     <meta name="theme-color" content="#0c0d0c" />
     <link rel="icon" type="image/png" href={u("/logos/jlm-alumni-couleur.png")} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    {lang === 'ar'
+      ? <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,800&display=swap" rel="stylesheet" />
+      : <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />}
   </head>
   <body>
-    <Header />
+    <Header lang={lang} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
     <script>
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });

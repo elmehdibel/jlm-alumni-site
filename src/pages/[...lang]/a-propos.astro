@@ -1,0 +1,186 @@
+---
+import { u } from '../../lib/url';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import { chiffres } from '../../data/site';
+import { getLang, langPaths } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = getLang(Astro.params.lang);
+const T = {
+  fr: {
+    title: 'À propos', desc: "Découvrez JLM Alumni, l'association des lauréats Jeunes Leaders Marocains, son histoire, sa mission et ses valeurs.",
+    badge: 'Qui sommes-nous', titre: 'Les lauréats JLM,', accent: 'au service du Maroc.',
+    intro: "JLM Alumni rassemble les lauréats du programme Jeunes Leaders Marocains pour prolonger son impact : transmettre, accompagner et agir sur le terrain.",
+    jlm: 'Jeunes Leaders Marocains',
+    jlmTxt: `JLM est une initiative d'entrepreneuriat social et d'engagement citoyen, 100 % marocaine et à but non lucratif. Elle encadre les étudiants de l'enseignement supérieur public et privé à travers un réseau de ${chiffres.ecoles} grandes écoles et universités.`,
+    alumniTxt: `L'association des lauréats JLM est née pour que l'aventure continue après les études. Elle réunit ${chiffres.laureats} lauréats qui mettent leur expérience au service des nouvelles générations et des populations.`,
+    indhPill: 'Partenariat institutionnel', indhH: "Aux côtés de l'INDH",
+    indhTxt: "JLM Alumni est partenaire de l'Initiative Nationale pour le Développement Humain sur l'axe « Amélioration du revenu et inclusion économique des jeunes ». L'association est installée au Complexe Social INDH de Sidi Maarouf, à Casablanca.",
+    indhAlt: 'Initiative Nationale pour le Développement Humain',
+    parcoursH: "Le parcours d'un lauréat", parcoursTxt: "De l'amphi au terrain : comment un étudiant devient un leader engagé.",
+    parcours: [
+      ['Étudiant JLM', "Il rejoint JLM dans son école ou son université et monte un projet à impact avec son équipe."],
+      ['Porteur de projet', 'Il se forme, participe aux bootcamps régionaux et défend son projet à la Compétition nationale.'],
+      ['Lauréat', "Il termine le programme avec un réseau, des compétences et l'envie de transmettre."],
+      ['Alumni engagé', 'Il rejoint JLM Alumni pour encadrer la nouvelle génération et agir sur le terrain.'],
+    ],
+    valeursH: 'Nos valeurs', valeursTxt: '« All we do is for our nation » : la devise qui guide chacune de nos actions.',
+    valeurs: [
+      ['Engagement citoyen', 'Agir concrètement pour son quartier, sa région et son pays.'],
+      ['Entrepreneuriat social', 'Créer des projets qui répondent à de vrais besoins de la société.'],
+      ['Transmission', "Les lauréats d'hier forment et accompagnent les leaders de demain."],
+      ['Excellence', 'Viser haut, se former sans cesse et donner le meilleur de soi.'],
+    ],
+    mapH: ['établissements, tout le Maroc'],
+    mapTxt: 'Casablanca, Rabat, Fès, Marrakech, Agadir, Tanger, Oujda, Laâyoune… JLM est présent dans les grandes écoles et universités de toutes les régions.',
+    mapAlt: 'Liste et carte des écoles et universités partenaires',
+  },
+  ar: {
+    title: 'من نحن', desc: 'تعرّف على JLM Alumni، جمعية خريجي رواد المغرب الشباب: تاريخها ومهمتها وقيمها.',
+    badge: 'من نحن', titre: 'خريجو JLM،', accent: 'في خدمة المغرب.',
+    intro: 'تجمع JLM Alumni خريجي برنامج رواد المغرب الشباب لمواصلة أثره: نقل الخبرة، والمواكبة، والعمل في الميدان.',
+    jlm: 'رواد المغرب الشباب',
+    jlmTxt: `JLM مبادرة مغربية 100% وغير ربحية في مجال ريادة الأعمال الاجتماعية والالتزام المواطن. تؤطّر طلبة التعليم العالي العمومي والخاص عبر شبكة تضم ${chiffres.ecoles} مدرسة عليا وجامعة.`,
+    alumniTxt: `وُلدت جمعية خريجي JLM لكي تستمر المغامرة بعد الدراسة. تضم ${chiffres.laureats} خريج يضعون تجربتهم في خدمة الأجيال الجديدة والساكنة.`,
+    indhPill: 'شراكة مؤسساتية', indhH: 'إلى جانب المبادرة الوطنية للتنمية البشرية',
+    indhTxt: 'JLM Alumni شريكة للمبادرة الوطنية للتنمية البشرية في محور «تحسين الدخل والإدماج الاقتصادي للشباب». ويوجد مقر الجمعية بالمركب الاجتماعي للمبادرة الوطنية للتنمية البشرية بسيدي معروف، الدار البيضاء.',
+    indhAlt: 'المبادرة الوطنية للتنمية البشرية',
+    parcoursH: 'مسار خريج', parcoursTxt: 'من المدرج إلى الميدان: كيف يصبح الطالب قائدًا ملتزمًا.',
+    parcours: [
+      ['طالب في JLM', 'ينضم إلى JLM في مدرسته أو جامعته ويُطلق مع فريقه مشروعًا ذا أثر.'],
+      ['حامل مشروع', 'يتكوّن ويشارك في المعسكرات الجهوية ويدافع عن مشروعه في المسابقة الوطنية.'],
+      ['خريج', 'يُنهي البرنامج بشبكة علاقات ومهارات ورغبة في نقل التجربة.'],
+      ['خريج ملتزم', 'ينضم إلى JLM Alumni لتأطير الجيل الجديد والعمل في الميدان.'],
+    ],
+    valeursH: 'قيمنا', valeursTxt: '«كل ما نقوم به هو من أجل وطننا»: الشعار الذي يوجّه كل أعمالنا.',
+    valeurs: [
+      ['الالتزام المواطن', 'العمل بشكل ملموس من أجل الحي والجهة والوطن.'],
+      ['ريادة الأعمال الاجتماعية', 'ابتكار مشاريع تستجيب لحاجيات حقيقية في المجتمع.'],
+      ['نقل الخبرة', 'خريجو الأمس يُكوّنون ويواكبون قادة الغد.'],
+      ['التميّز', 'الطموح العالي والتكوين المستمر وبذل أفضل ما لدينا.'],
+    ],
+    mapH: ['مؤسسة في كل ربوع المغرب'],
+    mapTxt: 'الدار البيضاء، الرباط، فاس، مراكش، أكادير، طنجة، وجدة، العيون… JLM حاضرة في المدارس العليا والجامعات بجميع الجهات.',
+    mapAlt: 'لائحة وخريطة المدارس والجامعات الشريكة',
+  },
+}[lang];
+const couleurs = ['green', 'yellow', 'red', 'ink'];
+---
+<Base title={T.title} description={T.desc} lang={lang}>
+  <PageHero badge={T.badge} titre={T.titre} accent={T.accent} intro={T.intro} image="/images/alumni-groupe.jpg" />
+
+  <section style="padding-top:24px">
+    <div class="wrap story">
+      <div class="story-card reveal">
+        <span class="year c-green">{chiffres.creationJlm}</span>
+        <h3>{T.jlm}</h3>
+        <p>{T.jlmTxt}</p>
+      </div>
+      <div class="story-card dark reveal">
+        <span class="year c-yellow">{chiffres.creationAlumni}</span>
+        <h3>JLM Alumni</h3>
+        <p>{T.alumniTxt}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="indh-sec">
+    <div class="wrap"><div class="indh reveal">
+      <img src={u("/images/partenaires/indh.png")} alt={T.indhAlt} loading="lazy" />
+      <div>
+        <span class="pill"><span class="dot"></span>{T.indhPill}</span>
+        <h2>{T.indhH}</h2>
+        <p>{T.indhTxt}</p>
+      </div>
+    </div></div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><h2>{T.parcoursH}</h2><p>{T.parcoursTxt}</p></div>
+      <ol class="path">
+        {T.parcours.map(([t, d], i) => (
+          <li class="reveal">
+            <span class={`n n-${couleurs[i]}`}>0{i + 1}</span>
+            <h3>{t}</h3>
+            <p>{d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <div class="dark-block">
+    <div class="wrap" style="padding:0">
+      <div class="sec-head"><h2>{T.valeursH}</h2><p>{T.valeursTxt}</p></div>
+      <div class="values">
+        {T.valeurs.map(([t, d], i) => (
+          <div class="value reveal">
+            <i class={['bg-green', 'bg-yellow', 'bg-red', 'bg-green'][i]}></i>
+            <h3>{t}</h3>
+            <p>{d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap map reveal">
+      <div>
+        <h2><span class="c-green">{chiffres.ecoles}</span> {T.mapH[0]}</h2>
+        <p>{T.mapTxt}</p>
+      </div>
+      <img src={u("/images/carte-ecoles.jpg")} alt={T.mapAlt} loading="lazy" />
+    </div>
+  </section>
+
+  <CtaBlock lang={lang} />
+</Base>
+
+<style>
+  .story { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .story-card { background: var(--soft); border-radius: var(--radius); padding: 40px; }
+  .story-card.dark { background: var(--ink); color: #fff; }
+  .story-card.dark p { color: rgba(255,255,255,.7); }
+  .year { font-family: var(--display); font-weight: 800; font-size: clamp(3.5rem, 7vw, 5.5rem); letter-spacing: -.04em; line-height: 1; }
+  .story-card h3 { font-size: 1.8rem; margin: 1rem 0 .75rem; }
+  .story-card p { color: var(--muted); font-size: 1.05rem; }
+
+  .indh-sec { padding-top: 0; }
+  .indh { display: grid; grid-template-columns: 280px 1fr; gap: 56px; align-items: center; border: 2px solid var(--ink); border-radius: var(--radius); padding: 48px; }
+  .indh img { width: 100%; mix-blend-mode: multiply; }
+  .indh h2 { font-size: clamp(2rem, 4vw, 3rem); margin: 1rem 0; }
+  .indh p { color: var(--muted); font-size: 1.05rem; max-width: 60ch; }
+
+  .path { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: none; }
+  .path li { border-top: 3px solid var(--ink); padding-top: 24px; }
+  .n { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; font-family: var(--display); font-weight: 800; font-size: 1.1rem; }
+  .n-green { background: var(--green); color: #fff; }
+  .n-yellow { background: var(--yellow); }
+  .n-red { background: var(--red); color: #fff; }
+  .n-ink { background: var(--ink); color: #fff; }
+  .path h3 { font-size: 1.6rem; margin: 1.25rem 0 .5rem; }
+  .path p { color: var(--muted); }
+
+  .values { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .value { background: var(--ink-2); border-radius: 24px; padding: 28px; }
+  .value i { display: block; width: 40px; height: 8px; border-radius: 4px; margin-bottom: 1.5rem; }
+  .value h3 { font-size: 1.5rem; margin-bottom: .5rem; }
+  .value p { color: rgba(255,255,255,.65); }
+
+  .map { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center; }
+  .map p { color: var(--muted); font-size: 1.1rem; margin-top: 1rem; max-width: 44ch; }
+  .map img { border-radius: var(--radius); border: 1px solid var(--line); }
+
+  @media (max-width: 960px) {
+    .story, .map { grid-template-columns: 1fr; }
+    .indh { grid-template-columns: 1fr; padding: 32px 24px; gap: 24px; }
+    .indh img { max-width: 200px; }
+    .path, .values { grid-template-columns: 1fr 1fr; }
+    .story-card { padding: 28px; }
+  }
+  @media (max-width: 520px) { .path, .values { grid-template-columns: 1fr; } }
+</style>

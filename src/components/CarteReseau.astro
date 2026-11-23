@@ -3,6 +3,15 @@ import { geoMercator, geoPath } from 'd3-geo';
 import { merge } from 'topojson-client';
 import world from 'world-atlas/countries-50m.json';
 import { reseau } from '../data/site';
+import { type Lang, tr } from '../i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+// « 1 équipe », « 6 équipes » / « فريق واحد »، « فريقان »، « 6 فرق »، « 27 فريقًا »
+const nbEquipes = (n: number) =>
+  lang === 'ar'
+    ? n === 1 ? 'فريق واحد' : n === 2 ? 'فريقان' : n <= 10 ? `${n} فرق` : `${n} فريقًا`
+    : `${n} équipe${n > 1 ? 's' : ''}`;
 
 // Fond de carte : Maroc (504) et provinces du Sud (732) fusionnés en une seule forme.
 const topo = world as any;
@@ -22,18 +31,26 @@ const villes = [...reseau]
   .sort((a, b) => b.ecoles.length - a.ecoles.length)
   .map((v, i) => {
     const [x, y] = projection([v.lon, v.lat])!;
-    return { ...v, i, x: +x.toFixed(1), y: +y.toFixed(1), r: +(3.2 + Math.sqrt(v.ecoles.length) * 2.6).toFixed(1) };
+    return { ...v, ville: tr(v.ville, lang), i, x: +x.toFixed(1), y: +y.toFixed(1), r: +(3.2 + Math.sqrt(v.ecoles.length) * 2.6).toFixed(1) };
   });
 const total = reseau.reduce((n, v) => n + v.ecoles.length, 0);
-const data = JSON.stringify(villes.map(({ ville, ecoles, x, y, r }) => ({ ville, ecoles, x, y, r })));
+const data = JSON.stringify(villes.map(({ ville, ecoles, x, y, r }) => ({ ville, ecoles, x, y, r, n: nbEquipes(ecoles.length) })));
+const t = {
+  titre: { fr: 'Carte du Maroc des villes où des équipes JLM sont actives', ar: 'خريطة المغرب للمدن التي تنشط فيها فرق JLM' },
+  pill: { fr: 'Un réseau national', ar: 'شبكة وطنية' },
+  intro: {
+    fr: 'Survolez ou touchez une ville pour découvrir les équipes JLM actives dans ses écoles et universités.',
+    ar: 'مرّر المؤشر أو انقر على مدينة لاكتشاف فرق JLM النشيطة في مدارسها وجامعاتها.',
+  },
+};
 const premiere = villes[0];
 ---
 <section class="carte-sec">
   <div class="wrap">
     <div class="carte reveal" data-villes={data}>
-      <div class="map-wrap">
+      <div class="map-wrap" dir="ltr">
         <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="carte-titre">
-          <title id="carte-titre">Carte du Maroc des villes où des équipes JLM sont actives</title>
+          <title id="carte-titre">{tr(t.titre, lang)}</title>
           <defs>
             <pattern id="trame" width="7" height="7" patternUnits="userSpaceOnUse">
               <circle cx="3.5" cy="3.5" r="1.1" fill="rgba(255,255,255,.16)" />
@@ -49,7 +66,7 @@ const premiere = villes[0];
                 style={`--d:${v.i * 45}ms`}
                 tabindex="0"
                 role="button"
-                aria-label={`${v.ville} : ${v.ecoles.length} équipe${v.ecoles.length > 1 ? 's' : ''}`}
+                aria-label={`${v.ville} : ${nbEquipes(v.ecoles.length)}`}
               >
                 <circle class="halo" cx={v.x} cy={v.y} r={v.r + 7} />
                 <circle class="dot" cx={v.x} cy={v.y} r={v.r} />
@@ -65,17 +82,19 @@ const premiere = villes[0];
       </div>
 
       <div class="panel">
-        <span class="pill dark-pill"><span class="dot" style="background:var(--red)"></span>Un réseau national</span>
-        <h2><span class="c-green">{total}</span> équipes<br />dans {reseau.length} villes</h2>
-        <p class="intro">Survolez ou touchez une ville pour découvrir les équipes JLM actives dans ses écoles et universités.</p>
+        <span class="pill dark-pill"><span class="dot" style="background:var(--red)"></span>{tr(t.pill, lang)}</span>
+        {lang === 'ar'
+          ? <h2><span class="c-green">{total}</span> فريقًا<br />في {reseau.length} مدينة</h2>
+          : <h2><span class="c-green">{total}</span> équipes<br />dans {reseau.length} villes</h2>}
+        <p class="intro">{tr(t.intro, lang)}</p>
 
         <div class="city" aria-live="polite">
           <div class="city-head">
             <h3 class="city-name">{premiere.ville}</h3>
-            <span class="city-count">{premiere.ecoles.length} équipe{premiere.ecoles.length > 1 ? 's' : ''}</span>
+            <span class="city-count">{nbEquipes(premiere.ecoles.length)}</span>
           </div>
           <ul class="city-list">
-            {premiere.ecoles.map((e) => <li>{e}</li>)}
+            {premiere.ecoles.map((e) => <li dir="ltr">{e}</li>)}
           </ul>
         </div>
 
@@ -93,7 +112,7 @@ const premiere = villes[0];
 
 <script>
   document.querySelectorAll<HTMLElement>('.carte').forEach((root) => {
-    const villes: { ville: string; ecoles: string[]; x: number; y: number; r: number }[] = JSON.parse(root.dataset.villes || '[]');
+    const villes: { ville: string; ecoles: string[]; x: number; y: number; r: number; n: string }[] = JSON.parse(root.dataset.villes || '[]');
     const svg = root.querySelector('svg')!;
     const label = svg.querySelector<SVGGElement>('.label')!;
     const rect = label.querySelector('rect')!;
@@ -110,8 +129,8 @@ const premiere = villes[0];
       const v = villes[i];
       root.querySelectorAll('[data-i]').forEach((el) => el.classList.toggle('active', Number((el as HTMLElement).dataset.i) === i));
       nom.textContent = v.ville;
-      count.textContent = `${v.ecoles.length} équipe${v.ecoles.length > 1 ? 's' : ''}`;
-      list.innerHTML = v.ecoles.map((e) => `<li>${e}</li>`).join('');
+      count.textContent = v.n;
+      list.innerHTML = v.ecoles.map((e) => `<li dir="ltr">${e}</li>`).join('');
       list.classList.remove('pop'); void (list as HTMLElement).offsetWidth; list.classList.add('pop');
       // étiquette sur la carte
       text.textContent = v.ville;

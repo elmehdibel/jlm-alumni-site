@@ -1,52 +1,55 @@
-// Les 12 régions du Maroc et leurs principales villes (utilisé par le formulaire Team Leader).
+// Les 12 régions du Maroc et leurs principales villes (formulaire Team Leader), en français et en arabe.
+// Chaque ville : [nom français, nom arabe]. La valeur envoyée dans les candidatures reste en français.
 // Une ville manquante ? L'ajouter dans la bonne région : la liste se met à jour toute seule.
-export const regions: { nom: string; villes: string[] }[] = [
+import type { L } from '../i18n';
+
+export const regions: { nom: L; villes: [string, string][] }[] = [
   {
-    nom: "Tanger-Tétouan-Al Hoceïma",
-    villes: ["Tanger", "Tétouan", "Al Hoceïma", "Larache", "Ksar El Kébir", "Chefchaouen", "Ouazzane", "Asilah", "Fnideq", "M'diq", "Martil", "Imzouren", "Targuist", "Bni Bouayach", "Oued Laou"],
+    nom: { fr: "Tanger-Tétouan-Al Hoceïma", ar: "طنجة - تطوان - الحسيمة" },
+    villes: [["Tanger", "طنجة"], ["Tétouan", "تطوان"], ["Al Hoceïma", "الحسيمة"], ["Larache", "العرائش"], ["Ksar El Kébir", "القصر الكبير"], ["Chefchaouen", "شفشاون"], ["Ouazzane", "وزان"], ["Asilah", "أصيلة"], ["Fnideq", "الفنيدق"], ["M'diq", "المضيق"], ["Martil", "مرتيل"], ["Imzouren", "إمزورن"], ["Targuist", "تارجيست"], ["Bni Bouayach", "بني بوعياش"], ["Oued Laou", "واد لاو"]],
   },
   {
-    nom: "L'Oriental",
-    villes: ["Oujda", "Nador", "Berkane", "Taourirt", "Guercif", "Jerada", "Driouch", "Figuig", "Bouarfa", "Zaïo", "Selouane", "Al Aroui", "Saïdia", "Ahfir", "El Aïoun Sidi Mellouk"],
+    nom: { fr: "L'Oriental", ar: "الشرق" },
+    villes: [["Oujda", "وجدة"], ["Nador", "الناظور"], ["Berkane", "بركان"], ["Taourirt", "تاوريرت"], ["Guercif", "جرسيف"], ["Jerada", "جرادة"], ["Driouch", "الدريوش"], ["Figuig", "فكيك"], ["Bouarfa", "بوعرفة"], ["Zaïo", "زايو"], ["Selouane", "سلوان"], ["Al Aroui", "العروي"], ["Saïdia", "السعيدية"], ["Ahfir", "أحفير"], ["El Aïoun Sidi Mellouk", "العيون سيدي ملوك"]],
   },
   {
-    nom: "Fès-Meknès",
-    villes: ["Fès", "Meknès", "Taza", "Ifrane", "Sefrou", "Azrou", "El Hajeb", "Taounate", "Moulay Yacoub", "Boulemane", "Missour", "Imouzzer Kandar", "Tahla", "Aïn Taoujdate", "Moulay Idriss Zerhoun", "Ribat El Kheir", "Karia Ba Mohamed"],
+    nom: { fr: "Fès-Meknès", ar: "فاس - مكناس" },
+    villes: [["Fès", "فاس"], ["Meknès", "مكناس"], ["Taza", "تازة"], ["Ifrane", "إفران"], ["Sefrou", "صفرو"], ["Azrou", "أزرو"], ["El Hajeb", "الحاجب"], ["Taounate", "تاونات"], ["Moulay Yacoub", "مولاي يعقوب"], ["Boulemane", "بولمان"], ["Missour", "ميسور"], ["Imouzzer Kandar", "إيموزار كندر"], ["Tahla", "تاهلة"], ["Aïn Taoujdate", "عين تاوجطات"], ["Moulay Idriss Zerhoun", "مولاي إدريس زرهون"], ["Ribat El Kheir", "رباط الخير"], ["Karia Ba Mohamed", "قرية با محمد"]],
   },
   {
-    nom: "Rabat-Salé-Kénitra",
-    villes: ["Rabat", "Salé", "Kénitra", "Témara", "Skhirat", "Khémisset", "Tiflet", "Rommani", "Sidi Kacem", "Sidi Slimane", "Souk El Arbaa", "Sidi Yahya El Gharb", "Mechra Bel Ksiri", "Mehdia", "Aïn El Aouda", "Harhoura"],
+    nom: { fr: "Rabat-Salé-Kénitra", ar: "الرباط - سلا - القنيطرة" },
+    villes: [["Rabat", "الرباط"], ["Salé", "سلا"], ["Kénitra", "القنيطرة"], ["Témara", "تمارة"], ["Skhirat", "الصخيرات"], ["Khémisset", "الخميسات"], ["Tiflet", "تيفلت"], ["Rommani", "الرماني"], ["Sidi Kacem", "سيدي قاسم"], ["Sidi Slimane", "سيدي سليمان"], ["Souk El Arbaa", "سوق الأربعاء"], ["Sidi Yahya El Gharb", "سيدي يحيى الغرب"], ["Mechra Bel Ksiri", "مشرع بلقصيري"], ["Mehdia", "المهدية"], ["Aïn El Aouda", "عين عودة"], ["Harhoura", "الهرهورة"]],
   },
   {
-    nom: "Béni Mellal-Khénifra",
-    villes: ["Béni Mellal", "Khouribga", "Khénifra", "Fkih Ben Salah", "Azilal", "Kasba Tadla", "Oued Zem", "Bejaâd", "Souk Sebt Oulad Nemma", "Demnate", "M'rirt", "Boujniba", "Ouaouizeght", "Zaouiat Cheikh"],
+    nom: { fr: "Béni Mellal-Khénifra", ar: "بني ملال - خنيفرة" },
+    villes: [["Béni Mellal", "بني ملال"], ["Khouribga", "خريبكة"], ["Khénifra", "خنيفرة"], ["Fkih Ben Salah", "الفقيه بن صالح"], ["Azilal", "أزيلال"], ["Kasba Tadla", "قصبة تادلة"], ["Oued Zem", "وادي زم"], ["Bejaâd", "أبي الجعد"], ["Souk Sebt Oulad Nemma", "سوق السبت أولاد النمة"], ["Demnate", "دمنات"], ["M'rirt", "مريرت"], ["Boujniba", "بوجنيبة"], ["Ouaouizeght", "واويزغت"], ["Zaouiat Cheikh", "زاوية الشيخ"]],
   },
   {
-    nom: "Casablanca-Settat",
-    villes: ["Casablanca", "Mohammedia", "El Jadida", "Settat", "Berrechid", "Benslimane", "Bouskoura", "Dar Bouazza", "Médiouna", "Nouaceur", "Tit Mellil", "Had Soualem", "Azemmour", "Sidi Bennour", "Bir Jdid", "Ben Ahmed", "El Gara", "Sidi Rahal"],
+    nom: { fr: "Casablanca-Settat", ar: "الدار البيضاء - سطات" },
+    villes: [["Casablanca", "الدار البيضاء"], ["Mohammedia", "المحمدية"], ["El Jadida", "الجديدة"], ["Settat", "سطات"], ["Berrechid", "برشيد"], ["Benslimane", "بنسليمان"], ["Bouskoura", "بوسكورة"], ["Dar Bouazza", "دار بوعزة"], ["Médiouna", "مديونة"], ["Nouaceur", "النواصر"], ["Tit Mellil", "تيط مليل"], ["Had Soualem", "حد السوالم"], ["Azemmour", "أزمور"], ["Sidi Bennour", "سيدي بنور"], ["Bir Jdid", "البئر الجديد"], ["Ben Ahmed", "ابن أحمد"], ["El Gara", "الكارة"], ["Sidi Rahal", "سيدي رحال"]],
   },
   {
-    nom: "Marrakech-Safi",
-    villes: ["Marrakech", "Safi", "Essaouira", "El Kelaâ des Sraghna", "Ben Guerir", "Youssoufia", "Chichaoua", "Tamansourt", "Tahannaout", "Aït Ourir", "Amizmiz", "Chemaïa", "Sidi Bou Othmane", "Jemâa Shaïm"],
+    nom: { fr: "Marrakech-Safi", ar: "مراكش - آسفي" },
+    villes: [["Marrakech", "مراكش"], ["Safi", "آسفي"], ["Essaouira", "الصويرة"], ["El Kelaâ des Sraghna", "قلعة السراغنة"], ["Ben Guerir", "ابن جرير"], ["Youssoufia", "اليوسفية"], ["Chichaoua", "شيشاوة"], ["Tamansourt", "تامنصورت"], ["Tahannaout", "تحناوت"], ["Aït Ourir", "أيت أورير"], ["Amizmiz", "أمزميز"], ["Chemaïa", "الشماعية"], ["Sidi Bou Othmane", "سيدي بوعثمان"], ["Jemâa Shaïm", "جمعة سحيم"]],
   },
   {
-    nom: "Drâa-Tafilalet",
-    villes: ["Errachidia", "Ouarzazate", "Midelt", "Tinghir", "Zagora", "Erfoud", "Rissani", "Goulmima", "Tinejdad", "Kelaat M'Gouna", "Boumalne Dadès", "Agdz", "Rich"],
+    nom: { fr: "Drâa-Tafilalet", ar: "درعة - تافيلالت" },
+    villes: [["Errachidia", "الرشيدية"], ["Ouarzazate", "ورزازات"], ["Midelt", "ميدلت"], ["Tinghir", "تنغير"], ["Zagora", "زاكورة"], ["Erfoud", "أرفود"], ["Rissani", "الريصاني"], ["Goulmima", "كلميمة"], ["Tinejdad", "تنجداد"], ["Kelaat M'Gouna", "قلعة مكونة"], ["Boumalne Dadès", "بومالن دادس"], ["Agdz", "أكدز"], ["Rich", "الريش"]],
   },
   {
-    nom: "Souss-Massa",
-    villes: ["Agadir", "Inezgane", "Aït Melloul", "Dcheira El Jihadia", "Taroudant", "Tiznit", "Tata", "Biougra", "Oulad Teïma", "Lqliâa", "Taliouine", "Tafraout"],
+    nom: { fr: "Souss-Massa", ar: "سوس - ماسة" },
+    villes: [["Agadir", "أكادير"], ["Inezgane", "إنزكان"], ["Aït Melloul", "أيت ملول"], ["Dcheira El Jihadia", "الدشيرة الجهادية"], ["Taroudant", "تارودانت"], ["Tiznit", "تيزنيت"], ["Tata", "طاطا"], ["Biougra", "بيوكرى"], ["Oulad Teïma", "أولاد تايمة"], ["Lqliâa", "القليعة"], ["Taliouine", "تالوين"], ["Tafraout", "تافراوت"]],
   },
   {
-    nom: "Guelmim-Oued Noun",
-    villes: ["Guelmim", "Tan-Tan", "Sidi Ifni", "Assa", "Zag", "Bouizakarne", "El Ouatia"],
+    nom: { fr: "Guelmim-Oued Noun", ar: "كلميم - واد نون" },
+    villes: [["Guelmim", "كلميم"], ["Tan-Tan", "طانطان"], ["Sidi Ifni", "سيدي إفني"], ["Assa", "آسا"], ["Zag", "الزاك"], ["Bouizakarne", "بويزكارن"], ["El Ouatia", "الوطية"]],
   },
   {
-    nom: "Laâyoune-Sakia El Hamra",
-    villes: ["Laâyoune", "Boujdour", "Es-Semara", "Tarfaya", "El Marsa"],
+    nom: { fr: "Laâyoune-Sakia El Hamra", ar: "العيون - الساقية الحمراء" },
+    villes: [["Laâyoune", "العيون"], ["Boujdour", "بوجدور"], ["Es-Semara", "السمارة"], ["Tarfaya", "طرفاية"], ["El Marsa", "المرسى"]],
   },
   {
-    nom: "Dakhla-Oued Ed-Dahab",
-    villes: ["Dakhla", "Aousserd", "Bir Gandouz"],
+    nom: { fr: "Dakhla-Oued Ed-Dahab", ar: "الداخلة - وادي الذهب" },
+    villes: [["Dakhla", "الداخلة"], ["Aousserd", "أوسرد"], ["Bir Gandouz", "بئر كندوز"]],
   },
 ];

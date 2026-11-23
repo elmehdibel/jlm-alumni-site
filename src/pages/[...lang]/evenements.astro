@@ -1,0 +1,116 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import { saison, galerie, chiffres, contact } from '../../data/site';
+import { getLang, langPaths, tr } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = getLang(Astro.params.lang);
+const txt: Record<string, string> = { green: '#fff', yellow: 'var(--ink)', red: '#fff' };
+const T = {
+  fr: {
+    title: 'Événements', desc: 'Kick-off, bootcamps régionaux et Compétition nationale : les temps forts de la saison JLM.',
+    badge: 'La saison JLM', titre: 'Trois temps forts,', accent: 'une communauté.',
+    intro: "Chaque année, des milliers d'étudiants se retrouvent autour des événements JLM pour se former, présenter leurs projets et célébrer l'engagement.",
+    kpiH: 'La Compétition nationale en chiffres', kpis: ['projets présentés', 'participants', 'visiteurs'],
+    nextH: 'Prochains rendez-vous', nextTxt: 'Le calendrier de la saison sera publié ici. Suivez-nous sur les réseaux pour ne rien manquer.',
+    bientot: 'Calendrier bientôt disponible', images: 'En images',
+  },
+  ar: {
+    title: 'الفعاليات', desc: 'الانطلاقة، المعسكرات الجهوية والمسابقة الوطنية: أبرز محطات موسم JLM.',
+    badge: 'موسم JLM', titre: 'ثلاث محطات كبرى،', accent: 'ومجتمع واحد.',
+    intro: 'كل سنة، يلتقي آلاف الطلبة حول فعاليات JLM للتكوين وعرض مشاريعهم والاحتفاء بالالتزام.',
+    kpiH: 'المسابقة الوطنية بالأرقام', kpis: ['مشروعًا مُقدَّمًا', 'مشاركًا', 'زائرًا'],
+    nextH: 'المواعيد القادمة', nextTxt: 'سيُنشر هنا برنامج الموسم. تابعونا على شبكات التواصل حتى لا يفوتكم أي جديد.',
+    bientot: 'البرنامج متاح قريبًا', images: 'بالصور',
+  },
+}[lang];
+---
+<Base title={T.title} description={T.desc} lang={lang}>
+  <PageHero badge={T.badge} titre={T.titre} accent={T.accent} intro={T.intro} image="/images/competition-foule.jpg" couleur="red" />
+
+  <section style="padding-top:24px">
+    <div class="wrap timeline">
+      {saison.map((s, i) => (
+        <article class="step reveal">
+          <img src={s.image} alt={tr(s.nom, lang)} loading="lazy" />
+          <div>
+            <span class="when" style={`background:var(--${s.couleur});color:${txt[s.couleur]}`}>0{i + 1} · {tr(s.quand, lang)}</span>
+            <h2>{tr(s.nom, lang)}</h2>
+            <p>{tr(s.texte, lang)}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <div class="dark-block">
+    <div class="wrap" style="padding:0">
+      <div class="sec-head"><h2>{T.kpiH}</h2></div>
+      <div class="kpis">
+        <div class="reveal"><b class="c-green">{chiffres.projetsCompetition}</b><span>{T.kpis[0]}</span></div>
+        <div class="reveal"><b class="c-yellow">{chiffres.participantsCompetition}</b><span>{T.kpis[1]}</span></div>
+        <div class="reveal"><b class="c-red">{chiffres.visiteursCompetition}</b><span>{T.kpis[2]}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>{T.nextH}</h2>
+        <p>{T.nextTxt}</p>
+      </div>
+      <div class="upcoming reveal">
+        <span class="pill"><span class="dot" style="background:var(--yellow)"></span>{T.bientot}</span>
+        <div class="socials">
+          {contact.reseaux.map((r) => <a href={r.url} target="_blank" rel="noopener" class="btn btn-line">{r.nom} ↗</a>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>{T.images}</h2></div>
+      <div class="gallery">
+        {galerie.map((g, i) => <img src={g} alt="" loading="lazy" class={i === 0 ? 'wide' : i === 4 ? 'tall' : ''} />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock lang={lang} />
+</Base>
+
+<style>
+  .timeline { display: grid; gap: 16px; }
+  .step { display: grid; grid-template-columns: 420px 1fr; gap: 40px; align-items: center; background: var(--soft); border-radius: var(--radius); padding: 16px; }
+  .step img { width: 100%; height: 280px; object-fit: cover; border-radius: 20px; }
+  .step h2 { font-size: clamp(2rem, 4vw, 3.2rem); margin: 1rem 0 .75rem; }
+  .step p { color: var(--muted); font-size: 1.1rem; max-width: 52ch; padding-right: 24px; }
+  .when { font-size: .85rem; font-weight: 600; padding: .35rem .8rem; border-radius: 999px; display: inline-block; }
+
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .kpis div { background: var(--ink-2); border-radius: 24px; padding: 32px; }
+  .kpis b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 6vw, 5rem); letter-spacing: -.04em; line-height: 1; }
+  .kpis span { color: rgba(255,255,255,.7); font-weight: 500; }
+
+  .upcoming { border: 2px dashed var(--line); border-radius: var(--radius); padding: 40px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .socials { display: flex; gap: 10px; flex-wrap: wrap; }
+  .socials .btn { padding: .7rem 1.2rem; }
+
+  .gallery { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 12px; }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
+  .gallery .wide { grid-column: span 2; grid-row: span 2; }
+  .gallery .tall { grid-row: span 2; }
+
+  @media (max-width: 960px) {
+    .step { grid-template-columns: 1fr; gap: 16px; }
+    .step img { height: 220px; }
+    .step div { padding: 0 12px 16px; }
+    .kpis { grid-template-columns: 1fr; }
+    .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 160px; }
+    .upcoming { padding: 24px; }
+  }
+</style>

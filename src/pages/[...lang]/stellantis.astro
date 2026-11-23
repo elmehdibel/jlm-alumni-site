@@ -1,0 +1,327 @@
+---
+import Base from '../../layouts/Base.astro';
+import InscriptionForm from '../../components/InscriptionForm.astro';
+import { u } from '../../lib/url';
+import { formulaires } from '../../data/site';
+import { getLang, langPaths } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = getLang(Astro.params.lang);
+const img = (p: string) => u(`/images/stellantis/${p}`);
+const txt: Record<string, string> = { green: '#fff', yellow: 'var(--ink)', red: '#fff', ink: '#fff' };
+const f = lang === 'ar' ? '←' : '→';
+
+const T = {
+  fr: {
+    title: 'Programmes avec Stellantis',
+    desc: 'Digital Skills For Future et Digital Startup Incubation : deux programmes JLM Alumni × Stellantis pour former, insérer et incuber les jeunes au Maroc.',
+    h1: ['Deux programmes pour les', 'talents', 'et les', 'start-up', 'de demain.'],
+    lead: "Avec le mécénat de Stellantis, JLM Alumni forme les jeunes aux compétences digitales, les accompagne vers l'emploi et incube leurs projets d'entreprise.",
+    pickDsff: 'Formation et insertion professionnelle', pickDsu: 'Formation et incubation de start-up',
+    dsff: {
+      pill: 'Programme 01 · DSFF',
+      lead: "Former, accompagner et insérer chaque année 120 jeunes grâce aux compétences digitales de demain. L'objectif : faire du numérique un vrai levier d'insertion socio-professionnelle.",
+      btn: "Je m'inscris",
+      stats: [['120', 'jeunes formés par an', 'green'], ['180 h', 'de formation par participant', 'yellow'], ['≥ 30 %', 'de femmes', 'red'], ['≥ 50 %', 'insérés en stage', 'ink']],
+      sub: 'Un parcours de 180 heures',
+      parcours: [
+        ['Tronc commun', '90 h', 'green', ['Écoute et orientation', 'Soft skills, avec un psychologue', 'Bureautique', 'Digital branding']],
+        ['Spécialisation', '60 h', 'yellow', ['Intelligence artificielle et automatisation', 'Techniques de vente', 'Logistique et gestion des stocks']],
+        ['Bootcamps & ateliers', '30 h', 'red', ['Mini-projets', 'Employabilité', 'Sécurité au travail']],
+      ],
+      etapes: [
+        ['Recrutement', 'Appel à candidatures sur plusieurs canaux et sélection de la cohorte.'],
+        ['Formation', '180 heures : tronc commun, spécialisation, bootcamps et ateliers pratiques.'],
+        ['Suivi', 'Suivi pédagogique, bilans trimestriels et accompagnement contre le décrochage.'],
+        ['Insertion', 'Mise en relation avec les entreprises partenaires et stages.'],
+      ],
+      alts: ['Séance de formation Digital Skills For Future', 'Atelier sur ordinateur', "Signature d'un partenariat d'insertion"],
+      partners: ["Partenaires d'insertion :", "Mikafric, ManpowerGroup et le Centre Américain accompagnent les bénéficiaires vers les stages et l'emploi."],
+      formPill: 'Inscriptions', formH: 'Rejoins la prochaine cohorte DSFF',
+      formP: "Remplis le formulaire : l'équipe JLM Alumni te recontacte pour la suite de la sélection.",
+      formTitre: 'Inscription DSFF',
+    },
+    dsu: {
+      pill: 'Programme 02 · DSU',
+      lead: "Former, accompagner et incuber les jeunes entrepreneurs jusqu'à la création effective de leur start-up. Un parcours complet : formation, création juridique et 6 mois d'incubation.",
+      small: "Programme de formation conçu avec le Laboratoire Pluridisciplinaire de Recherche et d'Innovation (LPRI) de l'EMSI.",
+      btn: 'Je candidate',
+      stats: [['100', 'jeunes accompagnés', 'green'], ['18–35', 'ans', 'yellow'], ['45 h', 'de formation', 'red'], ['6 mois', "d'incubation et coworking", 'green'], ['30', 'start-up créées', 'yellow'], ['≥ 35 %', 'de femmes', 'red']],
+      sub: '45 heures de formation, 11 modules',
+      parcours: [
+        ['Fondations & idéation', '12 h', 'green', ["Introduction à l'entrepreneuriat digital", "Identification du problème et validation de l'idée", 'Design thinking et innovation']],
+        ['Stratégie & marché', '16 h', 'yellow', ["Intelligence artificielle appliquée à l'entrepreneuriat", 'Business model et revenus', 'Étude de marché et concurrence', 'Marketing digital et acquisition']],
+        ['Lancement & pitch', '17 h', 'red', ["Développement d'un MVP", 'Gestion financière et prévisions', "Création d'entreprise au Maroc", 'Pitch et préparation au Demo Day']],
+      ],
+      etapes: [
+        ['Mobilisation', 'Cérémonie de lancement, campagnes et appels à candidatures.'],
+        ['Sélection', 'Analyse des dossiers, entretiens et validation des 100 bénéficiaires.'],
+        ['Formation & création', '45 h de formation, business plan validé et création juridique de la start-up.'],
+        ['Incubation', '6 mois de coworking, mentorat, coaching et Demo Day final.'],
+      ],
+      alts: ['Premier groupe Digital Startup Incubation en formation', "Module d'initiation à l'intelligence artificielle", 'Atelier en groupe', 'Échanges entre participants'],
+      formPill: 'Candidatures', formH: 'Tu as une idée de start-up ?',
+      formP: "Tu as entre 18 et 35 ans et un projet innovant ? Candidate : la sélection se fait sur la motivation, la pertinence de l'idée et l'engagement citoyen.",
+      formTitre: 'Candidature DSU',
+    },
+  },
+  ar: {
+    title: 'برامج مع ستيلانتيس',
+    desc: 'Digital Skills For Future وDigital Startup Incubation: برنامجان من JLM Alumni وستيلانتيس لتكوين الشباب وإدماجهم واحتضان مشاريعهم بالمغرب.',
+    h1: ['برنامجان من أجل', 'مواهب', 'الغد', 'ومقاولاته الناشئة.', ''],
+    lead: 'بدعم من ستيلانتيس، تُكوّن JLM Alumni الشباب في المهارات الرقمية، وتواكبهم نحو الشغل، وتحتضن مشاريعهم المقاولاتية.',
+    pickDsff: 'التكوين والإدماج المهني', pickDsu: 'التكوين واحتضان المقاولات الناشئة',
+    dsff: {
+      pill: 'البرنامج 01 · DSFF',
+      lead: 'تكوين ومواكبة وإدماج 120 شابًا كل سنة بفضل المهارات الرقمية للمستقبل. الهدف: جعل الرقمي رافعة حقيقية للإدماج السوسيو-مهني.',
+      btn: 'سجّل الآن',
+      stats: [['120', 'شابًا يتم تكوينهم سنويًا', 'green'], ['180 س', 'من التكوين لكل مشارك', 'yellow'], ['≥ 30%', 'من النساء', 'red'], ['≥ 50%', 'يتم إدماجهم في تداريب', 'ink']],
+      sub: 'مسار من 180 ساعة',
+      parcours: [
+        ['الجذع المشترك', '90 س', 'green', ['الإنصات والتوجيه', 'المهارات الناعمة مع أخصائي نفسي', 'المكتبيات', 'العلامة الرقمية الشخصية']],
+        ['التخصص', '60 س', 'yellow', ['الذكاء الاصطناعي والأتمتة', 'تقنيات البيع', 'اللوجستيك وتدبير المخزون']],
+        ['معسكرات وورشات', '30 س', 'red', ['مشاريع صغيرة', 'قابلية التشغيل', 'السلامة في العمل']],
+      ],
+      etapes: [
+        ['الانتقاء', 'إعلان عن الترشيحات عبر عدة قنوات وانتقاء الفوج.'],
+        ['التكوين', '180 ساعة: جذع مشترك، تخصص، معسكرات وورشات تطبيقية.'],
+        ['التتبع', 'تتبع بيداغوجي، حصيلة كل ثلاثة أشهر، ومواكبة لمحاربة الانقطاع.'],
+        ['الإدماج', 'ربط الصلة بالمقاولات الشريكة وتداريب ميدانية.'],
+      ],
+      alts: ['حصة تكوينية في برنامج Digital Skills For Future', 'ورشة على الحاسوب', 'توقيع شراكة للإدماج'],
+      partners: ['شركاء الإدماج:', 'تواكب Mikafric وManpowerGroup والمركز الأمريكي المستفيدين نحو التداريب والشغل.'],
+      formPill: 'التسجيل', formH: 'انضم إلى الفوج القادم لـ DSFF',
+      formP: 'املأ الاستمارة: سيتواصل معك فريق JLM Alumni لاستكمال مراحل الانتقاء.',
+      formTitre: 'التسجيل في DSFF',
+    },
+    dsu: {
+      pill: 'البرنامج 02 · DSU',
+      lead: 'تكوين ومواكبة واحتضان المقاولين الشباب حتى الإنشاء الفعلي لمقاولاتهم الناشئة. مسار متكامل: تكوين، إنشاء قانوني، و6 أشهر من الاحتضان.',
+      small: 'برنامج تكوين أُعدّ بشراكة مع المختبر متعدد التخصصات للبحث والابتكار (LPRI) التابع لـ EMSI.',
+      btn: 'ترشّح الآن',
+      stats: [['100', 'شاب مستفيد من المواكبة', 'green'], ['18–35', 'سنة', 'yellow'], ['45 س', 'من التكوين', 'red'], ['6 أشهر', 'من الاحتضان وفضاء العمل المشترك', 'green'], ['30', 'مقاولة ناشئة', 'yellow'], ['≥ 35%', 'من النساء', 'red']],
+      sub: '45 ساعة من التكوين، 11 وحدة',
+      parcours: [
+        ['الأسس وتوليد الأفكار', '12 س', 'green', ['مدخل إلى ريادة الأعمال الرقمية', 'تحديد المشكل والتحقق من الفكرة', 'التفكير التصميمي والابتكار']],
+        ['الاستراتيجية والسوق', '16 س', 'yellow', ['الذكاء الاصطناعي في خدمة ريادة الأعمال', 'نموذج العمل ومصادر الدخل', 'دراسة السوق والمنافسة', 'التسويق الرقمي واستقطاب الزبناء']],
+        ['الإطلاق والعرض', '17 س', 'red', ['تطوير نسخة أولية (MVP)', 'التدبير المالي والتوقعات', 'إنشاء المقاولة بالمغرب', 'العرض والتحضير ليوم Demo Day']],
+      ],
+      etapes: [
+        ['التعبئة', 'حفل الإطلاق، حملات تواصلية وإعلانات عن الترشيحات.'],
+        ['الانتقاء', 'دراسة الملفات، مقابلات، والمصادقة على 100 مستفيد.'],
+        ['التكوين والإنشاء', '45 ساعة من التكوين، المصادقة على مخطط العمل، والإنشاء القانوني للمقاولة.'],
+        ['الاحتضان', '6 أشهر من العمل المشترك والإرشاد والتوجيه، ويوم Demo Day ختامي.'],
+      ],
+      alts: ['الفوج الأول من Digital Startup Incubation خلال التكوين', 'وحدة التعريف بالذكاء الاصطناعي', 'ورشة جماعية', 'نقاش بين المشاركين'],
+      formPill: 'الترشيحات', formH: 'لديك فكرة مقاولة ناشئة؟',
+      formP: 'عمرك بين 18 و35 سنة ولديك مشروع مبتكر؟ ترشّح: يتم الانتقاء على أساس الحافز وجدوى الفكرة والالتزام المواطن.',
+      formTitre: 'الترشح لـ DSU',
+    },
+  },
+}[lang];
+---
+<Base title={T.title} description={T.desc} lang={lang}>
+  <!-- En-tête -->
+  <section class="top">
+    <div class="wrap">
+      <div class="duo" dir="ltr">
+        <img src={u('/logos/jlm-alumni-couleur.png')} alt="JLM Alumni" />
+        <span>×</span>
+        <img src={img('logo-stellantis.png')} alt="Stellantis" />
+      </div>
+      <h1>{T.h1[0]} <span class="c-green">{T.h1[1]}</span> {T.h1[2]} <span class="c-red">{T.h1[3]}</span> {T.h1[4]}</h1>
+      <p class="lead">{T.lead}</p>
+      <div class="picks">
+        <a href="#dsff" class="pick">
+          <img src={img('logo-dsff.png')} alt="Digital Skills For Future" />
+          <div><b dir="ltr">Digital Skills For Future</b><span>{T.pickDsff}</span></div>
+          <i>{f}</i>
+        </a>
+        <a href="#dsu" class="pick">
+          <img src={img('logo-dsu.png')} alt="Digital Startup Incubation" />
+          <div><b dir="ltr">Digital Startup Incubation</b><span>{T.pickDsu}</span></div>
+          <i>{f}</i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DSFF -->
+  <section id="dsff" class="prog">
+    <div class="wrap">
+      <div class="intro">
+        <div>
+          <span class="pill"><span class="dot"></span>{T.dsff.pill}</span>
+          <h2 dir="ltr" class="prog-name">Digital Skills <span class="c-green">For Future</span></h2>
+          <p class="lead">{T.dsff.lead}</p>
+          <a href="#inscription-dsff" class="btn btn-dark">{T.dsff.btn} {f}</a>
+        </div>
+        <div class="stats">
+          {T.dsff.stats.map(([v, l, c]) => <div class="stat reveal" style={`background:var(--${c});color:${txt[c]}`}><b><bdi>{v}</bdi></b><span>{l}</span></div>)}
+        </div>
+      </div>
+
+      <h3 class="sub">{T.dsff.sub}</h3>
+      <div class="parcours">
+        {T.dsff.parcours.map(([t, h, c, items]) => (
+          <div class="bloc reveal">
+            <div class="bloc-head"><span class={`hours bg-${c}`}>{h}</span><h4>{t}</h4></div>
+            <ul>{(items as string[]).map((i) => <li>{i}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+
+      <div class="steps">
+        {T.dsff.etapes.map(([t, d], i) => <div class="step reveal"><span>0{i + 1}</span><h4>{t}</h4><p>{d}</p></div>)}
+      </div>
+
+      <div class="photos">
+        <img src={img('dsff-1.jpg')} alt={T.dsff.alts[0]} loading="lazy" />
+        <img src={img('dsff-2.jpg')} alt={T.dsff.alts[1]} loading="lazy" />
+        <img src={img('dsff-partenariat.jpg')} alt={T.dsff.alts[2]} loading="lazy" />
+      </div>
+      <p class="partners-note"><b>{T.dsff.partners[0]}</b> {T.dsff.partners[1]}</p>
+
+      <div id="inscription-dsff" class="form-zone">
+        <div class="form-side">
+          <span class="pill"><span class="dot"></span>{T.dsff.formPill}</span>
+          <h3>{T.dsff.formH}</h3>
+          <p>{T.dsff.formP}</p>
+        </div>
+        <InscriptionForm programme="dsff" endpoint={formulaires.dsff} titre={T.dsff.formTitre} sujet="Inscription Digital Skills For Future" lang={lang} />
+      </div>
+    </div>
+  </section>
+
+  <!-- DSU -->
+  <section id="dsu" class="prog-dark">
+    <div class="dark-block">
+      <div class="wrap" style="padding:0">
+        <div class="intro">
+          <div>
+            <span class="pill dark-pill"><span class="dot" style="background:var(--red)"></span>{T.dsu.pill}</span>
+            <h2 dir="ltr" class="prog-name">Digital Startup <span class="c-red">Incubation</span></h2>
+            <p class="lead">{T.dsu.lead}</p>
+            <p class="small">{T.dsu.small}</p>
+            <a href="#inscription-dsu" class="btn btn-white">{T.dsu.btn} {f}</a>
+          </div>
+          <div class="stats six">
+            {T.dsu.stats.map(([v, l, c]) => <div class="stat reveal" style={`background:var(--${c});color:${txt[c]}`}><b><bdi>{v}</bdi></b><span>{l}</span></div>)}
+          </div>
+        </div>
+
+        <h3 class="sub">{T.dsu.sub}</h3>
+        <div class="parcours">
+          {T.dsu.parcours.map(([t, h, c, items]) => (
+            <div class="bloc reveal">
+              <div class="bloc-head"><span class={`hours bg-${c}`}>{h}</span><h4>{t}</h4></div>
+              <ul>{(items as string[]).map((i) => <li>{i}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+
+        <div class="steps">
+          {T.dsu.etapes.map(([t, d], i) => <div class="step reveal"><span>0{i + 1}</span><h4>{t}</h4><p>{d}</p></div>)}
+        </div>
+
+        <div class="photos four">
+          <img src={img('dsu-1.jpg')} alt={T.dsu.alts[0]} loading="lazy" />
+          <img src={img('dsu-4.jpg')} alt={T.dsu.alts[1]} loading="lazy" />
+          <img src={img('dsu-2.jpg')} alt={T.dsu.alts[2]} loading="lazy" />
+          <img src={img('dsu-3.jpg')} alt={T.dsu.alts[3]} loading="lazy" />
+        </div>
+
+        <div id="inscription-dsu" class="form-zone">
+          <div class="form-side">
+            <span class="pill dark-pill"><span class="dot" style="background:var(--yellow)"></span>{T.dsu.formPill}</span>
+            <h3>{T.dsu.formH}</h3>
+            <p>{T.dsu.formP}</p>
+          </div>
+          <InscriptionForm programme="dsu" endpoint={formulaires.dsu} titre={T.dsu.formTitre} sujet="Candidature Digital Startup Incubation" sombre lang={lang} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top { padding: 48px 0 32px; }
+  .duo { display: flex; align-items: center; gap: 18px; margin-bottom: 28px; }
+  .duo img { height: 54px; width: auto; }
+  .duo span { font-family: var(--display); font-size: 1.8rem; font-weight: 800; color: var(--muted); }
+  h1 { font-size: clamp(2.6rem, 6.2vw, 5.4rem); max-width: 16ch; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 56ch; margin: 1.25rem 0 1.75rem; }
+  .picks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 2rem; }
+  .pick { display: grid; grid-template-columns: 130px 1fr auto; align-items: center; gap: 20px; border: 2px solid var(--line); border-radius: var(--radius); padding: 20px 24px; transition: .25s; }
+  .pick:hover { border-color: var(--ink); transform: translateY(-3px); }
+  .pick img { width: 130px; height: 76px; object-fit: contain; }
+  .pick b { display: block; font-family: var(--display); font-size: 1.35rem; letter-spacing: -.02em; }
+  .pick span { color: var(--muted); font-size: .92rem; }
+  .pick i { font-style: normal; font-size: 1.4rem; font-weight: 700; }
+
+  .prog { padding: 72px 0 96px; scroll-margin-top: 84px; }
+  .prog-dark { padding: 0 0 24px; scroll-margin-top: 84px; }
+  .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .intro h2 { margin: 1.1rem 0 0; }
+  .prog-dark .lead, .prog-dark .small { color: rgba(255,255,255,.7); }
+  .small { font-size: .9rem; margin: -0.5rem 0 1.75rem; max-width: 52ch; }
+  .dark-pill { background: #222; color: #fff; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stats.six { grid-template-columns: repeat(3, 1fr); }
+  .stat { border-radius: 24px; padding: 22px; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; }
+  .stat b { font-family: var(--display); font-weight: 800; font-size: clamp(2rem, 3.6vw, 3rem); letter-spacing: -.04em; line-height: 1; white-space: nowrap; }
+  .stats.six .stat b { font-size: clamp(1.8rem, 2.8vw, 2.5rem); }
+  .stat span { font-weight: 500; font-size: .92rem; }
+
+  .sub { font-size: clamp(1.7rem, 3vw, 2.4rem); margin: 72px 0 24px; }
+  .parcours { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .bloc { background: var(--soft); border-radius: 24px; padding: 28px; }
+  .prog-dark .bloc { background: var(--ink-2); }
+  .bloc-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .hours { font-family: var(--display); font-weight: 800; font-size: 1.1rem; padding: .45rem .8rem; border-radius: 12px; white-space: nowrap; }
+  .hours.bg-yellow { color: var(--ink); }
+  .bloc h4 { font-family: var(--display); font-size: 1.3rem; letter-spacing: -.02em; line-height: 1.1; }
+  .bloc li { padding: 10px 0; border-top: 1px solid var(--line); font-weight: 500; }
+  .prog-dark .bloc li { border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.85); }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
+  .step { border-top: 3px solid currentColor; padding-top: 18px; }
+  .step span { font-family: var(--display); font-weight: 800; color: var(--green); font-size: 1.1rem; }
+  .prog-dark .step span { color: var(--yellow); }
+  .step h4 { font-family: var(--display); font-size: 1.35rem; margin: .4rem 0; letter-spacing: -.02em; }
+  .step p { color: var(--muted); font-size: .95rem; }
+  .prog-dark .step p { color: rgba(255,255,255,.65); }
+
+  .photos { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; margin-top: 56px; }
+  .photos.four { grid-template-columns: 1.5fr 1fr 1fr 1fr; }
+  .photos img { width: 100%; height: 280px; object-fit: cover; border-radius: 20px; }
+  .partners-note { margin-top: 20px; color: var(--muted); }
+
+  .form-zone { display: grid; grid-template-columns: .8fr 1.2fr; gap: 48px; align-items: start; margin-top: 72px; scroll-margin-top: 100px; }
+  .form-side { position: sticky; top: 108px; }
+  .form-side h3 { font-size: clamp(2rem, 4vw, 3rem); margin: 1rem 0; }
+  .form-side p { color: var(--muted); font-size: 1.05rem; }
+  .prog-dark .form-side p { color: rgba(255,255,255,.7); }
+
+  @media (max-width: 960px) {
+    .picks, .intro, .form-zone { grid-template-columns: 1fr; }
+    .parcours { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .stats.six { grid-template-columns: 1fr 1fr; }
+    .photos, .photos.four { grid-template-columns: 1fr 1fr; }
+    .photos img { height: 200px; }
+    .photos img:first-child { grid-column: span 2; }
+    .photos.four img:first-child { grid-column: span 2; }
+    .form-side { position: static; }
+    .sub { margin-top: 56px; }
+  }
+  @media (max-width: 520px) {
+    .pick { grid-template-columns: 90px 1fr; padding: 16px; }
+    .pick img { width: 90px; height: 56px; }
+    .pick i { display: none; }
+    .duo img { height: 40px; }
+    .steps { grid-template-columns: 1fr; }
+    .stat { min-height: 120px; padding: 18px; }
+  }
+</style>

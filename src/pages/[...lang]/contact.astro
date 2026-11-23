@@ -1,0 +1,101 @@
+---
+import Base from '../../layouts/Base.astro';
+import { contact } from '../../data/site';
+import { getLang, langPaths, lp, tr } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = getLang(Astro.params.lang);
+type Profil = { t: string; d: string; c: string; sujet?: string; lien?: string; cta?: string };
+const m = (sujet: string) => `mailto:${contact.email}?subject=${encodeURIComponent(sujet)}`;
+const T = {
+  fr: {
+    title: 'Contact', desc: 'Contactez JLM Alumni : adresse, email, téléphone et réseaux sociaux.',
+    pill: 'Contact', h1: ['Parlons', 'ensemble.'], intro: 'Choisissez votre profil, on vous répond rapidement.',
+    ecrire: 'Écrire un message →',
+    profils: [
+      { t: 'Je suis lauréat JLM', d: 'Rejoignez le réseau Alumni et engagez-vous auprès de la nouvelle génération.', sujet: 'Rejoindre le réseau JLM Alumni', c: 'green' },
+      { t: 'Je veux devenir partenaire', d: 'Institution ou entreprise : construisons un partenariat sur mesure.', sujet: 'Partenariat JLM Alumni', c: 'yellow' },
+      { t: 'Je postule pour devenir Team Leader', d: 'Encadrez une équipe JLM dans votre école et accompagnez ses porteurs de projets tout au long de la saison.', lien: lp('/team-leader', 'fr'), cta: 'Remplir le formulaire →', c: 'red' },
+      { t: 'Presse & autres demandes', d: 'Une question, une interview, une idée ? Écrivez-nous.', sujet: 'Demande de contact', c: 'ink' },
+    ] as Profil[],
+    adresse: 'Adresse', maps: 'Ouvrir dans Google Maps ↗', emailTel: 'Email & téléphone', reseaux: 'Réseaux sociaux',
+  },
+  ar: {
+    title: 'اتصل بنا', desc: 'تواصل مع JLM Alumni: العنوان، البريد الإلكتروني، الهاتف وشبكات التواصل.',
+    pill: 'اتصل بنا', h1: ['لنتحدث', 'معًا.'], intro: 'اختر ملفك، وسنرد عليك بسرعة.',
+    ecrire: 'أرسل رسالة ←',
+    profils: [
+      { t: 'أنا من خريجي JLM', d: 'انضم إلى شبكة الخريجين وساهم في مواكبة الجيل الجديد.', sujet: 'Rejoindre le réseau JLM Alumni', c: 'green' },
+      { t: 'أريد أن أصبح شريكًا', d: 'مؤسسة أو مقاولة: لنبنِ معًا شراكة على المقاس.', sujet: 'Partenariat JLM Alumni', c: 'yellow' },
+      { t: 'أترشح لأصبح قائد فريق', d: 'أطّر فريق JLM في مدرستك وواكب حاملي المشاريع طوال الموسم.', lien: lp('/team-leader', 'ar'), cta: 'املأ الاستمارة ←', c: 'red' },
+      { t: 'الصحافة وطلبات أخرى', d: 'سؤال، مقابلة صحفية، أو فكرة؟ راسلنا.', sujet: 'Demande de contact', c: 'ink' },
+    ] as Profil[],
+    adresse: 'العنوان', maps: 'فتح في خرائط Google ↗', emailTel: 'البريد الإلكتروني والهاتف', reseaux: 'شبكات التواصل',
+  },
+}[lang];
+---
+<Base title={T.title} description={T.desc} lang={lang}>
+  <section class="head">
+    <div class="wrap">
+      <span class="pill"><span class="dot"></span>{T.pill}</span>
+      <h1>{T.h1[0]} <span class="c-green">{T.h1[1]}</span></h1>
+      <p>{T.intro}</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap profils">
+      {T.profils.map((p) => (
+        <a href={p.lien ?? m(p.sujet ?? '')} class={`profil p-${p.c} reveal`}>
+          <h2>{p.t}</h2>
+          <p>{p.d}</p>
+          <span class="go">{p.cta ?? T.ecrire}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap infos">
+      <div class="info reveal">
+        <h3>{T.adresse}</h3>
+        <p>{contact.adresse.map((l) => <>{tr(l, lang)}<br /></>)}</p>
+        <a class="link" href="https://www.google.com/maps/search/?api=1&query=Complexe+Social+INDH+Sidi+Maarouf+Casablanca" target="_blank" rel="noopener">{T.maps}</a>
+      </div>
+      <div class="info reveal">
+        <h3>{T.emailTel}</h3>
+        <p><a href={`mailto:${contact.email}`} dir="ltr">{contact.email}</a><br /><a href={`tel:${contact.telephoneLien}`} dir="ltr">{contact.telephone}</a></p>
+      </div>
+      <div class="info reveal">
+        <h3>{T.reseaux}</h3>
+        <p>{contact.reseaux.map((r) => <><a href={r.url} target="_blank" rel="noopener">{r.nom} ↗</a><br /></>)}</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { padding: 56px 0 48px; }
+  .head h1 { font-size: clamp(3rem, 8vw, 6.4rem); margin: 1.25rem 0 1rem; }
+  .head p { font-size: 1.15rem; color: var(--muted); }
+  .profils { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .profil { border-radius: var(--radius); padding: 40px; min-height: 260px; display: flex; flex-direction: column; transition: .25s; }
+  .profil:hover { transform: translateY(-4px); }
+  .profil h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: .75rem; }
+  .profil p { opacity: .8; max-width: 40ch; }
+  .go { margin-top: auto; padding-top: 24px; font-weight: 600; }
+  .p-green { background: var(--green); color: #fff; }
+  .p-yellow { background: var(--yellow); }
+  .p-red { background: var(--red); color: #fff; }
+  .p-ink { background: var(--ink); color: #fff; }
+  .infos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .info { background: var(--soft); border-radius: 24px; padding: 32px; }
+  .info h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+  .info p { color: var(--muted); line-height: 1.8; }
+  .info a:hover { color: var(--green); }
+  .link { display: inline-block; margin-top: 1rem; font-weight: 600; }
+  @media (max-width: 960px) {
+    .profils, .infos { grid-template-columns: 1fr; }
+    .profil { padding: 28px; min-height: 200px; }
+  }
+</style>

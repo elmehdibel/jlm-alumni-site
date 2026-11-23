@@ -1,29 +1,48 @@
 ---
 import { u } from '../lib/url';
 import { navigation } from '../data/site';
+import { type Lang, lp, tr, autreLangue } from '../i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const actif = (p: string) => path === lp(p, lang).replace(/\/$/, '');
+const alt = autreLangue(Astro.url.pathname, lang);
+const t = {
+  contact: { fr: 'Contact', ar: 'اتصل بنا' },
+  accueil: { fr: 'Accueil', ar: 'الرئيسية' },
+  ouvrir: { fr: 'Ouvrir le menu', ar: 'فتح القائمة' },
+  langue: { fr: 'Lire en arabe', ar: 'Lire en français' },
+};
 ---
 <header class="site-header">
   <div class="wrap nav">
-    <a href={u("/")} class="brand" aria-label="JLM Alumni, accueil">
+    <a href={lp('/', lang)} class="brand" aria-label="JLM Alumni">
       <img src={u("/logos/jlm-alumni-couleur.png")} alt="JLM Alumni" width="1117" height="507" />
     </a>
-    <nav class="links" aria-label="Navigation principale">
+    <nav class="links" aria-label={lang === 'ar' ? 'القائمة الرئيسية' : 'Navigation principale'}>
       {navigation.map((l) => (
-        <a href={l.href} class={path === l.href ? 'active' : ''}>{l.label}</a>
+        <a href={lp(l.path, lang)} class={actif(l.path) ? 'active' : ''}>{tr(l.label, lang)}</a>
       ))}
     </nav>
-    <a href={u("/contact")} class="btn btn-dark cta-desk">Contact</a>
-    <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
-      <span></span><span></span>
-    </button>
+    <div class="right">
+      <div class="lang" role="group" aria-label={lang === 'ar' ? 'اللغة' : 'Langue'}>
+        <a href={lang === 'fr' ? undefined : alt} class={lang === 'fr' ? 'on' : ''} lang="fr" hreflang="fr" aria-current={lang === 'fr' ? 'true' : undefined}>FR</a>
+        <a href={lang === 'ar' ? undefined : alt} class={lang === 'ar' ? 'on' : ''} lang="ar" hreflang="ar" aria-current={lang === 'ar' ? 'true' : undefined} title={tr(t.langue, 'fr')}>ع</a>
+      </div>
+      <a href={lp('/contact', lang)} class="btn btn-dark cta-desk">{tr(t.contact, lang)}</a>
+      <button class="burger" aria-label={tr(t.ouvrir, lang)} aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 <div class="mobile-menu" id="mobile-menu" hidden>
-  <nav class="wrap" aria-label="Menu mobile">
-    <a href={u("/")}>Accueil</a>
-    {navigation.map((l) => <a href={l.href}>{l.label}</a>)}
-    <a href={u("/contact")}>Contact</a>
+  <nav class="wrap" aria-label={lang === 'ar' ? 'قائمة الهاتف' : 'Menu mobile'}>
+    <a href={lp('/', lang)}>{tr(t.accueil, lang)}</a>
+    {navigation.map((l) => <a href={lp(l.path, lang)}>{tr(l.label, lang)}</a>)}
+    <a href={lp('/contact', lang)}>{tr(t.contact, lang)}</a>
+    <a href={alt} class="mm-lang" lang={lang === 'fr' ? 'ar' : 'fr'}>{lang === 'fr' ? 'العربية ←' : 'Français →'}</a>
     <div class="mm-bar"><i class="bg-green"></i><i class="bg-yellow"></i><i class="bg-red"></i></div>
   </nav>
 </div>
@@ -34,11 +53,10 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   btn?.addEventListener('click', () => {
     const open = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', String(!open));
-    btn.setAttribute('aria-label', open ? 'Ouvrir le menu' : 'Fermer le menu');
     if (menu) menu.hidden = open;
     document.documentElement.style.overflow = open ? '' : 'hidden';
   });
-  window.matchMedia('(min-width: 961px)').addEventListener('change', (e) => {
+  window.matchMedia('(min-width: 1021px)').addEventListener('change', (e) => {
     if (e.matches && btn?.getAttribute('aria-expanded') === 'true') btn.click();
   });
 </script>
@@ -48,10 +66,16 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   .nav { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 16px; }
   .brand img { height: 50px; width: auto; }
   .links { display: flex; gap: .25rem; background: var(--soft); padding: .35rem; border-radius: 999px; }
-  .links a { padding: .5rem 1rem; border-radius: 999px; font-weight: 500; font-size: .92rem; transition: .2s; }
+  .links a { padding: .5rem 1rem; border-radius: 999px; font-weight: 500; font-size: .92rem; transition: .2s; white-space: nowrap; }
   .links a:hover { background: #fff; }
   .links a.active { background: var(--ink); color: #fff; }
-  .cta-desk { padding: .75rem 1.3rem; }
+  .right { display: flex; align-items: center; gap: 10px; }
+  .lang { display: flex; background: var(--soft); border-radius: 999px; padding: 4px; }
+  .lang a { min-width: 38px; height: 34px; display: grid; place-items: center; border-radius: 999px; font-weight: 700; font-size: .85rem; transition: .2s; }
+  .lang a[lang='ar'] { font-family: 'Cairo', sans-serif; font-size: 1.05rem; }
+  .lang a[href]:hover { background: #fff; }
+  .lang a.on { background: var(--ink); color: #fff; cursor: default; }
+  .cta-desk { padding: .75rem 1.3rem; white-space: nowrap; }
   .burger { display: none; width: 48px; height: 48px; border-radius: 50%; background: var(--soft); border: 0; cursor: pointer; position: relative; }
   .burger span { position: absolute; left: 14px; right: 14px; height: 2px; background: var(--ink); transition: .25s; }
   .burger span:first-child { top: 19px; }
@@ -61,9 +85,12 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   .mobile-menu { position: fixed; inset: 84px 0 0; background: #fff; z-index: 49; padding-top: 24px; overflow-y: auto; }
   .mobile-menu nav { display: flex; flex-direction: column; }
   .mobile-menu a { font-family: var(--display); font-weight: 800; font-size: 2.2rem; letter-spacing: -.03em; padding: .5rem 0; border-bottom: 1px solid var(--line); }
-  .mm-bar { display: flex; gap: 8px; margin-top: 32px; }
+  .mobile-menu a.mm-lang { font-size: 1.2rem; color: var(--green); border-bottom: 0; padding-top: 1rem; }
+  .mobile-menu a.mm-lang[lang='ar'] { font-family: 'Cairo', sans-serif; letter-spacing: 0; }
+  .mm-bar { display: flex; gap: 8px; margin-top: 24px; }
   .mm-bar i { height: 8px; flex: 1; border-radius: 4px; }
-  @media (max-width: 960px) {
+  @media (max-width: 1100px) { .links a { padding: .5rem .7rem; font-size: .88rem; } }
+  @media (max-width: 1020px) {
     .links, .cta-desk { display: none; }
     .burger { display: block; }
     .brand img { height: 44px; }
